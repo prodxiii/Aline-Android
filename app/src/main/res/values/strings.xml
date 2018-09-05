@@ -5,4 +5,8 @@
     <string name="cool_group">COOL GROUP</string>
     <string name="looking_for_the_assistor_app">LOOKING FOR THE ASSISTOR APP?</string>
     <string name="a_l_i_n_e">A L I N E</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="name">name</string>
+    <string name="phone">phone</string>
 </resources>
