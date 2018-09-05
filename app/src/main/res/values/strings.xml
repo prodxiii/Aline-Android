@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Aline</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="register">REGISTER</string>
+    <string name="cool_group">COOL GROUP</string>
+    <string name="looking_for_the_assistor_app">LOOKING FOR THE ASSISTOR APP?</string>
+    <string name="a_l_i_n_e">A L I N E</string>
 </resources>
