@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.Model.User;
+import dmax.dialog.SpotsDialog;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -88,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
                 dialog.dismiss();
 
+                // Set disable button Sign In if procsessing
+                btnSignIn.setEnabled(false);
+
+
                 // Check validation
                 if (TextUtils.isEmpty(edtEmail.getText().toString())) {
                     Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
@@ -107,20 +112,35 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                android.app.AlertDialog waitingDialog = new SpotsDialog(MainActivity.this);
+                waitingDialog.show();
+
                 // Log In
                 auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
+
+                                waitingDialog.dismiss();
+
                                 startActivity(new Intent(MainActivity.this, Welcome.class));
                                 finish();
+
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+
+                                waitingDialog.dismiss();
+
                                 Snackbar.make(rootLayout, "Failed " + e.getMessage(), Snackbar.LENGTH_SHORT)
                                         .show();
+
+                                // Active button
+                                btnSignIn.setEnabled(true);
+
                             }
                         });
 
