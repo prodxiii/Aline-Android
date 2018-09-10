@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase db;
     DatabaseReference users;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

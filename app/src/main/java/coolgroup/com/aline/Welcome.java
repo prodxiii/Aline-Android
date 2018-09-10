@@ -107,8 +107,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
         setUpLocation();
     }
 
-    // Since we request runtime permission, we need override OnRequestPermissionResult method
-
+    // Since we request runtime permission, we need to override OnRequestPermissionResult method
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -280,18 +279,6 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
         mLastLocation = location;
         displayLocation();
     }
-
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//    }
-//
-//    public void onProviderEnabled(String provider) {
-//
-//    }
-//
-//    public void onProviderDisabled(String provider) {
-//
-//    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
