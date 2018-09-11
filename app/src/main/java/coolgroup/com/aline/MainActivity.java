@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         waitingDialog.dismiss();
 
                         // If email and password is authenticated open the welcome layout
-                        startActivity(new Intent(MainActivity.this, Welcome.class));
+                        startActivity(new Intent(MainActivity.this, Homepage.class));
 
                         // And close the Login layout
                         finish();
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                                 .setValue(user)
                                 .addOnSuccessListener(aVoid -> {
                                     //WELCOME TO ALINE
-                                    Snackbar.make(rootLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
+                                    Snackbar.make(rootLayout, "Homepage to ALINE!", Snackbar.LENGTH_SHORT)
                                             .show();
                                 })
                                 .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" +e.getMessage(),Snackbar.LENGTH_LONG)
