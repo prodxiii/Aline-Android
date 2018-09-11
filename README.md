@@ -52,7 +52,7 @@ If the device does not appear, the OEM USB driver for ADB must be installed.
 Please [download and install the appropriate OEM driver](https://developer.android.com/studio/run/oem-usb#Drivers).
 
 ### Running on a virtual device
-Select *Run > Run 'app'* in Android Studio. A dialogue box will appear prompting for the deployment target; select a vitual device running API 21 or later must be selected. 
+Select *Run > Run 'app'* in Android Studio. A dialogue box will appear prompting for the deployment target; select a vitual device running API 15 or later must be selected. 
 If none exist, create a new virtual device.
 
 #### Note
