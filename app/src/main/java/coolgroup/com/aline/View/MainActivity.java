@@ -1,10 +1,10 @@
-package coolgroup.com.aline;
+package coolgroup.com.aline.View;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.Model.User;
+import coolgroup.com.aline.R;
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
@@ -167,38 +168,33 @@ public class MainActivity extends AppCompatActivity {
             dialog12.dismiss();
 
             // Validate email, password, name and phone
-            if (TextUtils.isEmpty(edtEmail.getText().toString()))
-            {
-                Snackbar.make(rootLayout,"Please enter email address", Snackbar.LENGTH_SHORT)
+            if (TextUtils.isEmpty(edtEmail.getText().toString())) {
+                Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
-            if (TextUtils.isEmpty(edtPhone.getText().toString()))
-            {
-                Snackbar.make(rootLayout,"Please enter phone number", Snackbar.LENGTH_SHORT)
+            if (TextUtils.isEmpty(edtPhone.getText().toString())) {
+                Snackbar.make(rootLayout, "Please enter phone number", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
-            if (TextUtils.isEmpty(edtName.getText().toString()))
-            {
-                Snackbar.make(rootLayout,"Please enter name", Snackbar.LENGTH_SHORT)
+            if (TextUtils.isEmpty(edtName.getText().toString())) {
+                Snackbar.make(rootLayout, "Please enter name", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
-            if (TextUtils.isEmpty(edtPassword.getText().toString()))
-            {
-                Snackbar.make(rootLayout,"Please enter password", Snackbar.LENGTH_SHORT)
+            if (TextUtils.isEmpty(edtPassword.getText().toString())) {
+                Snackbar.make(rootLayout, "Please enter password", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
             // If password is shorter than six characters
-            if (edtPassword.getText().toString().length() < 6)
-            {
-                Snackbar.make(rootLayout,"Password too short!", Snackbar.LENGTH_SHORT)
+            if (edtPassword.getText().toString().length() < 6) {
+                Snackbar.make(rootLayout, "Password too short!", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
@@ -226,11 +222,11 @@ public class MainActivity extends AppCompatActivity {
                                     Snackbar.make(rootLayout, "Homepage to ALINE!", Snackbar.LENGTH_SHORT)
                                             .show();
                                 })
-                                .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" +e.getMessage(),Snackbar.LENGTH_LONG)
+                                .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
                                         .show());
 
                     })
-                    .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" +e.getMessage(),Snackbar.LENGTH_SHORT)
+                    .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT)
                             .show());
         });
         // Set the Cancel button
