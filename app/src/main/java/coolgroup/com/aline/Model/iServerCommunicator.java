@@ -1,5 +1,8 @@
 package coolgroup.com.aline.Model;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+
 import java.util.ArrayList;
 
 public interface iServerCommunicator {
@@ -10,7 +13,7 @@ public interface iServerCommunicator {
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
-    boolean logInUserEmail(String email, String password);
+    Task<AuthResult> logInUserEmail(String email, String password);
 
     /**
      * Authenticate a user by phone number and password.

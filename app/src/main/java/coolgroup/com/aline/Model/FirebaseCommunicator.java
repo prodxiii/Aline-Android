@@ -1,5 +1,7 @@
 package coolgroup.com.aline.Model;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,8 +27,9 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * @return True if the account exists and details are correct, else false.
      */
     @Override
-    public boolean logInUserEmail(String email, String password) {
-        return false;
+    public Task<AuthResult> logInUserEmail(String email, String password) {
+        return auth.signInWithEmailAndPassword(email, password);
+
     }
 
     /**
