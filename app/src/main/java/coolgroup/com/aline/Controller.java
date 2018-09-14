@@ -10,11 +10,15 @@ public class Controller {
 
     // Controlled classes
     public iServerCommunicator serverCommunicator = new FirebaseCommunicator(); // Not sure if this should be of type iServerCommunicator or FirebaseCommunicator?
+
     public Controller() {
-        return;
     }
 
     public static Controller getInstance() {
+        if (instance == null) {
+            Controller.instance = new Controller();
+        }
         return instance;
     }
+
 }
