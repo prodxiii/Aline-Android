@@ -1,8 +1,22 @@
 package coolgroup.com.aline.Model;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class FirebaseCommunicator implements iServerCommunicator {
+
+    // Declare Firebase
+    FirebaseAuth auth;
+    FirebaseDatabase db;
+
+    public FirebaseCommunicator() {
+        // Initialize Firebase
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseDatabase.getInstance();
+    }
+
     /**
      * Authenticate a user by email address and password.
      *
