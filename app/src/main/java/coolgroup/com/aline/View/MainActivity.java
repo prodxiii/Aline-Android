@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.Model.User;
 import coolgroup.com.aline.R;
 import dmax.dialog.SpotsDialog;
@@ -108,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
             waitingDialog.show();
 
             // Try to Login with correctly validated email and password
-            auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
+            // auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
+            Controller.getInstance().serverCommunicator.logInUserEmail(edtEmail.getText().toString(), edtPassword.getText().toString())
                     .addOnSuccessListener(authResult -> {
 
                         // Remove the loading dialog
@@ -200,10 +202,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create a new user with the input details
-            auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
+            // auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
+            Controller.getInstance().serverCommunicator.signUpUser(edtEmail.getText().toString(), edtPassword.getText().toString(), "", "")
                     .addOnSuccessListener(authResult -> {
                         // Save user to database
-                        // Create a new user object
+                        // Create a new user object TODO: Move this logic out of here
                         User user = new User();
 
                         // Set email, name and password for the user
