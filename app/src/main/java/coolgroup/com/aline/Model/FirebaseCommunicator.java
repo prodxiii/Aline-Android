@@ -55,8 +55,8 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * and the format of all arguments is valid (e.g. password length).
      */
     @Override
-    public boolean signUpUser(String email, String password, String name, String phone) {
-        return false;
+    public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
+        return auth.createUserWithEmailAndPassword(email, password);
     }
 
     /**

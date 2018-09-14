@@ -34,7 +34,7 @@ public interface iServerCommunicator {
      * @return True if the user doesn’t already exist (e.g. email taken)
      * and the format of all arguments is valid (e.g. password length).
      */
-    boolean signUpUser(String email, String password, String name, String phone);
+    Task<AuthResult> signUpUser(String email, String password, String name, String phone);
 
     /**
      * Retrieve a user ID string.
