@@ -1,4 +1,4 @@
-package coolgroup.com.aline.View;
+package coolgroup.com.aline.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

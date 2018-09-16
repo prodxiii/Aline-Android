@@ -1,4 +1,4 @@
-package coolgroup.com.aline.View;
+package coolgroup.com.aline.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +13,10 @@ import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.Controller;
-import coolgroup.com.aline.Model.User;
+import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.R;
 import dmax.dialog.SpotsDialog;
 
@@ -28,10 +27,6 @@ public class MainActivity extends AppCompatActivity {
     Button btnSignIn, btnRegister;
     RelativeLayout rootLayout;
 
-    // Declare Firebase
-    FirebaseAuth auth;
-    FirebaseDatabase db;
-
     // Declare a users database
     DatabaseReference users;
 
@@ -40,10 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Firebase
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance();
-        users = db.getReference("Users");
+        users = Controller.getInstance().serverCommunicator.getmFirebaseDatabase().getReference("Users");
 
         // Initialize Views
         btnRegister = findViewById(R.id.btnRegister);
@@ -217,12 +209,17 @@ public class MainActivity extends AppCompatActivity {
                         // Not saving the password
                         user.setPassword(edtPassword.getText().toString());
 
+//                        System.out.println(user.getName());
+//                        System.out.println(user.getEmail());
+//                        System.out.println(user.getPassword());
+//                        System.out.println(user.getPhone());
+
                         // Use UID as the unique key
                         users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                 .setValue(user)
                                 .addOnSuccessListener(aVoid -> {
                                     //WELCOME TO ALINE
-                                    Snackbar.make(rootLayout, "Homepage to ALINE!", Snackbar.LENGTH_SHORT)
+                                    Snackbar.make(rootLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                                             .show();
                                 })
                                 .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
