@@ -1,8 +1,10 @@
-package coolgroup.com.aline.Model;
+package coolgroup.com.aline.model;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -10,13 +12,23 @@ import java.util.ArrayList;
 public class FirebaseCommunicator implements iServerCommunicator {
 
     // Declare Firebase
-    FirebaseAuth auth;
-    FirebaseDatabase db;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference users;
 
     public FirebaseCommunicator() {
         // Initialize Firebase
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+    }
+
+    /**
+     * Getter for FirebaseDatabase
+     *
+     * @return db
+     */
+    public FirebaseDatabase getmFirebaseDatabase() {
+        return mFirebaseDatabase;
     }
 
     /**
@@ -28,7 +40,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public Task<AuthResult> logInUserEmail(String email, String password) {
-        return auth.signInWithEmailAndPassword(email, password);
+        return mFirebaseAuth.signInWithEmailAndPassword(email, password);
 
     }
 
@@ -56,7 +68,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
-        return auth.createUserWithEmailAndPassword(email, password);
+        return mFirebaseAuth.createUserWithEmailAndPassword(email, password);
     }
 
     /**

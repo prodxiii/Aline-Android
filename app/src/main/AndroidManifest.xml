@@ -8,6 +8,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,10 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.MainActivity">
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -41,16 +41,16 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".View.Homepage"
+            android:name=".view.Homepage"
             android:label="@string/title_activity_welcome" />
         <activity
-            android:name=".View.ContactsList"
+            android:name=".view.ContactsList"
             android:label="@string/title_activity_contacts_list"
-            android:parentActivityName=".View.Homepage"
+            android:parentActivityName=".view.Homepage"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="coolgroup.com.aline.View.Homepage" />
+                android:value="coolgroup.com.aline.view.Homepage" />
         </activity>
     </application>
 
