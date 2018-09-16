@@ -42,7 +42,16 @@
 
         <activity
             android:name=".View.Homepage"
-            android:label="@string/title_activity_welcome"></activity>
+            android:label="@string/title_activity_welcome" />
+        <activity
+            android:name=".View.ContactsList"
+            android:label="@string/title_activity_contacts_list"
+            android:parentActivityName=".View.Homepage"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="coolgroup.com.aline.View.Homepage" />
+        </activity>
     </application>
 
 </manifest>
