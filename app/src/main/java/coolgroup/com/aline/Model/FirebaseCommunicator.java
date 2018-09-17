@@ -58,8 +58,11 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists())
+                    return;
+
                 for (DataSnapshot contactSnapshot : dataSnapshot.getChildren()) {
-                    String contactId = contactSnapshot.getKey().toString();
+                    String contactId = contactSnapshot.getKey();
                     contactList.add(contactId);
                 }
             }
@@ -75,7 +78,13 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
     @Override
     public boolean addNewContact(String userId, String contactUserId) {
-        return false;
+        // reference to user node in the contacts database subtree
+        DatabaseReference userRef = contacts.child(userId);
+
+        // add new key-value pair under the user node (only key matters)
+        userRef.child(contactUserId).setValue(true);
+
+        return true;
     }
 
     @Override
