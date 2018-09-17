@@ -16,15 +16,7 @@ public class Controller {
 
     private User mainUser;
 
-    public Controller() {}
-
-    /**
-     * Initialise the controller with a signed in user.
-     * @param user The current signed in user.
-     */
-    public Controller(User user) {
-        mainUser = user;
-    }
+    private Controller() {}
 
     public static Controller getInstance() {
         return instance;
