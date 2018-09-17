@@ -3,11 +3,12 @@ package coolgroup.com.aline.model;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+
+import coolgroup.com.aline.Controller;
 
 public class FirebaseCommunicator implements iServerCommunicator {
 
@@ -40,8 +41,10 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public Task<AuthResult> logInUserEmail(String email, String password) {
-        return mFirebaseAuth.signInWithEmailAndPassword(email, password);
-
+        Task<AuthResult> toReturn = mFirebaseAuth.signInWithEmailAndPassword(email, password);
+        Controller.getInstance().setMainUser(new User(email, password));
+        Controller.getInstance().getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
+        return toReturn;
     }
 
     /**
@@ -68,7 +71,13 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
-        return mFirebaseAuth.createUserWithEmailAndPassword(email, password);
+        Controller currentController = Controller.getInstance();
+        Task<AuthResult> toReturn = mFirebaseAuth.createUserWithEmailAndPassword(email, password);
+        currentController.setMainUser(new User(email, password));
+        currentController.getMainUser().setName(name);
+        currentController.getMainUser().setPhone(name);
+        currentController.getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
+        return toReturn;
     }
 
     /**

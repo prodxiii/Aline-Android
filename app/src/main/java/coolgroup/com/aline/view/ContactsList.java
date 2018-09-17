@@ -8,11 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.adapters.ContactsListAdapter;
 import coolgroup.com.aline.viewmodels.ContactsListViewModel;
 
 public class ContactsList extends AppCompatActivity {
 
     private ContactsListViewModel viewModel;
+    private ContactsListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class ContactsList extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        adapter = new ContactsListAdapter(this, R.id.contacts_list_view, viewModel.getContacts().);
 
         viewModel = ViewModelProviders.of(this).get(ContactsListViewModel.class);
         viewModel.getContacts().observe(this, user -> {

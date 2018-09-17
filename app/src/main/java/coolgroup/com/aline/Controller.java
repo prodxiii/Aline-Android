@@ -1,9 +1,7 @@
 package coolgroup.com.aline;
 
 import coolgroup.com.aline.model.FirebaseCommunicator;
-import coolgroup.com.aline.model.FirebaseCommunicator;
 import coolgroup.com.aline.model.User;
-import coolgroup.com.aline.model.iServerCommunicator;
 
 public class Controller {
 
@@ -12,7 +10,6 @@ public class Controller {
 
     // Controlled classes
     public FirebaseCommunicator serverCommunicator = new FirebaseCommunicator(); // Not sure if this should be of type iServerCommunicator or FirebaseCommunicator?
-    public iServerCommunicator serverCommunicator = new FirebaseCommunicator(); // Not sure if this should be of type iServerCommunicator or FirebaseCommunicator?
     private User mainUser;
 
     private Controller() {
@@ -25,5 +22,11 @@ public class Controller {
         return instance;
     }
 
+    public User getMainUser() {
+        return mainUser;
+    }
 
+    public void setMainUser(User mainUser) {
+        this.mainUser = mainUser;
+    }
 }
