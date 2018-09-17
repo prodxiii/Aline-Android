@@ -2,17 +2,22 @@ package coolgroup.com.aline.model;
 
 public class User {
 
-    private String email,password,name,phone;
+    private String email, password, name, phone, uID;
 
     public User() {
-
     }
 
-    public User(String email, String password, String name, String phone) {
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String email, String password, String name, String phone, String uID) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
+        this.uID = uID;
     }
 
     public String getEmail() {
@@ -45,5 +50,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getuID() {
+        return uID;
+    }
+
+    public void setuID(String uID) {
+        this.uID = uID;
     }
 }

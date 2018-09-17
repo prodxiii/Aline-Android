@@ -16,8 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.Controller;
-import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
