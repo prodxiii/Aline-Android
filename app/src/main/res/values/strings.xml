@@ -9,5 +9,5 @@
     <string name="password">Password</string>
     <string name="name">Name</string>
     <string name="phone">Phone</string>
-    <string name="title_activity_welcome">Welcome to Aline</string>
+    <string name="title_activity_welcome">Map</string>
 </resources>
