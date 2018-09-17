@@ -8,8 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.viewmodels.ContactsListViewModel;
 
 public class ContactsList extends AppCompatActivity {
+
+    private ContactsListViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,5 +30,14 @@ public class ContactsList extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewModel = ViewModelProviders.of(this).get(ContactsListViewModel.class);
+        viewModel.getContacts().observe(this, user -> {
+            updateContactsListUI();
+        });
+    }
+
+    private void updateContactsListUI() {
+        //TODO: Fill me out
     }
 }
