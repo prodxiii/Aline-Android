@@ -1,4 +1,4 @@
-package coolgroup.com.aline.View;
+package coolgroup.com.aline.view;
 
 import android.Manifest;
 import android.content.Intent;
