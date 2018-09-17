@@ -203,19 +203,15 @@ public class MainActivity extends AppCompatActivity {
             auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
                     .addOnSuccessListener(authResult -> {
                         // Save user to database
-                        // Create a new user object
-                        User user = new User();
+                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        String email = edtEmail.getText().toString();
+                        String name = edtName.getText().toString();
+                        String phone = edtPhone.getText().toString();
 
-                        // Set email, name and password for the user
-                        user.setEmail(edtEmail.getText().toString());
-                        user.setName(edtName.getText().toString());
-                        user.setPhone(edtPhone.getText().toString());
-
-                        // Not saving the password
-                        user.setPassword(edtPassword.getText().toString());
+                        User user = new User(id, email, name, phone);
 
                         // Use UID as the unique key
-                        users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        users.child(id)
                                 .setValue(user)
                                 .addOnSuccessListener(aVoid -> {
                                     //WELCOME TO ALINE
