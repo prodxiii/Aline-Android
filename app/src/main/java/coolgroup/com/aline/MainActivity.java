@@ -223,14 +223,15 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(AuthResult authResult) {
                                 // Save user to db
-                                User user = new User();
-                                user.setEmail(edtEmail.getText().toString());
-                                user.setName(edtName.getText().toString());
-                                user.setPassword(edtPassword.getText().toString());
-                                user.setPhone(edtPhone.getText().toString());
+                                String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                String email = edtEmail.getText().toString();
+                                String name = edtName.getText().toString();
+                                String phone = edtPhone.getText().toString();
+
+                                User user = new User(id, email, name, phone);
 
                                 // Use UID to key
-                                users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                users.child(id)
                                         .setValue(user)
                                         .addOnSuccessListener((OnSuccessListener) (aVoid) -> {
                                             Snackbar.make(rootLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
