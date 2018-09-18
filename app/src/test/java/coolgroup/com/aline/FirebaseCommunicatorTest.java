@@ -141,7 +141,7 @@ public class FirebaseCommunicatorTest {
             public Task<AuthResult> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
                 return null;
             }
-        })
+        });
     }
 
     // ======== LOGIN TESTS ========
