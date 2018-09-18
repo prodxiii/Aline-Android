@@ -44,6 +44,20 @@ dependencies {
     implementation 'com.github.d-max:spots-dialog:0.7@aar'
     implementation 'com.firebase:geofire-android:2.1.2'
     implementation 'com.github.glomadrian:MaterialAnimatedSwitch:1.1@aar'
+
+    // For testing
+    // JUnit 4 framework
+    testImplementation 'junit:junit:4.12'
+    // Mockito framework
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+
+    testImplementation 'org.powermock:powermock-mockito-release-full:1.6.2'
+/*
+    // Mockito and PowerMock
+    androidTestCompile ('org.powermock:powermock-mockito-release-full:1.6.2') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+    }*/
 }
 
 apply plugin: 'com.google.gms.google-services'
