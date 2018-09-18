@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
@@ -68,6 +69,18 @@ public class FirebaseCommunicatorTest {
 
     @Test
     public void testValidRegistration(){
+
+        OnSuccessListener<Result> m = new OnSuccessListener<Result>() {
+            @Override
+            public void onSuccess(Result result) {
+
+            }
+
+            @Override
+            public void onFailure(Result result) {
+
+            }
+        };
         String validEmail = "oldperson@needsnavigational.help";
         String validPassword = "oldpersonpassword";
         String name = "Julius Caesar";
