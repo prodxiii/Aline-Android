@@ -3,6 +3,7 @@ package coolgroup.com.aline;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.testng.AssertJUnit.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -35,13 +37,17 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.Executor;
 
+import coolgroup.com.aline.Model.FirebaseCommunicator;
+
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(JUnit4.class)
-@PrepareForTest({ FirebaseDatabase.class})
+@PrepareForTest({ FirebaseDatabase.class, FirebaseAuth.class}) // this allows static classes to be mocked.
 public class FirebaseCommunicatorTest {
 
     private DatabaseReference mockedDatabaseReference;
     private FirebaseAuth mockedFirebaseAuth;
+
+    private FirebaseCommunicator testFirebaseCommunicator;
 
     @Before
     public void SetUp() throws Exception {
@@ -53,14 +59,24 @@ public class FirebaseCommunicatorTest {
         FirebaseDatabase mockedFirebaseDatabase = Mockito.mock(FirebaseDatabase.class);
         when(mockedFirebaseDatabase.getReference()).thenReturn(mockedDatabaseReference);
 
+        // Mock static values for Firebase
         PowerMockito.mockStatic(FirebaseDatabase.class);
         when(FirebaseDatabase.getInstance()).thenReturn(mockedFirebaseDatabase);
+        PowerMockito.mockStatic(FirebaseAuth.class);
+        when(FirebaseAuth.getInstance()).thenReturn(mockedFirebaseAuth);
         // These references may seem useless, but mockStatic will hold onto the references for them.
+
+        // Finally, create an instance of the thing we're testing.
+
+        testFirebaseCommunicator = new FirebaseCommunicator();
     }
 
     @After
     public void TearDown() throws Exception {
+        mockedDatabaseReference = null;
+        mockedFirebaseAuth = null;
 
+        testFirebaseCommunicator = null;
     }
 
     // ======== SIGNUP TESTS ========
@@ -70,32 +86,20 @@ public class FirebaseCommunicatorTest {
     @Test
     public void testValidRegistration(){
 
-        OnSuccessListener<Result> m = new OnSuccessListener<Result>() {
-            @Override
-            public void onSuccess(Result result) {
-
-            }
-
-            @Override
-            public void onFailure(Result result) {
-
-            }
-        };
         String validEmail = "oldperson@needsnavigational.help";
         String validPassword = "oldpersonpassword";
         String name = "Julius Caesar";
         String validPhoneNumber = "0444444444";
 
-        Mockito.when(mockedFirebaseAuth.signInWithEmailAndPassword(validEmail,
-                        validPassword)).thenReturn(new Task<AuthResult>() {
+        Task<AuthResult> taskToReturn = new Task<AuthResult>() {
             @Override
             public boolean isComplete() {
-                return false;
+                return true;
             }
 
             @Override
             public boolean isSuccessful() {
-                return false;
+                return true;
             }
 
             @Override
@@ -154,7 +158,24 @@ public class FirebaseCommunicatorTest {
             public Task<AuthResult> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
                 return null;
             }
-        });
+        };
+        Task<AuthResult> taskFromFirebaseCommunicator;
+
+        // specify the particulars for the FirebaseAuth for this test
+        Mockito.when(mockedFirebaseAuth.signInWithEmailAndPassword(validEmail,
+                        validPassword)).thenReturn(taskToReturn);
+
+        // Perform the test
+        taskFromFirebaseCommunicator = testFirebaseCommunicator.signUpUser(validEmail, validPassword, name, validPhoneNumber);
+
+        // now check the test ran successfully
+        PowerMockito.verifyStatic();
+
+        Mockito.verify(mockedFirebaseAuth.signInWithEmailAndPassword(validEmail, validPassword));
+
+        assertEquals(taskToReturn, taskFromFirebaseCommunicator);
+
+
     }
 
     // ======== LOGIN TESTS ========
@@ -166,6 +187,90 @@ public class FirebaseCommunicatorTest {
     public void testValidEmailLogin() {
         String validEmail = "oldperson@needsnavigational.help";
         String validPassword = "oldpersonpassword";
+
+        Task<AuthResult> taskToReturn = new Task<AuthResult>() {
+            @Override
+            public boolean isComplete() {
+                return true;
+            }
+
+            @Override
+            public boolean isSuccessful() {
+                return true;
+            }
+
+            @Override
+            public boolean isCanceled() {
+                return false;
+            }
+
+            @Override
+            public AuthResult getResult() {
+                return null;
+            }
+
+            @Override
+            public <X extends Throwable> AuthResult getResult(@NonNull Class<X> aClass) throws X {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public Exception getException() {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnSuccessListener(@NonNull OnSuccessListener<? super AuthResult> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super AuthResult> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super AuthResult> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
+                return null;
+            }
+        };
+        Task<AuthResult> taskFromFirebaseCommunicator;
+
+        // specify the particulars for the FirebaseAuth for this test
+        Mockito.when(mockedFirebaseAuth.signInWithEmailAndPassword(validEmail,
+                validPassword)).thenReturn(taskToReturn);
+
+        // Perform the test
+        taskFromFirebaseCommunicator = testFirebaseCommunicator.logInUserEmail(validEmail, validPassword);
+
+        // now check the test ran successfully
+        PowerMockito.verifyStatic();
+
+        Mockito.verify(mockedFirebaseAuth.signInWithEmailAndPassword(validEmail, validPassword));
+
+        assertEquals(taskToReturn, taskFromFirebaseCommunicator);
 
     }
 
