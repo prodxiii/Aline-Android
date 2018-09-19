@@ -1,6 +1,5 @@
 package coolgroup.com.aline.Model;
 
-import com.google.android.gms.common.api.Result;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -10,10 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-
-import coolgroup.com.aline.Controller;
-import coolgroup.com.aline.Model.iServerCommunicator;
-import coolgroup.com.aline.Model.User;
 
 public class FirebaseCommunicator implements iServerCommunicator {
 
