@@ -78,17 +78,21 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
     @Override
     public boolean addNewContact(String userId, String contactUserId) {
-        // reference to user node in the contacts database subtree
+        // reference to main user node in the contacts database subtree
         DatabaseReference userRef = contacts.child(userId);
 
         // add new key-value pair under the user node (only key matters)
         userRef.child(contactUserId).setValue(true);
-
         return true;
     }
 
     @Override
     public boolean removeContact(String userId, String contactUserId) {
-        return false;
+        // reference to main user node in the contacts database subtree
+        DatabaseReference userRef = contacts.child(userId);
+
+        // remove the key-value pair corresponding to the contact to be deleted
+        userRef.child(contactUserId).removeValue();
+        return true;
     }
 }
