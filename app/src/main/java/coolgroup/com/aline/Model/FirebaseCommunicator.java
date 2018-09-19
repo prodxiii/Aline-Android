@@ -46,9 +46,9 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * @return True if the account exists and details are correct, else false.
      */
     @Override
-    public Task<AuthResult> logInUserEmail(String email, String password) {
-        Task<AuthResult> toReturn = mFirebaseAuth.signInWithEmailAndPassword(email, password);
-        Controller.getInstance().setMainUser(new User(email, password));
+    public Task<Parcelable> logInUserEmail(String email, String password) {
+        Task<Parcelable> toReturn = (Task<Parcelable>) mFirebaseAuth.signInWithEmailAndPassword(email, password);
+        Controller.getInstance().setMainUser(new User(email, password, null, null));
         Controller.getInstance().getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
         return toReturn;
     }
