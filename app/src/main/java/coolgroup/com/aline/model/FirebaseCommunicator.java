@@ -1,14 +1,19 @@
-package coolgroup.com.aline.model;
+package coolgroup.com.aline.Model;
 
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 import coolgroup.com.aline.Controller;
+import coolgroup.com.aline.Model.iServerCommunicator;
+import coolgroup.com.aline.Model.User;
 
 public class FirebaseCommunicator implements iServerCommunicator {
 
@@ -40,11 +45,17 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * @return True if the account exists and details are correct, else false.
      */
     @Override
-    public Task<AuthResult> logInUserEmail(String email, String password) {
-        Task<AuthResult> toReturn = mFirebaseAuth.signInWithEmailAndPassword(email, password);
-        Controller.getInstance().setMainUser(new User(email, password));
-        Controller.getInstance().getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
-        return toReturn;
+    public void logInUserEmail(String email, String password, OnSuccessListener<User> listener) {
+        Task<AuthResult> task = mFirebaseAuth.signInWithEmailAndPassword(email, password);
+        task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+
+                FirebaseUser mFirebaseUser = authResult.getUser();
+
+                listener.onSuccess(firebaseUsertoUser(mFirebaseUser));
+            }
+        });
     }
 
     /**
@@ -55,8 +66,8 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * @return True if the account exists and details are correct, else false.
      */
     @Override
-    public boolean logInUserPhone(String phone, String password) {
-        return false;
+    public void logInUserPhone(String phone, String password, OnSuccessListener<User> listener) {
+        return;
     }
 
     /**
@@ -70,14 +81,14 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * and the format of all arguments is valid (e.g. password length).
      */
     @Override
-    public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
-        Controller currentController = Controller.getInstance();
-        Task<AuthResult> toReturn = mFirebaseAuth.createUserWithEmailAndPassword(email, password);
-        currentController.setMainUser(new User(email, password));
-        currentController.getMainUser().setName(name);
-        currentController.getMainUser().setPhone(name);
-        currentController.getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
-        return toReturn;
+    public void signUpUser(String email, String password, String name, String phone, OnSuccessListener<User> listener) {
+//        Controller currentController = Controller.getInstance();
+//        Task<AuthResult> toReturn = mFirebaseAuth.createUserWithEmailAndPassword(email, password);
+//        //TODO: check that login succeeded before assigning values as if it has.
+//        currentController.setMainUser(
+//                new User(email, name, phone, mFirebaseAuth.getCurrentUser().getUid())
+//                );
+//        return;
     }
 
     /**
@@ -138,4 +149,13 @@ public class FirebaseCommunicator implements iServerCommunicator {
     public boolean removeContact(String userId, String contactUserId) {
         return false;
     }
+
+    private User firebaseUsertoUser(FirebaseUser mFirebaseUser) {
+        return new User(mFirebaseUser.getEmail(),
+                        mFirebaseUser.getDisplayName(),
+                        mFirebaseUser.getPhoneNumber(),
+                        mFirebaseUser.getUid());
+    }
+
+
 }
