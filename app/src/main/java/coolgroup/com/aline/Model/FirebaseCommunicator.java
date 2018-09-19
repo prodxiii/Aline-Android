@@ -55,7 +55,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
         DatabaseReference userRef = contacts.child(userId);
 
         // each child key of the user node corresponds to a contact user ID
-        userRef.addValueEventListener(new ValueEventListener() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists())
@@ -78,6 +78,9 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
     @Override
     public boolean addNewContact(String userId, String contactUserId) {
+        if (!userExists(userId) || !userExists(contactUserId))
+            return false;
+
         // reference to main user node in the contacts database subtree
         DatabaseReference userRef = contacts.child(userId);
 
@@ -88,6 +91,9 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
     @Override
     public boolean removeContact(String userId, String contactUserId) {
+        if (!userExists(userId) || !userExists(contactUserId))
+            return false;
+
         // reference to main user node in the contacts database subtree
         DatabaseReference userRef = contacts.child(userId);
 
@@ -95,4 +101,54 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userRef.child(contactUserId).removeValue();
         return true;
     }
+
+    /**
+     * Container class for passing values from anonymous inner class to outer scope.
+     * @param <T> Type of the value to be passed
+     */
+    public class ValueContainer<T> {
+        private T value;
+
+        public ValueContainer() {
+
+        }
+
+        public ValueContainer(T v) {
+            this.value = v;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public void setValue(T val) {
+            this.value = value;
+        }
+    }
+
+    /**
+     * Determine whether a user ID is valid (corresponds to a user in the database)
+     * @param userId The user ID to be checked
+     * @return True iff the user ID is valid
+     */
+    private boolean userExists(String userId) {
+        DatabaseReference userRef = users.child(userId);
+        ValueContainer<Boolean> result = new ValueContainer<>(false);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    result.setValue(true);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return result.getValue();
+    }
+
 }
