@@ -21,6 +21,11 @@ import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
+    /*
+     * MainActivity is the entrance to the app. It is where we come when the app is first opened.
+     * After that, for doing anything, we palm it off to another activity. We want very little
+     * functionality in this activity.
+     */
 
 
     // Declare Button and Intro View
@@ -30,6 +35,19 @@ public class MainActivity extends AppCompatActivity {
     // Declare a users database
     DatabaseReference users;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //TODO: get this activity to follow this pattern.
+        // If (user logged in) {
+            // goto map activity or something.
+        // else {
+            // ask user to choose between login or signup activities.
+    }
+
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         // Override button onClick methods to show Login Dialog
         btnSignIn.setOnClickListener(v -> showLogInDialog());
     }
+    */
 
     // Create Login Dialog which is of type AlertDialog
     private void showLogInDialog() {
