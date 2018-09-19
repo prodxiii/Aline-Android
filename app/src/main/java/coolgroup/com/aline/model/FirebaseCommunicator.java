@@ -146,10 +146,10 @@ public class FirebaseCommunicator implements iServerCommunicator {
     }
 
     private User firebaseUsertoUser(FirebaseUser mFirebaseUser) {
-        return new User(mFirebaseUser.getEmail(),
+        return new User(mFirebaseUser.getUid(),
+                        mFirebaseUser.getEmail(),
                         mFirebaseUser.getDisplayName(),
-                        mFirebaseUser.getPhoneNumber(),
-                        mFirebaseUser.getUid());
+                        mFirebaseUser.getPhoneNumber());
     }
 
 

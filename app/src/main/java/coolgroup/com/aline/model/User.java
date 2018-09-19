@@ -1,48 +1,19 @@
 package coolgroup.com.aline.model;
 
-public class User {
+import com.google.firebase.database.Exclude;
 
-    private String email, name, phone, uID;
+public final class User {
 
-    public User() {
-    }
+    @Exclude  // so that id is not duplicated in database
+    public final String id;
 
-    public User(String email, String name, String phone, String uID) {
+    public final String email, name, phone;
+
+    public User(String id, String email, String name, String phone) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.phone = phone;
-        this.uID = uID;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getuID() {
-        return uID;
-    }
-
-    public void setuID(String uID) {
-        this.uID = uID;
-    }
 }
