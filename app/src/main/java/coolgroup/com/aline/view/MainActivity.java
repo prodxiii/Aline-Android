@@ -1,4 +1,4 @@
-package coolgroup.com.aline.View;
+package coolgroup.com.aline.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import coolgroup.com.aline.Model.User;
+import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.R;
 import dmax.dialog.SpotsDialog;
 

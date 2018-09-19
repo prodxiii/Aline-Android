@@ -1,4 +1,4 @@
-package coolgroup.com.aline.Model;
+package coolgroup.com.aline.model;
 
 import com.google.firebase.database.Exclude;
 
