@@ -23,30 +23,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference users;
 
-    private Parcelable r = new AuthResult() {
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel parcel, int i) {
-
-        }
-
-        @Override
-        public FirebaseUser getUser() {
-            return null;
-        }
-
-        @Override
-        public AdditionalUserInfo getAdditionalUserInfo() {
-            return null;
-        }
-    }
-            ;
-
     public FirebaseCommunicator() {
         // Initialize Firebase
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -103,9 +79,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
     public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
         Controller currentController = Controller.getInstance();
         Task<AuthResult> toReturn = mFirebaseAuth.createUserWithEmailAndPassword(email, password);
-        currentController.setMainUser(new User(email, password));
-        currentController.getMainUser().setName(name);
-        currentController.getMainUser().setPhone(name);
+        currentController.setMainUser(new User(email, password, name, phone));
         currentController.getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
         return toReturn;
     }

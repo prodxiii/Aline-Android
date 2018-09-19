@@ -1,5 +1,9 @@
 package coolgroup.com.aline.Model;
 
+import android.os.Parcelable;
+
+import com.google.android.gms.tasks.Task;
+
 import java.util.ArrayList;
 
 public interface iServerCommunicator {
@@ -10,7 +14,7 @@ public interface iServerCommunicator {
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
-    boolean logInUserEmail(String email, String password);
+    Task<Parcelable> logInUserEmail(String email, String password);
 
     /**
      * Authenticate a user by phone number and password.
@@ -19,7 +23,7 @@ public interface iServerCommunicator {
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
-    boolean logInUserPhone(String phone, String password);
+    Task<Parcelable> logInUserPhone(String phone, String password);
 
     /**
      * Register an account for a user.
@@ -31,7 +35,7 @@ public interface iServerCommunicator {
      * @return True if the user doesn’t already exist (e.g. email taken)
      * and the format of all arguments is valid (e.g. password length).
      */
-    boolean signUpUser(String email, String password, String name, String phone);
+    Task<Parcelable> signUpUser(String email, String password, String name, String phone);
 
     /**
      * Retrieve a user ID string.

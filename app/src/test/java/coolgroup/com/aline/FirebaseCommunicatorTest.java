@@ -162,8 +162,7 @@ public class FirebaseCommunicatorTest {
         Task<AuthResult> taskFromFirebaseCommunicator;
 
         // specify the particulars for the FirebaseAuth for this test
-        Mockito.when(mockedFirebaseAuth.signInWithEmailAndPassword(validEmail,
-                        validPassword)).thenReturn(taskToReturn);
+        Mockito.when(mockedFirebaseAuth.createUserWithEmailAndPassword(validEmail, validPassword)).thenReturn(taskToReturn);
 
         // Perform the test
         taskFromFirebaseCommunicator = testFirebaseCommunicator.signUpUser(validEmail, validPassword, name, validPhoneNumber);
@@ -171,7 +170,7 @@ public class FirebaseCommunicatorTest {
         // now check the test ran successfully
         PowerMockito.verifyStatic();
 
-        Mockito.verify(mockedFirebaseAuth.signInWithEmailAndPassword(validEmail, validPassword));
+        Mockito.verify(mockedFirebaseAuth.createUserWithEmailAndPassword(validEmail, validPassword));
 
         assertEquals(taskToReturn, taskFromFirebaseCommunicator);
 
@@ -282,6 +281,79 @@ public class FirebaseCommunicatorTest {
         String validPassword = "oldpersonpassword";
         String validPhoneNumber = "0444444444";
 
+        Task<AuthResult> taskToReturn = new Task<AuthResult>() {
+            @Override
+            public boolean isComplete() {
+                return true;
+            }
+
+            @Override
+            public boolean isSuccessful() {
+                return true;
+            }
+
+            @Override
+            public boolean isCanceled() {
+                return false;
+            }
+
+            @Override
+            public AuthResult getResult() {
+                return null;
+            }
+
+            @Override
+            public <X extends Throwable> AuthResult getResult(@NonNull Class<X> aClass) throws X {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public Exception getException() {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnSuccessListener(@NonNull OnSuccessListener<? super AuthResult> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super AuthResult> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super AuthResult> onSuccessListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public Task<AuthResult> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
+                return null;
+            }
+        };
+        Task<AuthResult> taskFromFirebaseCommunicator;
+
+        taskFromFirebaseCommunicator = testFirebaseCommunicator.logInUserPhone(validPhoneNumber, validPassword);
+
+        assertEquals(taskToReturn, taskFromFirebaseCommunicator);
     }
 
     // ======== CONTACTS TESTS ========
