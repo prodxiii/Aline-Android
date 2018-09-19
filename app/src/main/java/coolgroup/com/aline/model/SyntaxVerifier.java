@@ -1,4 +1,4 @@
-package coolgroup.com.aline.Model;
+package coolgroup.com.aline.model;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

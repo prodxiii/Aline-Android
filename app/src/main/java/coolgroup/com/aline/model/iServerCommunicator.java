@@ -1,4 +1,4 @@
-package coolgroup.com.aline.Model;
+package coolgroup.com.aline.model;
 
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -7,7 +7,7 @@ import com.google.firebase.auth.AuthResult;
 
 import java.util.ArrayList;
 
-import coolgroup.com.aline.Model.User;
+import coolgroup.com.aline.model.User;
 
 public interface iServerCommunicator {
     /**
