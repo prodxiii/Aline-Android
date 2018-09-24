@@ -1,24 +1,26 @@
 package coolgroup.com.aline;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import coolgroup.com.aline.model.FirebaseCommunicator;
-import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.model.iServerCommunicator;
+import coolgroup.com.aline.model.User;
 
 public class Controller {
 
     /* Follows Singleton design pattern */
     private static Controller instance = new Controller();
 
-    private final FirebaseDatabase db = FirebaseDatabase.getInstance();
-    public final iServerCommunicator serverCommunicator = new FirebaseCommunicator(db);
-
+    // Controlled classes
+    public final iServerCommunicator serverCommunicator = new FirebaseCommunicator();
     private User mainUser;
 
-    private Controller() {}
+    private Controller() {
+
+    }
 
     public static Controller getInstance() {
+        if (instance == null) {
+            Controller.instance = new Controller();
+        }
         return instance;
     }
 

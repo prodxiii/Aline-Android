@@ -13,36 +13,46 @@ import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.R;
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
+    /*
+     * MainActivity is the entrance to the app. It is where we come when the app is first opened.
+     * After that, for doing anything, we palm it off to another activity. We want very little
+     * functionality in this activity.
+     */
 
 
     // Declare Button and Intro View
     Button btnSignIn, btnRegister;
     RelativeLayout rootLayout;
 
-    // Declare Firebase
-    FirebaseAuth auth;
-    FirebaseDatabase db;
-
     // Declare a users database
     DatabaseReference users;
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        //TODO: get this activity to follow this pattern.
+//        // If (user logged in) {
+//            // goto map activity or something.
+//        // else {
+//            // ask user to choose between login or signup activities.
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Firebase
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance();
-        users = db.getReference("Users");
+        users = Controller.getInstance().serverCommunicator.getFirebaseDatabase().getReference("Users");
 
         // Initialize Views
         btnRegister = findViewById(R.id.btnRegister);
@@ -108,8 +118,12 @@ public class MainActivity extends AppCompatActivity {
             waitingDialog.show();
 
             // Try to Login with correctly validated email and password
-            auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
-                    .addOnSuccessListener(authResult -> {
+            // auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
+            Controller.getInstance().serverCommunicator.logInUserEmail(
+                    edtEmail.getText().toString(),
+                    edtPassword.getText().toString(),
+                    mainUser -> {
+                        Controller.getInstance().setMainUser(mainUser);
 
                         // Remove the loading dialog
                         waitingDialog.dismiss();
@@ -119,20 +133,20 @@ public class MainActivity extends AppCompatActivity {
 
                         // And close the Login layout
                         finish();
-                    })
-                    .addOnFailureListener(e -> {
-
-                        // Remove the loading dialog
-                        waitingDialog.dismiss();
-
-                        // Incorrect email or password
-                        Snackbar.make(rootLayout, "Failed " + e.getMessage(), Snackbar.LENGTH_LONG)
-                                .show();
-
-                        // Make SignIn button active again
-                        btnSignIn.setEnabled(true);
-
                     });
+//                    .addOnFailureListener(e -> {
+//
+//                        // Remove the loading dialog
+//                        waitingDialog.dismiss();
+//
+//                        // Incorrect email or password
+//                        Snackbar.make(rootLayout, "Failed " + e.getMessage(), Snackbar.LENGTH_LONG)
+//                                .show();
+//
+//                        // Make SignIn button active again
+//                        btnSignIn.setEnabled(true);
+//
+//                    });
         });
 
         // Set the Cancel button
@@ -200,8 +214,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create a new user with the input details
-            auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
-                    .addOnSuccessListener(authResult -> {
+            // auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
+            Controller.getInstance().serverCommunicator.signUpUser(
+                    edtEmail.getText().toString(),
+                    edtPassword.getText().toString(),
+                    "",
+                    "",
+                    authResult -> {
                         // Save user to database
                         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         String email = edtEmail.getText().toString();
@@ -210,20 +229,25 @@ public class MainActivity extends AppCompatActivity {
 
                         User user = new User(id, email, name, phone);
 
+//                        System.out.println(user.getName());
+//                        System.out.println(user.getEmail());
+//                        System.out.println(user.getPassword());
+//                        System.out.println(user.getPhone());
+
                         // Use UID as the unique key
                         users.child(id)
                                 .setValue(user)
                                 .addOnSuccessListener(aVoid -> {
                                     //WELCOME TO ALINE
-                                    Snackbar.make(rootLayout, "Homepage to ALINE!", Snackbar.LENGTH_SHORT)
+                                    Snackbar.make(rootLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                                             .show();
                                 })
                                 .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
                                         .show());
 
-                    })
-                    .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT)
-                            .show());
+                    });
+//                    .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT)
+//                            .show());
         });
         // Set the Cancel button
         dialog.setNegativeButton("CANCEL", (dialog1, which) -> dialog1.dismiss());
