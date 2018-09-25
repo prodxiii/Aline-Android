@@ -3,7 +3,7 @@ package coolgroup.com.aline.model;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface iServerCommunicator {
 
@@ -66,7 +66,15 @@ public interface iServerCommunicator {
      * @param userId The user to be queried.
      * @return An ArrayList of the user’s contacts.
      */
-    ArrayList<String> getContactsList(String userId);
+    List<String> getContactsList(String userId);
+
+    /**
+     * Retrieve all contacts of a user as User instances.
+     *
+     * @param userId The user to be queried.
+     * @return An ArrayList of the user’s contacts as User instances.
+     */
+    List<User> getContactsUserList(String userId);
 
     /**
      * Add a new user to the list of contacts.

@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FirebaseCommunicator implements iServerCommunicator {
 
@@ -133,8 +134,8 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * @return An ArrayList of the user’s contacts.
      */
     @Override
-    public ArrayList<String> getContactsList(String userId) {
-        ArrayList<String> contactList = new ArrayList<>();
+    public List<String> getContactsList(String userId) {
+        List<String> contactList = new ArrayList<>();
 
         // reference to user node in the contacts database subtree
         DatabaseReference userRef = contacts.child(userId);
@@ -159,6 +160,24 @@ public class FirebaseCommunicator implements iServerCommunicator {
         });
 
         return contactList;
+    }
+
+    /**
+     * Retrieve all contacts of a user as User instances.
+     *
+     * @param userId The user to be queried.
+     * @return An ArrayList of the user’s contacts as User instances.
+     */
+    @Override
+    public List<User> getContactsUserList(String userId) {
+        List<String> contactIds = getContactsList(userId);
+        List<User> contactUsers = new ArrayList<>();
+
+        for (String contactId : contactIds) {
+            contactUsers.add(getBasicUserInfo(contactId));
+        }
+
+        return contactUsers;
     }
 
     /**
