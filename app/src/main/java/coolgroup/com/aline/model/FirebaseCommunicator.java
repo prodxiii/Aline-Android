@@ -14,7 +14,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FirebaseCommunicator implements iServerCommunicator {
 
@@ -108,7 +107,23 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public User getBasicUserInfo(String userId) {
-        return null;
+        // reference to user node in the users database subtree
+        DatabaseReference userRef = users.child(userId);
+        ValueContainer<User> userContainer = new ValueContainer<>(null);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userContainer.setValue(dataSnapshot.getValue(User.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return userContainer.getValue();
     }
 
     /**
@@ -146,6 +161,13 @@ public class FirebaseCommunicator implements iServerCommunicator {
         return contactList;
     }
 
+    /**
+     * Add a new user to the list of contacts.
+     *
+     * @param userId        The user whose contact list is being updated.
+     * @param contactUserId The user to be added.
+     * @return True if the update was successful.
+     */
     @Override
     public boolean addNewContact(String userId, String contactUserId) {
         if (!userExists(userId) || !userExists(contactUserId))
