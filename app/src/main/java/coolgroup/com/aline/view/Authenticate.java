@@ -20,7 +20,7 @@ import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
 
-public class MainActivity extends AppCompatActivity {
+public class Authenticate extends AppCompatActivity {
 
 
     // Declare Button and Intro View
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_authenticate);
 
         users = Controller.getInstance().serverCommunicator.getmFirebaseDatabase().getReference("Users");
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setTitle("SIGN IN");
         dialog.setMessage("Please use email to sign in");
 
-        // Instantiates a Login layout XML file into the corresponding MainActivity view object
+        // Instantiates a Login layout XML file into the corresponding Authenticate view object
         LayoutInflater inflater = LayoutInflater.from(this);
         View login_layout = inflater.inflate(R.layout.layout_login, null);
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Android AlertDialog with moving spots progress indicator packed as android library.
-            android.app.AlertDialog waitingDialog = new SpotsDialog(MainActivity.this);
+            android.app.AlertDialog waitingDialog = new SpotsDialog(Authenticate.this);
             waitingDialog.show();
 
             // Try to Login with correctly validated email and password
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         waitingDialog.dismiss();
 
                         // If email and password is authenticated open the welcome layout
-                        startActivity(new Intent(MainActivity.this, Homepage.class));
+                        startActivity(new Intent(Authenticate.this, Chat.class));
 
                         // And close the Login layout
                         finish();
@@ -136,15 +136,16 @@ public class MainActivity extends AppCompatActivity {
         dialog.setTitle("REGISTER");
         dialog.setMessage("Please use email to register");
 
-        // Instantiates a Register layout XML file into the corresponding MainActivity view object
+        // Instantiates a Register layout XML file into the corresponding Authenticate view object
         LayoutInflater inflater = LayoutInflater.from(this);
         View register_layout = inflater.inflate(R.layout.layout_register, null);
 
         // Create custom TextView for email, name, phone and password
-        final MaterialEditText edtName = register_layout.findViewById(R.id.edtName);
-        final MaterialEditText edtEmail = register_layout.findViewById(R.id.edtEmail);
-        final MaterialEditText edtPhone = register_layout.findViewById(R.id.edtPhone);
-        final MaterialEditText edtPassword = register_layout.findViewById(R.id.edtPassword);
+        final MaterialEditText edtName, edtEmail, edtPhone, edtPassword;
+        edtName = register_layout.findViewById(R.id.edtName);
+        edtEmail = register_layout.findViewById(R.id.edtEmail);
+        edtPhone = register_layout.findViewById(R.id.edtPhone);
+        edtPassword = register_layout.findViewById(R.id.edtPassword);
 
         dialog.setView(register_layout);
 
@@ -186,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create a new user with the input details
-            // auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
             Controller.getInstance().serverCommunicator.signUpUser(edtEmail.getText().toString(), edtPassword.getText().toString(), "", "")
                     .addOnSuccessListener(authResult -> {
                         // Save user to database
@@ -199,20 +199,24 @@ public class MainActivity extends AppCompatActivity {
                         user.setPhone(edtPhone.getText().toString());
 
                         // Not saving the password
-                        user.setPassword(edtPassword.getText().toString());
-
-//                        System.out.println(user.getName());
-//                        System.out.println(user.getEmail());
-//                        System.out.println(user.getPassword());
-//                        System.out.println(user.getPhone());
+                        // user.setPassword(edtPassword.getText().toString());
 
                         // Use UID as the unique key
                         users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                 .setValue(user)
                                 .addOnSuccessListener(aVoid -> {
+
                                     //WELCOME TO ALINE
                                     Snackbar.make(rootLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                                             .show();
+
+                                    // If email and password is authenticated open the welcome layout
+                                    startActivity(new Intent(Authenticate.this, Chat.class));
+
+                                    // And close the Login layout
+                                    finish();
+
+
                                 })
                                 .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
                                         .show());
