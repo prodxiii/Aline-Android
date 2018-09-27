@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
             // Disable Sign In button after it starts processing
             btnSignIn.setEnabled(false);
 
-
             // Validate email and password
             if (TextUtils.isEmpty(edtEmail.getText().toString())) {
                 Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
@@ -85,13 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
             if (TextUtils.isEmpty(edtPassword.getText().toString())) {
                 Snackbar.make(rootLayout, "Please enter password", Snackbar.LENGTH_SHORT)
-                        .show();
-                return;
-            }
-
-            // If password is shorter than six characters
-            if (edtPassword.getText().toString().length() < 6) {
-                Snackbar.make(rootLayout, "Password too short!", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
