@@ -24,8 +24,8 @@ public class Authenticate extends AppCompatActivity {
 
 
     // Declare Button and Intro View
-    Button btnSignIn, btnRegister;
-    RelativeLayout rootLayout;
+    private Button btnSignIn, btnRegister;
+    private RelativeLayout authLayout;
 
     // Declare a users database
     DatabaseReference users;
@@ -40,7 +40,7 @@ public class Authenticate extends AppCompatActivity {
         // Initialize Views
         btnRegister = findViewById(R.id.btnRegister);
         btnSignIn = findViewById(R.id.btnSignIn);
-        rootLayout = findViewById(R.id.rootLayout);
+        authLayout = findViewById(R.id.authLayout);
 
         // Override button onClick methods to show Register Dialog
         btnRegister.setOnClickListener(v -> showRegisterDialog());
@@ -77,13 +77,13 @@ public class Authenticate extends AppCompatActivity {
 
             // Validate email and password
             if (TextUtils.isEmpty(edtEmail.getText().toString())) {
-                Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
+                Snackbar.make(authLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
             if (TextUtils.isEmpty(edtPassword.getText().toString())) {
-                Snackbar.make(rootLayout, "Please enter password", Snackbar.LENGTH_SHORT)
+                Snackbar.make(authLayout, "Please enter password", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
@@ -112,7 +112,7 @@ public class Authenticate extends AppCompatActivity {
                         waitingDialog.dismiss();
 
                         // Incorrect email or password
-                        Snackbar.make(rootLayout, "Failed " + e.getMessage(), Snackbar.LENGTH_LONG)
+                        Snackbar.make(authLayout, "Failed " + e.getMessage(), Snackbar.LENGTH_LONG)
                                 .show();
 
                         // Make SignIn button active again
@@ -156,32 +156,32 @@ public class Authenticate extends AppCompatActivity {
 
             // Validate email, password, name and phone
             if (TextUtils.isEmpty(edtEmail.getText().toString())) {
-                Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
+                Snackbar.make(authLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
             if (TextUtils.isEmpty(edtPhone.getText().toString())) {
-                Snackbar.make(rootLayout, "Please enter phone number", Snackbar.LENGTH_SHORT)
+                Snackbar.make(authLayout, "Please enter phone number", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
             if (TextUtils.isEmpty(edtName.getText().toString())) {
-                Snackbar.make(rootLayout, "Please enter name", Snackbar.LENGTH_SHORT)
+                Snackbar.make(authLayout, "Please enter name", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
             if (TextUtils.isEmpty(edtPassword.getText().toString())) {
-                Snackbar.make(rootLayout, "Please enter password", Snackbar.LENGTH_SHORT)
+                Snackbar.make(authLayout, "Please enter password", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
 
             // If password is shorter than six characters
             if (edtPassword.getText().toString().length() < 6) {
-                Snackbar.make(rootLayout, "Password too short!", Snackbar.LENGTH_SHORT)
+                Snackbar.make(authLayout, "Password too short!", Snackbar.LENGTH_SHORT)
                         .show();
                 return;
             }
@@ -198,31 +198,27 @@ public class Authenticate extends AppCompatActivity {
                         user.setName(edtName.getText().toString());
                         user.setPhone(edtPhone.getText().toString());
 
-                        // Not saving the password
-                        // user.setPassword(edtPassword.getText().toString());
-
                         // Use UID as the unique key
                         users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                 .setValue(user)
                                 .addOnSuccessListener(aVoid -> {
 
-                                    //WELCOME TO ALINE
-                                    Snackbar.make(rootLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
-                                            .show();
-
                                     // If email and password is authenticated open the welcome layout
                                     startActivity(new Intent(Authenticate.this, Chat.class));
+
+                                    //WELCOME TO ALINE
+                                    Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
+                                            .show();
 
                                     // And close the Login layout
                                     finish();
 
-
                                 })
-                                .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
+                                .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
                                         .show());
 
                     })
-                    .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT)
+                    .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
                             .show());
         });
         // Set the Cancel button
