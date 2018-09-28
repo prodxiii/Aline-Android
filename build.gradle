@@ -24,7 +24,7 @@ allprojects {
             url "http://dl.bintray.com/glomadrian/maven"
         }
         flatDir {
-            dirs '/libs'
+            dirs 'libs'
         }
     }
 }
