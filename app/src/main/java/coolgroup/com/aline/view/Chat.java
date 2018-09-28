@@ -35,7 +35,7 @@ public class Chat extends AppCompatActivity {
         // Create the toolbar for the chat activity
         Toolbar mToolbar = findViewById(R.id.chat_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("This is chat activity");
+        getSupportActionBar().setTitle("Chats");
 
         // Create Tabs
         mViewPager = findViewById(R.id.chat_tab_pager);
