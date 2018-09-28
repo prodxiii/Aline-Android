@@ -44,6 +44,8 @@ dependencies {
     implementation 'com.github.d-max:spots-dialog:0.7@aar'
     implementation 'com.firebase:geofire-android:2.1.2'
     implementation 'com.github.glomadrian:MaterialAnimatedSwitch:1.1@aar'
+
+    compile(name:'sinch-android-rtc', version:'+', ext:'aar')
 }
 
 apply plugin: 'com.google.gms.google-services'

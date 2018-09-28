@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':sinch-android'
+project(':sinch-android').projectDir = new File('sinch-android-rtc/build.gradle')
