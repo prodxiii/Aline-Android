@@ -8,9 +8,12 @@
     tools:context=".view.Account">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="123dp"
-        android:layout_height="124dp"
-        android:src="@drawable/avatar" />
+        android:layout_width="200dp"
+        android:layout_height="177dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="94dp"
+        android:src="@drawable/avatar_male" />
 
 
 </RelativeLayout>
