@@ -11,9 +11,10 @@ import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SinchCommunicator implements iVOIPCommunicator {
+public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
 
     private SinchClient mSinchClient;
     private Call currentCall = null;
@@ -23,7 +24,18 @@ public class SinchCommunicator implements iVOIPCommunicator {
     private String mApplicationSecret;
     private String mEnvironmentHost;
 
-    //TODO: allow other classes to subscribe to certain events - hanging up, etc.
+    private ArrayList<iVOIPListener> listeners = new ArrayList<>();
+
+    public void addListener(iVOIPListener listener){
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+    public void removeListener(iVOIPListener listener) {
+        if (listeners.contains(listener)){
+            listeners.remove(listener);
+        }
+    }
 
     public SinchCommunicator(Context context, User currentUser){
 
@@ -63,10 +75,7 @@ public class SinchCommunicator implements iVOIPCommunicator {
 
     @Override
     public void hangUpCall(){
-        if (currentCall == null) {
-            return;
-        }
-        else {
+        if (currentCall != null) {
             currentCall.hangup();
             currentCall = null;
         }
@@ -75,15 +84,23 @@ public class SinchCommunicator implements iVOIPCommunicator {
     private class MCallListener implements CallListener {
         @Override
         public void onCallEnded(Call endedCall) {
+            for(iVOIPListener l : listeners) {
+                l.onCallEnded();
+            }
             currentCall = null;
         }
         @Override
         public void onCallEstablished(Call establishedCall) {
-
+            for(iVOIPListener l : listeners) {
+                l.onCallEstablished();
+            }
         }
         @Override
         public void onCallProgressing(Call progressingCall) {
             //call is ringing
+            for(iVOIPListener l : listeners) {
+                l.onCallRinging();
+            }
         }
         @Override
         public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
