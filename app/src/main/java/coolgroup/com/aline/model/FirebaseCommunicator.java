@@ -161,7 +161,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userMap.put("email", email);
         userMap.put("status", "Hi there, I'm using Aline.");
         userMap.put("image", "default");
-        userMap.put("thumb_image", "default");
+        userMap.put("thumbnail", "default");
 
         return mDatabase.setValue(userMap);
     }

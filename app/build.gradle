@@ -48,7 +48,7 @@ dependencies {
     implementation 'com.github.glomadrian:MaterialAnimatedSwitch:1.1@aar'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 
-    // Account View Activity
+    // AccountSettings View Activity
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     // Dependency for Loading

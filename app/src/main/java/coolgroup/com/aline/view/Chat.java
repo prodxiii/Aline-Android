@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+import com.google.android.gms.common.internal.AccountType;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -57,7 +58,7 @@ public class Chat extends AppCompatActivity {
 
         // User is not signed in
         if (currentUser == null) {
-           sendToAuth();
+           backToAuth();
         }
     }
 
@@ -75,16 +76,22 @@ public class Chat extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         // Sign out of Aline
-        if (item.getItemId() == R.id.menuSignOut) {
+        if (item.getItemId() == R.id.menu_sign_out) {
             FirebaseAuth.getInstance().signOut();
-            sendToAuth();
+            backToAuth();
+        }
+
+        // Go to AccountSettings Settings
+        if (item.getItemId() == R.id.menu_account_settings) {
+            Intent accountIntent = new Intent(Chat.this, AccountSettings.class);
+            startActivity(accountIntent);
         }
 
         return true;
     }
 
     // Send user to Authentication page
-    private void sendToAuth() {
+    private void backToAuth() {
         Intent authIntent = new Intent(Chat.this, Authenticate.class);
 
         // Validation to stop user from going to the authenticate activity again

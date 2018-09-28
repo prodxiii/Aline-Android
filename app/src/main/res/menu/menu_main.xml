@@ -5,9 +5,9 @@
         android:id="@+id/menuAllUsers"
         android:title="All Users" />
     <item
-        android:id="@+id/menuSettings"
+        android:id="@+id/menu_account_settings"
         android:title="Account Settings" />
     <item
-        android:id="@+id/menuSignOut"
+        android:id="@+id/menu_sign_out"
         android:title="Sign Out" />
 </menu>

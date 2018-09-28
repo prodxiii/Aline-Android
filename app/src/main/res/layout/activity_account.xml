@@ -4,33 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.Account">
+    tools:context=".view.AccountSettings">
 
     <TextView
-        android:id="@+id/display_name"
+        android:id="@+id/account_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="235dp"
+        android:layout_marginTop="269dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Display Name"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/account_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/account_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp"
         android:fontFamily="@font/roboto_light"
         android:text="Hi there, I'm using Aline" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/account_image"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
@@ -42,10 +41,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="157dp"
+        android:layout_marginBottom="126dp"
         android:background="@color/colorSecondary"
-        android:textColor="@android:color/white"
         android:text="CHANGE IMAGE"
+        android:textColor="@android:color/white"
         android:textSize="10sp" />
 
     <Button
@@ -54,10 +53,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="101dp"
+        android:layout_marginBottom="67dp"
         android:background="@color/colorSecondary"
-        android:textColor="@android:color/white"
         android:text="UPDATE STATUS"
+        android:textColor="@android:color/white"
         android:textSize="10sp" />
 
 
