@@ -101,7 +101,12 @@ public class Authenticate extends AppCompatActivity {
                         waitingDialog.dismiss();
 
                         // If email and password is authenticated open the welcome layout
-                        startActivity(new Intent(Authenticate.this, Chat.class));
+                        Intent homeIntent = new Intent(Authenticate.this, Chat.class);
+
+                        // Validation to stop user from going to the authenticate activity again
+//                        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                        startActivity(homeIntent);
 
                         // And close the Login layout
                         finish();
