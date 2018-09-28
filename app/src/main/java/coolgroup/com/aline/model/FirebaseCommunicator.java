@@ -3,10 +3,12 @@ package coolgroup.com.aline.model;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import coolgroup.com.aline.Controller;
 
@@ -15,7 +17,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
     // Declare Firebase
     private FirebaseAuth mFirebaseAuth;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference users;
 
     public FirebaseCommunicator() {
         // Initialize Firebase
@@ -137,5 +138,29 @@ public class FirebaseCommunicator implements iServerCommunicator {
     @Override
     public boolean removeContact(String userId, String contactUserId) {
         return false;
+    }
+
+    /**
+     * Create user child in the database
+     *
+     * @param name
+     * @param email
+     * @param phone
+     */
+    public Task<Void> createUserChild(String name, String email, String phone) {
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = current_user.getUid();
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+
+        HashMap<String, String> userMap = new HashMap<>();
+        userMap.put("name", name);
+        userMap.put("phone", phone);
+        userMap.put("email", email);
+        userMap.put("status", "Hi there, I'm using Aline.");
+        userMap.put("image", "default");
+        userMap.put("thumb_image", "default");
+
+        return mDatabase.setValue(userMap);
     }
 }

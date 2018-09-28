@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -23,12 +24,11 @@ import dmax.dialog.SpotsDialog;
 public class Authenticate extends AppCompatActivity {
 
 
+    // Declare a users database
+    DatabaseReference users;
     // Declare Button and Intro View
     private Button btnSignIn, btnRegister;
     private RelativeLayout authLayout;
-
-    // Declare a users database
-    DatabaseReference users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,46 +191,33 @@ public class Authenticate extends AppCompatActivity {
                 return;
             }
 
-            // Create a new user with the input details
+            // Create an authentication in the Firebase Authentication
             Controller.getInstance().serverCommunicator.signUpUser(edtEmail.getText().toString(), edtPassword.getText().toString(), "", "")
                     .addOnSuccessListener(authResult -> {
-                        // Save user to database
-                        // Create a new user object TODO: Move this logic out of here
-                        User user = new User();
 
-                        // Set email, name and password for the user
-                        user.setEmail(edtEmail.getText().toString());
-                        user.setName(edtName.getText().toString());
-                        user.setPhone(edtPhone.getText().toString());
-
-                        // Use UID as the unique key
-                        users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .setValue(user)
+                        // Create an user in the Firebase Realtime Database
+                        Controller.getInstance().serverCommunicator.
+                                createUserChild(edtName.getText().toString(), edtEmail.getText().toString(), edtPhone.getText().toString())
                                 .addOnSuccessListener(aVoid -> {
-
-                                    // If email and password is authenticated open the welcome layout
-                                    startActivity(new Intent(Authenticate.this, Chat.class));
 
                                     //WELCOME TO ALINE
                                     Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                                             .show();
 
+                                    // If email and password is authenticated open the welcome layout
+                                    startActivity(new Intent(Authenticate.this, Chat.class));
+
                                     // And close the Login layout
                                     finish();
 
                                 })
-                                .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
-                                        .show());
-
+                                .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG).show());
                     })
-                    .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
-                            .show());
+                    .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG).show());
         });
-        // Set the Cancel button
+
         dialog.setNegativeButton("CANCEL", (dialog1, which) -> dialog1.dismiss());
-
         dialog.show();
-
     }
 }
 
