@@ -100,16 +100,9 @@ public class Authenticate extends AppCompatActivity {
                         // Remove the loading dialog
                         waitingDialog.dismiss();
 
-                        // If email and password is authenticated open the welcome layout
-                        Intent homeIntent = new Intent(Authenticate.this, Chat.class);
+                        // Welcome to Aline
+                        proceedToHomepage();
 
-                        // Validation to stop user from going to the authenticate activity again
-//                        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                        startActivity(homeIntent);
-
-                        // And close the Login layout
-                        finish();
                     })
                     .addOnFailureListener(e -> {
 
@@ -117,7 +110,7 @@ public class Authenticate extends AppCompatActivity {
                         waitingDialog.dismiss();
 
                         // Incorrect email or password
-                        Snackbar.make(authLayout, "Failed " + e.getMessage(), Snackbar.LENGTH_LONG)
+                        Snackbar.make(authLayout, e.getMessage(), Snackbar.LENGTH_LONG)
                                 .show();
 
                         // Make SignIn button active again
@@ -159,6 +152,9 @@ public class Authenticate extends AppCompatActivity {
 
             dialog12.dismiss();
 
+            // Disable Sign In button after it starts processing
+            btnRegister.setEnabled(false);
+
             // Validate email, password, name and phone
             if (TextUtils.isEmpty(edtEmail.getText().toString())) {
                 Snackbar.make(authLayout, "Please enter email address", Snackbar.LENGTH_SHORT)
@@ -191,6 +187,10 @@ public class Authenticate extends AppCompatActivity {
                 return;
             }
 
+            // Android AlertDialog with moving spots progress indicator packed as android library.
+            android.app.AlertDialog waitingDialog = new SpotsDialog(Authenticate.this);
+            waitingDialog.show();
+
             // Create an authentication in the Firebase Authentication
             Controller.getInstance().serverCommunicator.signUpUser(edtEmail.getText().toString(), edtPassword.getText().toString(), "", "")
                     .addOnSuccessListener(authResult -> {
@@ -200,24 +200,55 @@ public class Authenticate extends AppCompatActivity {
                                 createUserChild(edtName.getText().toString(), edtEmail.getText().toString(), edtPhone.getText().toString())
                                 .addOnSuccessListener(aVoid -> {
 
+                                    // Remove the loading dialog
+                                    waitingDialog.dismiss();
+
                                     //WELCOME TO ALINE
-                                    Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
-                                            .show();
-
-                                    // If email and password is authenticated open the welcome layout
-                                    startActivity(new Intent(Authenticate.this, Chat.class));
-
-                                    // And close the Login layout
-                                    finish();
+                                    proceedToHomepage();
 
                                 })
-                                .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG).show());
+                                .addOnFailureListener(e -> {
+                                    // Remove the loading dialog
+                                    waitingDialog.dismiss();
+
+                                    // Incorrect email or password
+                                    Snackbar.make(authLayout, e.getMessage(), Snackbar.LENGTH_LONG)
+                                            .show();
+
+                                    // Make SignIn button active again
+                                    btnSignIn.setEnabled(true);
+                                });
                     })
-                    .addOnFailureListener(e -> Snackbar.make(authLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG).show());
+                    .addOnFailureListener(e -> {
+                        // Remove the loading dialog
+                        waitingDialog.dismiss();
+
+                        Snackbar.make(authLayout, e.getMessage(), Snackbar.LENGTH_LONG).show();
+                    });
         });
 
         dialog.setNegativeButton("CANCEL", (dialog1, which) -> dialog1.dismiss());
         dialog.show();
     }
+
+
+    private void proceedToHomepage() {
+
+        Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
+                .show();
+
+        Intent homeIntent = new Intent(Authenticate.this, Chat.class);
+
+        // If email and password is authenticated open the welcome layout
+        startActivity(homeIntent);
+
+        // Validation to stop user from going to the authenticate activity again
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // And close the Login layout
+        finish();
+    }
+
+
 }
 

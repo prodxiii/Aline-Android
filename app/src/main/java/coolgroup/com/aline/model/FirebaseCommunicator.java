@@ -72,12 +72,12 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
-        Controller currentController = Controller.getInstance();
+//        Controller currentController = Controller.getInstance();
         Task<AuthResult> toReturn = mFirebaseAuth.createUserWithEmailAndPassword(email, password);
-        currentController.setMainUser(new User(email, password));
-        currentController.getMainUser().setName(name);
-        currentController.getMainUser().setPhone(name);
-        currentController.getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
+//        currentController.setMainUser(new User(email, password));
+//        currentController.getMainUser().setName(name);
+//        currentController.getMainUser().setPhone(name);
+//        currentController.getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
         return toReturn;
     }
 
@@ -141,11 +141,13 @@ public class FirebaseCommunicator implements iServerCommunicator {
     }
 
     /**
-     * Create user child in the database
+     * Create user reference in the Firebase Realtime Database
      *
-     * @param name
-     * @param email
-     * @param phone
+     * @param name name of user
+     * @param email email of user
+     * @param phone phone of user
+     *
+     * @return Task<Void>
      */
     public Task<Void> createUserChild(String name, String email, String phone) {
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
