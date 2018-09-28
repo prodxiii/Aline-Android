@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".view.Chat">
 
+    <include layout="@layout/layout_appbar" android:id="@id/chatAppBar"/>
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
