@@ -1,11 +1,10 @@
-package coolgroup.com.aline.view;
+package coolgroup.com.aline.view.options;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.view.Update.Status;
+import coolgroup.com.aline.view.update.Status;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountSettings extends AppCompatActivity {
@@ -40,6 +39,8 @@ public class AccountSettings extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
+    private static final int GALLERY_PICK = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,7 @@ public class AccountSettings extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.profile_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Account");
+        getSupportActionBar().setTitle("Your Profile");
 
         //**************FIREBASE******************//
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -81,7 +82,6 @@ public class AccountSettings extends AppCompatActivity {
                 mAccountStatus.setText(status);
                 mAccountEmail.setText(email);
                 mAccountPhone.setText(phone);
-
             }
 
             @Override
@@ -90,13 +90,25 @@ public class AccountSettings extends AppCompatActivity {
             }
         });
 
-        mUpdateStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent statusIntent = new Intent(AccountSettings.this, Status.class);
-                startActivity(statusIntent);
-            }
+        mUpdateStatus.setOnClickListener(v -> {
+
+            String statusValue = mAccountStatus.getText().toString();
+
+            Intent statusIntent = new Intent(AccountSettings.this, Status.class);
+            statusIntent.putExtra("statusValue", statusValue);
+
+            startActivity(statusIntent);
         });
 
+        // TODO: 29/9/18 Incomplete. Ref: Picasso, CropImage and Part 13
+        mChangeImage.setOnClickListener(v -> {
+
+            Intent galleryIntent = new Intent();
+            galleryIntent.setType("image/*");
+            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+            startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
+
+        });
     }
 }

@@ -35,7 +35,7 @@ public class Authenticate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authenticate);
 
-        users = Controller.getInstance().serverCommunicator.getmFirebaseDatabase().getReference("Users");
+        users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("Users");
 
         // Initialize Views
         btnRegister = findViewById(R.id.btnRegister);

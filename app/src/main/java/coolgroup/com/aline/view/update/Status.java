@@ -1,11 +1,9 @@
-package coolgroup.com.aline.view.Update;
+package coolgroup.com.aline.view.update;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,8 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.view.AccountSettings;
-import dmax.dialog.SpotsDialog;
+import coolgroup.com.aline.view.options.AccountSettings;
 
 public class Status extends AppCompatActivity {
 
@@ -44,14 +41,17 @@ public class Status extends AppCompatActivity {
         mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUID);
         //**************************************************//
 
-
         mToolbar = findViewById(R.id.status_appbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Update Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        String statusValue = getIntent().getStringExtra("statusValue");
         mStatus = findViewById(R.id.input_status);
         mSave = findViewById(R.id.btn_save_status);
+
+        mStatus.setText(statusValue);
 
         mSave.setOnClickListener(v -> {
 
@@ -68,8 +68,6 @@ public class Status extends AppCompatActivity {
     // Send user back to parent page
     private void backToParentActivity() {
         Intent parentIntent = new Intent(Status.this, AccountSettings.class);
-
-        // Take user to authentication
         startActivity(parentIntent);
         finish();
     }

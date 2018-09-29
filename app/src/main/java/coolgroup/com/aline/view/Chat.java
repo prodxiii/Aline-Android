@@ -10,16 +10,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-import com.google.android.gms.common.internal.AccountType;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.adapters.SectionsPagerAdapter;
+import coolgroup.com.aline.model.User;
+import coolgroup.com.aline.view.options.AccountSettings;
+import coolgroup.com.aline.view.options.Users;
 
 public class Chat extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth; // Done
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -31,7 +33,7 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance(); // Done
 
         // Create the toolbar for the chat activity
         Toolbar mToolbar = findViewById(R.id.chat_appbar);
@@ -75,16 +77,21 @@ public class Chat extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        // Sign out of Aline
+        // Sign out of aline
         if (item.getItemId() == R.id.menu_sign_out) {
             FirebaseAuth.getInstance().signOut();
             backToAuth();
         }
 
-        // Go to AccountSettings Settings
+        // Go to accounts settings activity
         if (item.getItemId() == R.id.menu_account_settings) {
             Intent accountIntent = new Intent(Chat.this, AccountSettings.class);
             startActivity(accountIntent);
+        }
+        // Get a list of all users
+        if (item.getItemId() == R.id.menu_all_users) {
+            Intent usersIntent = new Intent(Chat.this, Users.class);
+            startActivity(usersIntent);
         }
 
         return true;

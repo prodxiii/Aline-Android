@@ -39,12 +39,9 @@ public interface iServerCommunicator {
     /**
      * Retrieve a user ID string.
      *
-     * @param email The email of the user to be queried.
-     * @param name  The name of the user to be queried.
-     * @param phone The phone of the user to be queried.
      * @return The user ID if the user exists, else null.
      */
-    String getUserId(String email, String name, String phone);
+    String getCurrentUID();
 
     /**
      * Retrieve the basic details of a user.
@@ -80,4 +77,14 @@ public interface iServerCommunicator {
      */
     boolean removeContact(String userId, String contactUserId);
 
+    /**
+     * Create user reference in the Firebase Realtime Database
+     *
+     * @param name  The name of user
+     * @param email The login email of user
+     * @param phone The phone number of user
+     *
+     * @return Task<Void>
+     */
+    Task<Void> createUserChild(String name, String email, String phone);
 }

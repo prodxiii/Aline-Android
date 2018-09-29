@@ -15,22 +15,23 @@ import coolgroup.com.aline.Controller;
 public class FirebaseCommunicator implements iServerCommunicator {
 
     // Declare Firebase
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
 
     public FirebaseCommunicator() {
         // Initialize Firebase
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
     }
 
     /**
-     * Getter for FirebaseDatabase
+     * Retrieve a user ID string.
      *
-     * @return db
+     * @return The user ID if the user exists, else null.
      */
-    public FirebaseDatabase getmFirebaseDatabase() {
-        return mFirebaseDatabase;
+    @Override
+    public String getCurrentUID() {
+        return mAuth.getCurrentUser().getUid();
     }
 
     /**
@@ -42,7 +43,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public Task<AuthResult> logInUserEmail(String email, String password) {
-        Task<AuthResult> toReturn = mFirebaseAuth.signInWithEmailAndPassword(email, password);
+        Task<AuthResult> toReturn = mAuth.signInWithEmailAndPassword(email, password);
 //        Controller.getInstance().setMainUser(new User(email, password));
 //        Controller.getInstance().getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
         return toReturn;
@@ -73,7 +74,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
     @Override
     public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
 //        Controller currentController = Controller.getInstance();
-        Task<AuthResult> toReturn = mFirebaseAuth.createUserWithEmailAndPassword(email, password);
+        Task<AuthResult> toReturn = mAuth.createUserWithEmailAndPassword(email, password);
 //        currentController.setMainUser(new User(email, password));
 //        currentController.getMainUser().setName(name);
 //        currentController.getMainUser().setPhone(name);
@@ -81,18 +82,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
         return toReturn;
     }
 
-    /**
-     * Retrieve a user ID string.
-     *
-     * @param email The email of the user to be queried.
-     * @param name  The name of the user to be queried.
-     * @param phone The phone of the user to be queried.
-     * @return The user ID if the user exists, else null.
-     */
-    @Override
-    public String getUserId(String email, String name, String phone) {
-        return null;
-    }
+
 
     /**
      * Retrieve the basic details of a user.
@@ -143,12 +133,13 @@ public class FirebaseCommunicator implements iServerCommunicator {
     /**
      * Create user reference in the Firebase Realtime Database
      *
-     * @param name name of user
-     * @param email email of user
-     * @param phone phone of user
+     * @param name  The name of user
+     * @param email The login email of user
+     * @param phone The phone number of user
      *
      * @return Task<Void>
      */
+    @Override
     public Task<Void> createUserChild(String name, String email, String phone) {
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = current_user.getUid();
@@ -164,5 +155,9 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userMap.put("thumbnail", "default");
 
         return mDatabase.setValue(userMap);
+    }
+
+    public FirebaseDatabase getmDatabase() {
+        return mDatabase;
     }
 }
