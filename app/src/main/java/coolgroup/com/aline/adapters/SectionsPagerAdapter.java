@@ -21,20 +21,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
         switch (position) {
             case 0:
-                Requests requests = new Requests();
-                return requests;
-
+                return new Requests();
             case 1:
-                Chats chats = new Chats();
-                return chats;
-
+                return new Chats();
             case 2:
-                Friends friends = new Friends();
-                return friends;
-
+                return new Friends();
             default:
                 return null;
-
         }
     }
 
