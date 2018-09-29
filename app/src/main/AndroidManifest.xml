@@ -42,7 +42,10 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".view.Chat" />
-        <activity android:name=".view.AccountSettings"></activity>
+        <activity android:name=".view.AccountSettings" />
+        <activity
+            android:name=".view.Update.Status"
+            android:parentActivityName=".view.AccountSettings" />
     </application>
 
 </manifest>

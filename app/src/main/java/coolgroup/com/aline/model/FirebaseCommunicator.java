@@ -43,8 +43,8 @@ public class FirebaseCommunicator implements iServerCommunicator {
     @Override
     public Task<AuthResult> logInUserEmail(String email, String password) {
         Task<AuthResult> toReturn = mFirebaseAuth.signInWithEmailAndPassword(email, password);
-        Controller.getInstance().setMainUser(new User(email, password));
-        Controller.getInstance().getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
+//        Controller.getInstance().setMainUser(new User(email, password));
+//        Controller.getInstance().getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
         return toReturn;
     }
 

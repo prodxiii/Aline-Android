@@ -6,58 +6,155 @@
     android:layout_height="match_parent"
     tools:context=".view.AccountSettings">
 
+    <include
+        android:id="@+id/profile_appbar"
+        layout="@layout/layout_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/account_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="269dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="247dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Display Name"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/account_status"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/account_name"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="239dp"
+        android:layout_marginStart="20dp"
         android:fontFamily="@font/roboto_light"
         android:text="Hi there, I'm using Aline" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/account_image"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_width="158dp"
+        android:layout_height="173dp"
+        android:layout_above="@+id/account_name"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_marginBottom="-247dp"
         android:src="@drawable/avatar_male" />
 
     <Button
         android:id="@+id/btn_change_image"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="126dp"
-        android:background="@color/colorSecondary"
-        android:text="CHANGE IMAGE"
-        android:textColor="@android:color/white"
-        android:textSize="10sp" />
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="206dp"
+        android:background="@drawable/btn_account_background"
+        android:fontFamily="@font/roboto_bold"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="EDIT"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="12sp" />
 
     <Button
-        android:id="@+id/btn_update_status"
-        android:layout_width="140dp"
+    android:id="@+id/btn_update_status"
+    android:layout_width="120dp"
+    android:layout_height="37dp"
+    android:layout_alignBottom="@+id/account_status"
+    android:layout_alignParentEnd="true"
+    android:layout_marginEnd="20dp"
+    android:background="@drawable/btn_account_background"
+    android:fontFamily="@font/roboto_bold"
+    android:paddingEnd="10dp"
+    android:paddingStart="10dp"
+    android:text="UPDATE STATUS"
+    android:textColor="@color/colorPrimaryText"
+    android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btn_update_phone"
+        android:layout_width="120dp"
+        android:layout_height="37dp"
+        android:layout_alignBottom="@+id/account_phone"
+        android:layout_alignStart="@+id/btn_update_status"
+        android:background="@drawable/btn_account_background"
+        android:fontFamily="@font/roboto_bold"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="UPDATE PHONE"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btn_update_email"
+        android:layout_width="120dp"
+        android:layout_height="37dp"
+        android:layout_alignBottom="@+id/account_email"
+        android:layout_alignStart="@+id/btn_update_status"
+        android:background="@drawable/btn_account_background"
+        android:fontFamily="@font/roboto_bold"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="UPDATE EMAIL"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/account_phone"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="67dp"
-        android:background="@color/colorSecondary"
-        android:text="UPDATE STATUS"
-        android:textColor="@android:color/white"
-        android:textSize="10sp" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="171dp"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="Your Mobile Number"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/account_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="96dp"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Your primary email address"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/account_status"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:text="Status" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/account_phone"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:text="Phone" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/account_email"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:text="Email" />
 
 
 </RelativeLayout>
