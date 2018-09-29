@@ -35,7 +35,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
     }
 
     /**
-     * Authenticate a user by email address and password.
+     * AuthenticateActivity a user by email address and password.
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
@@ -50,7 +50,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
     }
 
     /**
-     * Authenticate a user by phone number and password.
+     * AuthenticateActivity a user by phone number and password.
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.
@@ -144,7 +144,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = current_user.getUid();
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("AllUsersActivity").child(uid);
 
         HashMap<String, String> userMap = new HashMap<>();
         userMap.put("name", name);

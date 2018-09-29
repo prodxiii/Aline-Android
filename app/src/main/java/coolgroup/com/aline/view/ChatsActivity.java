@@ -15,11 +15,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.adapters.SectionsPagerAdapter;
-import coolgroup.com.aline.model.User;
-import coolgroup.com.aline.view.options.AccountSettings;
-import coolgroup.com.aline.view.options.Users;
+import coolgroup.com.aline.view.options.AccountSettingsActivity;
+import coolgroup.com.aline.view.options.AllUsersActivity;
 
-public class Chat extends AppCompatActivity {
+public class ChatsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth; // Done
 
@@ -31,7 +30,7 @@ public class Chat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chats);
 
         mAuth = FirebaseAuth.getInstance(); // Done
 
@@ -85,12 +84,12 @@ public class Chat extends AppCompatActivity {
 
         // Go to accounts settings activity
         if (item.getItemId() == R.id.menu_account_settings) {
-            Intent accountIntent = new Intent(Chat.this, AccountSettings.class);
+            Intent accountIntent = new Intent(ChatsActivity.this, AccountSettingsActivity.class);
             startActivity(accountIntent);
         }
         // Get a list of all users
         if (item.getItemId() == R.id.menu_all_users) {
-            Intent usersIntent = new Intent(Chat.this, Users.class);
+            Intent usersIntent = new Intent(ChatsActivity.this, AllUsersActivity.class);
             startActivity(usersIntent);
         }
 
@@ -99,7 +98,7 @@ public class Chat extends AppCompatActivity {
 
     // Send user to Authentication page
     private void backToAuth() {
-        Intent authIntent = new Intent(Chat.this, Authenticate.class);
+        Intent authIntent = new Intent(ChatsActivity.this, AuthenticateActivity.class);
 
         // Validation to stop user from going to the authenticate activity again
         authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

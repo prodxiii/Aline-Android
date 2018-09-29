@@ -17,10 +17,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.view.update.Status;
+import coolgroup.com.aline.view.update.StatusActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AccountSettings extends AppCompatActivity {
+public class AccountSettingsActivity extends AppCompatActivity {
 
     //**************FIREBASE******************//
     private DatabaseReference mUserDatabase;
@@ -44,7 +44,7 @@ public class AccountSettings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account);
+        setContentView(R.layout.activity_account_settings);
 
         mAccountImage = findViewById(R.id.account_image);
         mAccountName = findViewById(R.id.account_name);
@@ -57,14 +57,14 @@ public class AccountSettings extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.profile_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Your Profile");
+        getSupportActionBar().setTitle("Account Settings");
 
         //**************FIREBASE******************//
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         String current_uid = mCurrentUser.getUid();
 
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("AllUsersActivity").child(current_uid);
         //***************************************//
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
@@ -94,7 +94,7 @@ public class AccountSettings extends AppCompatActivity {
 
             String statusValue = mAccountStatus.getText().toString();
 
-            Intent statusIntent = new Intent(AccountSettings.this, Status.class);
+            Intent statusIntent = new Intent(AccountSettingsActivity.this, StatusActivity.class);
             statusIntent.putExtra("statusValue", statusValue);
 
             startActivity(statusIntent);

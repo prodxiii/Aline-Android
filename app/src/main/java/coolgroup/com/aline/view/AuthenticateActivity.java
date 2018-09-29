@@ -11,17 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
 
-public class Authenticate extends AppCompatActivity {
+public class AuthenticateActivity extends AppCompatActivity {
 
 
     // Declare a users database
@@ -35,7 +32,7 @@ public class Authenticate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authenticate);
 
-        users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("Users");
+        users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("AllUsersActivity");
 
         // Initialize Views
         btnRegister = findViewById(R.id.btnRegister);
@@ -57,7 +54,7 @@ public class Authenticate extends AppCompatActivity {
         dialog.setTitle("SIGN IN");
         dialog.setMessage("Please use email to sign in");
 
-        // Instantiates a Login layout XML file into the corresponding Authenticate view object
+        // Instantiates a Login layout XML file into the corresponding AuthenticateActivity view object
         LayoutInflater inflater = LayoutInflater.from(this);
         View login_layout = inflater.inflate(R.layout.layout_login, null);
 
@@ -89,7 +86,7 @@ public class Authenticate extends AppCompatActivity {
             }
 
             // Android AlertDialog with moving spots progress indicator packed as android library.
-            android.app.AlertDialog waitingDialog = new SpotsDialog(Authenticate.this);
+            android.app.AlertDialog waitingDialog = new SpotsDialog(AuthenticateActivity.this);
             waitingDialog.show();
 
             // Try to Login with correctly validated email and password
@@ -134,7 +131,7 @@ public class Authenticate extends AppCompatActivity {
         dialog.setTitle("REGISTER");
         dialog.setMessage("Please use email to register");
 
-        // Instantiates a Register layout XML file into the corresponding Authenticate view object
+        // Instantiates a Register layout XML file into the corresponding AuthenticateActivity view object
         LayoutInflater inflater = LayoutInflater.from(this);
         View register_layout = inflater.inflate(R.layout.layout_register, null);
 
@@ -188,7 +185,7 @@ public class Authenticate extends AppCompatActivity {
             }
 
             // Android AlertDialog with moving spots progress indicator packed as android library.
-            android.app.AlertDialog waitingDialog = new SpotsDialog(Authenticate.this);
+            android.app.AlertDialog waitingDialog = new SpotsDialog(AuthenticateActivity.this);
             waitingDialog.show();
 
             // Create an authentication in the Firebase Authentication
@@ -237,7 +234,7 @@ public class Authenticate extends AppCompatActivity {
         Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                 .show();
 
-        Intent homeIntent = new Intent(Authenticate.this, Chat.class);
+        Intent homeIntent = new Intent(AuthenticateActivity.this, ChatsActivity.class);
 
         // If email and password is authenticated open the welcome layout
         startActivity(homeIntent);

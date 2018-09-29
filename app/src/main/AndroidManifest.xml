@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.Authenticate">
+        <activity android:name=".view.AuthenticateActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,14 +41,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.Chat" />
-        <activity android:name=".view.options.AccountSettings" />
+        <activity android:name=".view.ChatsActivity" />
+        <activity android:name=".view.options.AccountSettingsActivity" />
         <activity
-            android:name=".view.update.Status"
-            android:parentActivityName=".view.options.AccountSettings" />
+            android:name=".view.update.StatusActivity"
+            android:parentActivityName=".view.options.AccountSettingsActivity" />
         <activity
-            android:name=".view.options.Users"
-            android:parentActivityName=".view.options.AccountSettings" />
+            android:name=".view.options.AllUsersActivity"
+            android:parentActivityName=".view.options.AccountSettingsActivity" />
     </application>
 
 </manifest>

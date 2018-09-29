@@ -15,9 +15,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.view.options.AccountSettings;
+import coolgroup.com.aline.view.options.AccountSettingsActivity;
 
-public class Status extends AppCompatActivity {
+public class StatusActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
@@ -38,12 +38,12 @@ public class Status extends AppCompatActivity {
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String currentUID = mCurrentUser.getUid();
 
-        mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUID);
+        mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("AllUsersActivity").child(currentUID);
         //**************************************************//
 
         mToolbar = findViewById(R.id.status_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Update Status");
+        getSupportActionBar().setTitle("Update StatusActivity");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -60,14 +60,14 @@ public class Status extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         backToParentActivity();
                     })
-                    .addOnFailureListener(e -> Toast.makeText(Status.this, e.getMessage(), Toast.LENGTH_LONG).show());
+                    .addOnFailureListener(e -> Toast.makeText(StatusActivity.this, e.getMessage(), Toast.LENGTH_LONG).show());
         });
 
     }
 
     // Send user back to parent page
     private void backToParentActivity() {
-        Intent parentIntent = new Intent(Status.this, AccountSettings.class);
+        Intent parentIntent = new Intent(StatusActivity.this, AccountSettingsActivity.class);
         startActivity(parentIntent);
         finish();
     }

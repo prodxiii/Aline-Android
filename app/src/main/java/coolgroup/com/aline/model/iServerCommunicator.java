@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface iServerCommunicator {
     /**
-     * Authenticate a user by email address and password.
+     * AuthenticateActivity a user by email address and password.
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
@@ -16,7 +16,7 @@ public interface iServerCommunicator {
     Task<AuthResult> logInUserEmail(String email, String password);
 
     /**
-     * Authenticate a user by phone number and password.
+     * AuthenticateActivity a user by phone number and password.
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.

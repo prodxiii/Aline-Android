@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:id="@+id/authLayout"
-    tools:context=".view.Authenticate">
+    tools:context=".view.AuthenticateActivity">
 
     <LinearLayout
         android:orientation="vertical"
