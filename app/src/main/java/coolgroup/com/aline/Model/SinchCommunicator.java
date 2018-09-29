@@ -59,7 +59,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
                 currentCall = incomingCall;
                 currentCall.answer();
 
-                currentCall.addCallListener( new MCallListener() );
+                currentCall.addCallListener( new ObserverCallListener() );
             }
         });
     }
@@ -68,9 +68,10 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
     public void startCall(User user) {
         hangUpCall();
 
+        // TODO: use userID instead of phone number as unique identifier.
         currentCall = mSinchClient.getCallClient().callUser(user.getPhone());
 
-        currentCall.addCallListener( new MCallListener() );
+        currentCall.addCallListener( new ObserverCallListener() );
     }
 
     @Override
@@ -81,7 +82,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
         }
     }
 
-    private class MCallListener implements CallListener {
+    private class ObserverCallListener implements CallListener {
         @Override
         public void onCallEnded(Call endedCall) {
             for(iVOIPListener l : listeners) {
