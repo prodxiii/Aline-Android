@@ -13,4 +13,8 @@
     <color name="baseReleaseColor">#212121</color>
     <color name="basePressColor">#FAFAFA</color>
     <color name="ballReleaseColor">#9E9E9E</color>
+
+    <!-- colours related to contacts Contacts -->
+    <color name="contactTextColor">#000000</color>
+    <color name="contactErrorTextColor">#FF0000</color>
 </resources>

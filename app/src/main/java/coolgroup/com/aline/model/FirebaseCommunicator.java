@@ -185,19 +185,10 @@ public class FirebaseCommunicator implements iServerCommunicator {
      *
      * @param userId        The user whose contact list is being updated.
      * @param contactUserId The user to be added.
-     * @return True if the update was successful.
      */
     @Override
-    public boolean addNewContact(String userId, String contactUserId) {
-        if (!userExists(userId) || !userExists(contactUserId))
-            return false;
-
-        // reference to main user node in the contacts database subtree
-        DatabaseReference userRef = contacts.child(userId);
-
-        // add new key-value pair under the user node (only key matters)
-        userRef.child(contactUserId).setValue(true);
-        return true;
+    public void addContact(String userId, String contactUserId) {
+        contacts.child(userId).push().setValue(contactUserId);
     }
 
     /**
@@ -205,35 +196,18 @@ public class FirebaseCommunicator implements iServerCommunicator {
      *
      * @param userId        The user whose contact list is being updated.
      * @param contactUserId The user to be removed.
-     * @return True if the removal was successful.
      */
     @Override
-    public boolean removeContact(String userId, String contactUserId) {
-        if (!userExists(userId) || !userExists(contactUserId))
-            return false;
-
-        // reference to main user node in the contacts database subtree
-        DatabaseReference userRef = contacts.child(userId);
-
-        // remove the key-value pair corresponding to the contact to be deleted
-        userRef.child(contactUserId).removeValue();
-        return true;
-    }
-
-    /**
-     * Determine whether a user ID is valid (corresponds to a user in the database)
-     * @param userId The user ID to be checked
-     * @return True iff the user ID is valid
-     */
-    private boolean userExists(String userId) {
-        DatabaseReference userRef = users.child(userId);
-        ValueContainer<Boolean> result = new ValueContainer<>(false);
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void removeContact(String userId, String contactUserId) {
+        contacts.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists())
-                    result.setValue(true);
+                for (DataSnapshot contact : dataSnapshot.getChildren()) {
+                    if (contactUserId.equals(contact.getValue(String.class))) {
+                        contact.getRef().removeValue();
+                        return;
+                    }
+                }
             }
 
             @Override
@@ -241,8 +215,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
             }
         });
-
-        return result.getValue();
     }
 
     private User firebaseUsertoUser(FirebaseUser mFirebaseUser) {

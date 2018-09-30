@@ -81,17 +81,15 @@ public interface iServerCommunicator {
      *
      * @param userId        The user whose contact list is being updated.
      * @param contactUserId The user to be added.
-     * @return True if the update was successful.
      */
-    boolean addNewContact(String userId, String contactUserId);
+    void addContact(String userId, String contactUserId);
 
     /**
      * Remove a user from the list of contacts.
      *
      * @param userId        The user whose contact list is being updated.
      * @param contactUserId The user to be removed.
-     * @return True if the removal was successful.
      */
-    boolean removeContact(String userId, String contactUserId);
+    void removeContact(String userId, String contactUserId);
 
 }

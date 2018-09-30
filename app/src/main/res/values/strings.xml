@@ -115,4 +115,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Strings related to contacts -->
+    <string name="name_no_record">Contact name not found</string>
 </resources>

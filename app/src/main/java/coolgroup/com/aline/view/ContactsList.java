@@ -7,6 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.adapters.ContactsListAdapter;
 
