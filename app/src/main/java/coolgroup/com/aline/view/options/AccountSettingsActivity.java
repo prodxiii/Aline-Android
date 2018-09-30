@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -71,17 +74,19 @@ public class AccountSettingsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String name = dataSnapshot.child("name").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
-                String status = dataSnapshot.child("status").getValue().toString();
-                String email = dataSnapshot.child("email").getValue().toString();
-                String phone = dataSnapshot.child("phone").getValue().toString();
-                String thumbnail = dataSnapshot.child("thumbnail").getValue().toString();
+                if (dataSnapshot.exists()) {
+                    String name = dataSnapshot.child("name").getValue().toString();
+                    String image = dataSnapshot.child("image").getValue().toString();
+                    String status = dataSnapshot.child("status").getValue().toString();
+                    String email = dataSnapshot.child("email").getValue().toString();
+                    String phone = dataSnapshot.child("phone").getValue().toString();
+                    String thumbnail = dataSnapshot.child("thumbnail").getValue().toString();
 
-                mAccountName.setText(name);
-                mAccountStatus.setText(status);
-                mAccountEmail.setText(email);
-                mAccountPhone.setText(phone);
+                    mAccountName.setText(name);
+                    mAccountStatus.setText(status);
+                    mAccountEmail.setText(email);
+                    mAccountPhone.setText(phone);
+                }
             }
 
             @Override

@@ -77,6 +77,7 @@ public class AllUsersActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull UsersViewHolder usersViewHolder, int position, @NonNull Users users) {
                 // Create a new instance of the usersViewHolder
                 usersViewHolder.setName(users.getName());
+                usersViewHolder.setStatus(users.getStatus());
             }
 
         };

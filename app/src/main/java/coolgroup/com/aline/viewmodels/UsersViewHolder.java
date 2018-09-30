@@ -24,4 +24,11 @@ public class UsersViewHolder extends RecyclerView.ViewHolder{
         nameView.setText(name);
 
     }
+
+    public void setStatus(String status) {
+
+        TextView statusView = mView.findViewById(R.id.single_user_status);
+        statusView.setText(status);
+
+    }
 }
