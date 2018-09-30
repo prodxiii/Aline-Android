@@ -1,5 +1,6 @@
 package coolgroup.com.aline.view.options;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.fragments.chat.Chats;
 import coolgroup.com.aline.model.Users;
+import coolgroup.com.aline.view.ProfileActivity;
 import coolgroup.com.aline.viewmodels.UsersViewHolder;
 
 public class AllUsersActivity extends AppCompatActivity {
@@ -75,9 +77,23 @@ public class AllUsersActivity extends AppCompatActivity {
              */
             @Override
             protected void onBindViewHolder(@NonNull UsersViewHolder usersViewHolder, int position, @NonNull Users users) {
-                // Create a new instance of the usersViewHolder
+                // Set the name and status of the UsersViewHolder
                 usersViewHolder.setName(users.getName());
                 usersViewHolder.setStatus(users.getStatus());
+
+                String userID = getRef(position).getKey();
+
+                // Set up OnClickListener to open Profile activity
+                usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
+                        profileIntent.putExtra("userID", userID);
+                        startActivity(profileIntent);
+
+                    }
+                });
             }
 
         };

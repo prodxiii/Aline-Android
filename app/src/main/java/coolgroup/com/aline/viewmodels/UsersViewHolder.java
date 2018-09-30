@@ -9,7 +9,7 @@ import coolgroup.com.aline.R;
 
 public class UsersViewHolder extends RecyclerView.ViewHolder{
 
-    View mView;
+    public View mView;
 
 
     public UsersViewHolder(@NonNull View itemView) {

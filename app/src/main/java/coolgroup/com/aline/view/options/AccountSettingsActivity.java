@@ -67,7 +67,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         String current_uid = mCurrentUser.getUid();
 
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("AllUsersActivity").child(current_uid);
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+        mUserDatabase.keepSynced(true); // Keep offline
         //***************************************//
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {

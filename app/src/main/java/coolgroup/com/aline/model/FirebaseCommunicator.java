@@ -144,7 +144,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = current_user.getUid();
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("AllUsersActivity").child(uid);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
         HashMap<String, String> userMap = new HashMap<>();
         userMap.put("name", name);

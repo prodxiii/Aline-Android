@@ -32,7 +32,7 @@ public class AuthenticateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authenticate);
 
-        users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("AllUsersActivity");
+        users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("Users");
 
         // Initialize Views
         btnRegister = findViewById(R.id.btnRegister);
