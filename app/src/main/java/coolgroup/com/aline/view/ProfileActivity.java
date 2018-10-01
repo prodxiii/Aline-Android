@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import coolgroup.com.aline.R;
 
@@ -35,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mFriendReqDatabase;
     private DatabaseReference mFriendDatabase;
+    private DatabaseReference mNotificationDatabase;
     private FirebaseUser mCurrentUser;
 
     private int mFriendState;
@@ -63,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(profileUid);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend Requests");
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mNotificationDatabase = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         //********************************************//
 
@@ -178,7 +181,7 @@ public class ProfileActivity extends AppCompatActivity {
             // Disable the Send Request Button from further use
             mSendReq.setEnabled(false);
 
-            // ************************* SENDING A FRIEND REQUEST ***************************** //
+            // ************************* NOT A FRIEND STATE ***************************** //
 
             if (mFriendState == 0) {
                 mFriendReqDatabase.child(mCurrentUser.getUid())
@@ -187,15 +190,23 @@ public class ProfileActivity extends AppCompatActivity {
                                 .child(mCurrentUser.getUid()).child("request type").setValue("received")
                                 .addOnSuccessListener(aVoid1 -> {
 
-                                    mFriendState = 1; // Friend Request Sent
-                                    mSendReq.setText("Cancel Friend Request");
+                                    HashMap<String, String> notificationData = new HashMap<>();
+                                    notificationData.put("from", mCurrentUser.getUid());
+                                    notificationData.put("type", "request");
 
-                                    mDeclineReq.setVisibility(View.INVISIBLE);
-                                    mDeclineReq.setEnabled(false);
+                                    mNotificationDatabase.child(profileUid).push().setValue(notificationData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            mFriendState = 1; // Friend Request Sent
+                                            mSendReq.setText("Cancel Friend Request");
 
-                                    Toast.makeText(ProfileActivity.this, "Request Sent Successfully", Toast.LENGTH_SHORT).show();
+                                            mDeclineReq.setVisibility(View.INVISIBLE);
+                                            mDeclineReq.setEnabled(false);
 
-                                        })
+                                            Toast.makeText(ProfileActivity.this, "Request Sent Successfully", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                })
                                 .addOnFailureListener(e -> Toast.makeText(ProfileActivity.this, "Unable to Send Request", Toast.LENGTH_SHORT).show())
                         .addOnFailureListener(e -> Toast.makeText(ProfileActivity.this, "Unable to Send Request", Toast.LENGTH_SHORT).show()));
 
