@@ -6,14 +6,18 @@ import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.calling.Call;
-import com.sinch.android.rtc.calling.CallListener;
 import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
-
+import com.sinch.android.rtc.calling.CallListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class allows the app to make voice and video calls over Internet Protocol, to an instance of
+ * a User Class. Thi User needs some unique identifier (currently a phone number), and then this
+ * class manages the call with them; in doing so it also fulfils the role of an iVOIPNotifier.
+ */
 public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
 
     private SinchClient mSinchClient;
@@ -24,6 +28,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
     private String mApplicationSecret;
     private String mEnvironmentHost;
 
+    // List of Observers to notify
     private ArrayList<iVOIPListener> listeners = new ArrayList<>();
 
     public void addListener(iVOIPListener listener){
@@ -31,6 +36,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
             listeners.add(listener);
         }
     }
+
     public void removeListener(iVOIPListener listener) {
         if (listeners.contains(listener)){
             listeners.remove(listener);
@@ -90,12 +96,14 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
             }
             currentCall = null;
         }
+
         @Override
         public void onCallEstablished(Call establishedCall) {
             for(iVOIPListener l : listeners) {
                 l.onCallEstablished();
             }
         }
+
         @Override
         public void onCallProgressing(Call progressingCall) {
             //call is ringing
@@ -103,6 +111,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
                 l.onCallRinging();
             }
         }
+
         @Override
         public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
             //don't worry about this right now
