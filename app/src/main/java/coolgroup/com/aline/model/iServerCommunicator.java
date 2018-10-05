@@ -17,7 +17,7 @@ public interface iServerCommunicator {
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
-     * @return True if the account exists and details are correct, else false.
+     * @param listener Listener called upon successful authentication.
      */
     void logInUserEmail(String email, String password, OnSuccessListener<User> listener);
 
@@ -26,7 +26,7 @@ public interface iServerCommunicator {
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.
-     * @return True if the account exists and details are correct, else false.
+     * @param listener Listener called upon successful authentication.
      */
     void logInUserPhone(String phone, String password, OnSuccessListener<User> listener);
 
@@ -37,44 +37,43 @@ public interface iServerCommunicator {
      * @param password The user’s selected password.
      * @param name     The user’s full name.
      * @param phone    The user’s phone number.
-     * @return True if the user doesn’t already exist (e.g. email taken)
-     * and the format of all arguments is valid (e.g. password length).
+     * @param listener Listener called upon successful registration.
      */
     void signUpUser(String email, String password, String name, String phone, OnSuccessListener<User> listener);
 
     /**
      * Retrieve a user ID string.
      *
-     * @param email The email of the user to be queried.
-     * @param name  The name of the user to be queried.
-     * @param phone The phone of the user to be queried.
-     * @return The user ID if the user exists, else null.
+     * @param email    The email of the user to be queried.
+     * @param name     The name of the user to be queried.
+     * @param phone    The phone of the user to be queried.
+     * @param listener Listener called upon retrieval.
      */
-    String getUserId(String email, String name, String phone);
+    void getUserId(String email, String name, String phone, OnSuccessListener<String> listener);
 
     /**
      * Retrieve the basic details of a user.
      *
-     * @param userId The user ID of the user to be queried.
-     * @return A User object corresponding to the user, if it exists (else null).
+     * @param userId   The user ID of the user to be queried.
+     * @param listener Listener called upon retrieval.
      */
-    User getBasicUserInfo(String userId);
+    void getBasicUserInfo(String userId, OnSuccessListener<User> listener);
 
     /**
      * Retrieve all contacts of a user.
      *
-     * @param userId The user to be queried.
-     * @return An ArrayList of the user’s contacts.
+     * @param userId   The user to be queried.
+     * @param listener Listener called upon retrieval.
      */
-    List<String> getContactsList(String userId);
+    void getContactsList(String userId, OnSuccessListener<List<String>> listener);
 
     /**
      * Retrieve all contacts of a user as User instances.
      *
-     * @param userId The user to be queried.
-     * @return An ArrayList of the user’s contacts as User instances.
+     * @param userId   The user to be queried.
+     * @param listener Listener called upon retrieval.
      */
-    List<User> getContactsUserList(String userId);
+    void getContactsUserList(String userId, OnSuccessListener<List<User>> listener);
 
     /**
      * Add a new user to the list of contacts.

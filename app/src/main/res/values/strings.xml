@@ -118,4 +118,5 @@
 
     <!-- Strings related to contacts -->
     <string name="name_no_record">Contact name not found</string>
+    <string name="contact_field_hint">Contact user ID</string>
 </resources>

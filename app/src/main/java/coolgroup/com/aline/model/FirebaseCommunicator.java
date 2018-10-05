@@ -40,7 +40,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
-     * @return True if the account exists and details are correct, else false.
+     * @param listener Listener called upon successful authentication.
      */
     @Override
     public void logInUserEmail(String email, String password, OnSuccessListener<User> listener) {
@@ -59,11 +59,11 @@ public class FirebaseCommunicator implements iServerCommunicator {
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.
-     * @return True if the account exists and details are correct, else false.
+     * @param listener Listener called upon successful authentication.
      */
     @Override
     public void logInUserPhone(String phone, String password, OnSuccessListener<User> listener) {
-        return;
+
     }
 
     /**
@@ -73,8 +73,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * @param password The user’s selected password.
      * @param name     The user’s full name.
      * @param phone    The user’s phone number.
-     * @return True if the user doesn’t already exist (e.g. email taken)
-     * and the format of all arguments is valid (e.g. password length).
+     * @param listener Listener called upon successful registration.
      */
     @Override
     public void signUpUser(String email, String password, String name, String phone, OnSuccessListener<User> listener) {
@@ -90,32 +89,35 @@ public class FirebaseCommunicator implements iServerCommunicator {
     /**
      * Retrieve a user ID string.
      *
-     * @param email The email of the user to be queried.
-     * @param name  The name of the user to be queried.
-     * @param phone The phone of the user to be queried.
-     * @return The user ID if the user exists, else null.
+     * @param email    The email of the user to be queried.
+     * @param name     The name of the user to be queried.
+     * @param phone    The phone of the user to be queried.
+     * @param listener Listener called upon retrieval.
      */
     @Override
-    public String getUserId(String email, String name, String phone) {
-        return null;
+    public void getUserId(String email, String name, String phone, OnSuccessListener<String> listener) {
+
     }
 
     /**
      * Retrieve the basic details of a user.
      *
-     * @param userId The user ID of the user to be queried.
-     * @return A User object corresponding to the user, if it exists (else null).
+     * @param userId   The user ID of the user to be queried.
+     * @param listener Listener called upon retrieval.
      */
     @Override
-    public User getBasicUserInfo(String userId) {
+    public void getBasicUserInfo(String userId, OnSuccessListener<User> listener) {
         // reference to user node in the users database subtree
         DatabaseReference userRef = users.child(userId);
-        ValueContainer<User> userContainer = new ValueContainer<>(null);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userContainer.setValue(dataSnapshot.getValue(User.class));
+                String email = dataSnapshot.child("email").getValue(String.class);
+                String name = dataSnapshot.child("name").getValue(String.class);
+                String phone = dataSnapshot.child("phone").getValue(String.class);
+
+                listener.onSuccess(new User(userId, email, name, phone));
             }
 
             @Override
@@ -123,18 +125,16 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
             }
         });
-
-        return userContainer.getValue();
     }
 
     /**
      * Retrieve all contacts of a user.
      *
-     * @param userId The user to be queried.
-     * @return An ArrayList of the user’s contacts.
+     * @param userId   The user to be queried.
+     * @param listener Listener called upon retrieval.
      */
     @Override
-    public List<String> getContactsList(String userId) {
+    public void getContactsList(String userId, OnSuccessListener<List<String>> listener) {
         List<String> contactList = new ArrayList<>();
 
         // reference to user node in the contacts database subtree
@@ -144,13 +144,11 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists())
-                    return;
-
                 for (DataSnapshot contactSnapshot : dataSnapshot.getChildren()) {
                     String contactId = contactSnapshot.getKey();
                     contactList.add(contactId);
                 }
+                listener.onSuccess(contactList);
             }
 
             @Override
@@ -158,26 +156,32 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
             }
         });
-
-        return contactList;
     }
 
     /**
      * Retrieve all contacts of a user as User instances.
      *
-     * @param userId The user to be queried.
-     * @return An ArrayList of the user’s contacts as User instances.
+     * @param userId   The user to be queried.
+     * @param listener Listener called upon retrieval.
      */
     @Override
-    public List<User> getContactsUserList(String userId) {
-        List<String> contactIds = getContactsList(userId);
-        List<User> contactUsers = new ArrayList<>();
+    public void getContactsUserList(String userId, OnSuccessListener<List<User>> listener) {
+        List<User> contacts = new ArrayList<>();
 
-        for (String contactId : contactIds) {
-            contactUsers.add(getBasicUserInfo(contactId));
-        }
-
-        return contactUsers;
+        getContactsList(userId, new OnSuccessListener<List<String>>() {
+            @Override
+            public void onSuccess(List<String> contactIds) {
+                for (String contactId : contactIds) {
+                    getBasicUserInfo(contactId, new OnSuccessListener<User>() {
+                        @Override
+                        public void onSuccess(User contact) {
+                            contacts.add(contact);
+                        }
+                    });
+                }
+                listener.onSuccess(contacts);
+            }
+        });
     }
 
     /**
@@ -222,26 +226,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
                         mFirebaseUser.getEmail(),
                         mFirebaseUser.getDisplayName(),
                         mFirebaseUser.getPhoneNumber());
-    }
-
-    /**
-     * Container class for passing values from anonymous inner class to outer scope.
-     * @param <T> Type of the value to be passed
-     */
-    private class ValueContainer<T> {
-        private T value;
-
-        private ValueContainer(T v) {
-            this.value = v;
-        }
-
-        private T getValue() {
-            return value;
-        }
-
-        private void setValue(T val) {
-            this.value = value;
-        }
     }
 
 }
