@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import coolgroup.com.aline.Maps.Homepage;
 import coolgroup.com.aline.Model.User;
 import coolgroup.com.aline.R;
 import dmax.dialog.SpotsDialog;
