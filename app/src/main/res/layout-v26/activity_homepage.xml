@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/source_address"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName"
+            android:autofillHints="" />
 
         <AutoCompleteTextView
             android:id="@+id/destinationAddress"

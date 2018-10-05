@@ -11,4 +11,11 @@
     <string name="phone">Phone</string>
     <string name="title_activity_welcome">Map</string>
     <string name="title_activity_homepage">Map</string>
+    <string name="source_address">Enter Source Address</string>
+    <string name="destination_address">Enter Destination Address</string>
+    <string name="search">Search</string>
+    <string name="get_direction">Get Direction</string>
+    <string name="call">Call</string>
+    <string name="chat">Chat</string>
+    <string name="sos">SOS</string>
 </resources>
