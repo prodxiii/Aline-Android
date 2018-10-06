@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -7,47 +8,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:visibility="visible">
-
-        <EditText
-            android:id="@+id/sourceAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/source_address"
-            android:inputType="textPersonName"/>
 
         <AutoCompleteTextView
             android:id="@+id/destinationAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="305dp"
+            android:layout_height="match_parent"
             android:ems="10"
             android:hint="@string/destination_address"
             android:inputType="textPersonName" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <Button
-                android:id="@+id/searchAddress"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/search" />
-
-            <Button
-                android:id="@+id/directionButton"
-                android:layout_width="wrap_content"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/get_direction" />
-        </LinearLayout>
+            android:background="@drawable/search" />
 
     </LinearLayout>
 
@@ -56,7 +32,7 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="496dp"
+        android:layout_height="566dp"
         tools:context=".View.Homepage" />
 
     <LinearLayout
@@ -66,27 +42,26 @@
 
         <Button
             android:id="@+id/callButton"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="97dp"
+            android:layout_width="52dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/call" />
+            android:layout_marginHorizontal="30dp"
+            android:background="@drawable/call" tools:targetApi="o" />
 
         <Button
             android:id="@+id/chatButton"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="52dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/chat" />
+            android:layout_marginHorizontal="60dp"
+            android:background="@drawable/chat" tools:targetApi="o" />
 
         <Button
-            android:id="@+id/SOSButton"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
+            android:id="@+id/sosButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@android:color/holo_red_dark"
             android:text="@string/sos" />
+
     </LinearLayout>
 
 </LinearLayout>
