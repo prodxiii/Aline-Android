@@ -1,5 +1,6 @@
 package coolgroup.com.aline.Maps;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -18,15 +19,17 @@ import android.widget.AutoCompleteTextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
+import android.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,13 +42,16 @@ import java.util.Locale;
 
 import coolgroup.com.aline.R;
 
-public class Homepage extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class Homepage extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private GoogleMap mMap;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private LatLng myCurrentLocation;
     private List<Address> addressList;
+
+    private static final long MIN_TIME = 400;
+    private static final float MIN_DISTANCE = 1000;
 
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
@@ -66,7 +72,6 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback, Go
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,33 +83,58 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback, Go
         }
 
 
-
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_homepage);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-
-                myCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(myCurrentLocation).title(getAddress(location)));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCurrentLocation, 15));
-
-            }
-        };
 
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                myCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(myCurrentLocation).title(getAddress(location))).
+                        setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myCurrentLocation, 15));
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,0,0,locationListener);
+
     }
-
-
 
 
     /**
@@ -123,54 +153,11 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback, Go
         // Prompt the user for permission.
         getLocationPermission();
 
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
     }
 
 
 
-    /**
-     * Gets the current location of the device, and positions the map's camera.
-     */
-    private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
-        try {
-            if (mLocationPermissionGranted) {
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            if(mLastKnownLocation != null) {
-                                LatLng location = new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude());
-                                mMap.clear();
-                                mMap.addMarker(new MarkerOptions().position(location).title(getAddress(mLastKnownLocation)));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,DEFAULT_ZOOM));
 
-                            }
-                        } else {
-                            Log.d("Current location", "Current location is null. Using defaults.");
-                            Log.e("Current Location", "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
 
     /**
      * Prompts the user for permission to use the device location.
@@ -248,16 +235,17 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback, Go
 
         if(addressList != null && addressList.size() > 0){
             if(addressList.get(0).getSubThoroughfare() != null){
-                address = addressList.get(0).getSubThoroughfare()+ " ";
+                address += addressList.get(0).getSubThoroughfare()+ " ";
             }
             if(addressList.get(0).getThoroughfare() != null){
-                address = addressList.get(0).getThoroughfare()+ " ";
+                address
+                        += addressList.get(0).getThoroughfare()+ " ";
             }
             if(addressList.get(0).getPostalCode() != null){
-                address = addressList.get(0).getPostalCode()+ " ";
+                address += addressList.get(0).getPostalCode()+ " ";
             }
             if(addressList.get(0).getCountryName() != null){
-                address = addressList.get(0).getCountryName();
+                address += addressList.get(0).getCountryName();
             }
         }
 
@@ -278,4 +266,6 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback, Go
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 }
