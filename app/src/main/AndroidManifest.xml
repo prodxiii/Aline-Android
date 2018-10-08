@@ -8,6 +8,12 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".View.MainActivity">
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,8 +47,20 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".View.Homepage"
-            android:label="@string/title_activity_welcome"></activity>
+            android:name=".view.Homepage"
+            android:label="@string/title_activity_welcome" />
+        <activity
+            android:name=".view.ContactsList"
+            android:label="@string/title_activity_contacts_list"
+            android:parentActivityName=".view.Homepage"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="coolgroup.com.aline.view.Homepage" />
+        </activity>
+        <activity
+            android:name=".view.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

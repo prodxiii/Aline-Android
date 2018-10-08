@@ -1,6 +1,13 @@
-package coolgroup.com.aline.Model;
+package coolgroup.com.aline.model;
+
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 
 import java.util.ArrayList;
+
+import coolgroup.com.aline.model.User;
 
 public interface iServerCommunicator {
     /**
@@ -10,7 +17,7 @@ public interface iServerCommunicator {
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
-    boolean logInUserEmail(String email, String password);
+    void logInUserEmail(String email, String password, OnSuccessListener<User> listener);
 
     /**
      * Authenticate a user by phone number and password.
@@ -19,7 +26,7 @@ public interface iServerCommunicator {
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
-    boolean logInUserPhone(String phone, String password);
+    void logInUserPhone(String phone, String password, OnSuccessListener<User> listener);
 
     /**
      * Register an account for a user.
@@ -31,7 +38,7 @@ public interface iServerCommunicator {
      * @return True if the user doesn’t already exist (e.g. email taken)
      * and the format of all arguments is valid (e.g. password length).
      */
-    boolean signUpUser(String email, String password, String name, String phone);
+    void signUpUser(String email, String password, String name, String phone, OnSuccessListener<User> listener);
 
     /**
      * Retrieve a user ID string.
