@@ -145,7 +145,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot contactSnapshot : dataSnapshot.getChildren()) {
-                    String contactId = contactSnapshot.getKey();
+                    String contactId = contactSnapshot.getValue(String.class);
                     contactList.add(contactId);
                 }
                 listener.onSuccess(contactList);
