@@ -41,15 +41,15 @@ public class StatusActivity extends AppCompatActivity {
         mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("AllUsersActivity").child(currentUID);
         //**************************************************//
 
-        mToolbar = findViewById(R.id.status_appbar);
+        mToolbar = (Toolbar) findViewById(R.id.status_appbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Update StatusActivity");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         String statusValue = getIntent().getStringExtra("statusValue");
-        mStatus = findViewById(R.id.input_status);
-        mSave = findViewById(R.id.btn_save_status);
+        mStatus = (MaterialEditText) findViewById(R.id.input_status);
+        mSave = (Button) findViewById(R.id.btn_save_status);
 
         mStatus.setText(statusValue);
 

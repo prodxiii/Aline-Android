@@ -19,7 +19,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/single_user_image"
         android:layout_marginStart="89dp"
-        android:fontFamily="@font/roboto_bold"
         android:text="Display Name"
         android:textColor="@color/colorPrimaryText"
         android:textSize="18sp" />

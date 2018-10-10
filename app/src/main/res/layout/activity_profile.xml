@@ -58,7 +58,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="87dp"
         android:background="@drawable/btn_sign_in_background"
-        android:fontFamily="@font/roboto_light"
         android:text="SEND FRIEND REQUEST"
         android:textColor="@color/colorPrimaryDarkText" />
 

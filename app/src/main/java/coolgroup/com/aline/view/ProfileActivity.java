@@ -47,13 +47,13 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         // Get the layout items
-        mName = findViewById(R.id.name_profile);
-        mStatus = findViewById(R.id.status_profile);
-        mFriendsTotal = findViewById(R.id.total_friends_profile);
-        mImage = findViewById(R.id.image_profile);
+        mName = (TextView) findViewById(R.id.name_profile);
+        mStatus = (TextView) findViewById(R.id.status_profile);
+        mFriendsTotal = (TextView) findViewById(R.id.total_friends_profile);
+        mImage = (ImageView) findViewById(R.id.image_profile);
 
-        mSendReq = findViewById(R.id.send_req_btn_profile);
-        mDeclineReq = findViewById(R.id.decline_btn_profile);
+        mSendReq = (Button) findViewById(R.id.send_req_btn_profile);
+        mDeclineReq = (Button) findViewById(R.id.decline_btn_profile);
 
         mDeclineReq.setVisibility(View.INVISIBLE);
         mDeclineReq.setEnabled(false);

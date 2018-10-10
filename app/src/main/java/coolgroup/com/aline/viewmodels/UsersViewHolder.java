@@ -20,14 +20,14 @@ public class UsersViewHolder extends RecyclerView.ViewHolder{
 
     public void setName(String name) {
 
-        TextView nameView = mView.findViewById(R.id.single_user_name);
+        TextView nameView = (TextView) mView.findViewById(R.id.single_user_name);
         nameView.setText(name);
 
     }
 
     public void setStatus(String status) {
 
-        TextView statusView = mView.findViewById(R.id.single_user_status);
+        TextView statusView = (TextView) mView.findViewById(R.id.single_user_status);
         statusView.setText(status);
 
     }

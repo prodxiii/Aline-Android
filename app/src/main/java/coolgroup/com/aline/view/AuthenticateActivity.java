@@ -35,9 +35,9 @@ public class AuthenticateActivity extends AppCompatActivity {
         users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("Users");
 
         // Initialize Views
-        btnRegister = findViewById(R.id.btnRegister);
-        btnSignIn = findViewById(R.id.btnSignIn);
-        authLayout = findViewById(R.id.authLayout);
+        btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnSignIn = (Button) findViewById(R.id.btnSignIn);
+        authLayout = (RelativeLayout) findViewById(R.id.authLayout);
 
         // Override button onClick methods to show Register Dialog
         btnRegister.setOnClickListener(v -> showRegisterDialog());
@@ -59,8 +59,8 @@ public class AuthenticateActivity extends AppCompatActivity {
         View login_layout = inflater.inflate(R.layout.layout_login, null);
 
         // Create custom TextView for email and password input
-        final MaterialEditText edtEmail = login_layout.findViewById(R.id.edtEmail);
-        final MaterialEditText edtPassword = login_layout.findViewById(R.id.edtPassword);
+        final MaterialEditText edtEmail = (MaterialEditText) login_layout.findViewById(R.id.edtEmail);
+        final MaterialEditText edtPassword = (MaterialEditText) login_layout.findViewById(R.id.edtPassword);
 
         dialog.setView(login_layout);
 
@@ -137,10 +137,10 @@ public class AuthenticateActivity extends AppCompatActivity {
 
         // Create custom TextView for email, name, phone and password
         final MaterialEditText edtName, edtEmail, edtPhone, edtPassword;
-        edtName = register_layout.findViewById(R.id.edtName);
-        edtEmail = register_layout.findViewById(R.id.edtEmail);
-        edtPhone = register_layout.findViewById(R.id.edtPhone);
-        edtPassword = register_layout.findViewById(R.id.edtPassword);
+        edtName = (MaterialEditText) register_layout.findViewById(R.id.edtName);
+        edtEmail = (MaterialEditText) register_layout.findViewById(R.id.edtEmail);
+        edtPhone = (MaterialEditText) register_layout.findViewById(R.id.edtPhone);
+        edtPassword = (MaterialEditText) register_layout.findViewById(R.id.edtPassword);
 
         dialog.setView(register_layout);
 

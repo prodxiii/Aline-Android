@@ -35,18 +35,18 @@ public class ChatsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance(); // Done
 
         // Create the toolbar for the chat activity
-        Toolbar mToolbar = findViewById(R.id.chat_appbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_appbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chats");
 
         // Create Tabs
-        mViewPager = findViewById(R.id.chat_tab_pager);
+        mViewPager = (ViewPager) findViewById(R.id.chat_tab_pager);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Include tab layout
-        mTabLayout = findViewById(R.id.chat_tabs);
+        mTabLayout = (TabLayout) findViewById(R.id.chat_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 

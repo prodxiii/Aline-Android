@@ -20,7 +20,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="38dp"
         android:layout_marginTop="247dp"
-        android:fontFamily="@font/roboto_bold"
         android:text="Display Name"
         android:textSize="20sp" />
 
@@ -32,7 +31,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="239dp"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/roboto_light"
         android:text="Hi there, I'm using Aline" />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -53,7 +51,6 @@
         android:layout_marginStart="55dp"
         android:layout_marginTop="206dp"
         android:background="@drawable/btn_account_background"
-        android:fontFamily="@font/roboto_bold"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
         android:text="EDIT"
@@ -68,7 +65,6 @@
     android:layout_alignParentEnd="true"
     android:layout_marginEnd="20dp"
     android:background="@drawable/btn_account_background"
-    android:fontFamily="@font/roboto_bold"
     android:paddingEnd="10dp"
     android:paddingStart="10dp"
     android:text="UPDATE STATUS"
@@ -82,7 +78,6 @@
         android:layout_alignBottom="@+id/account_phone"
         android:layout_alignStart="@+id/btn_update_status"
         android:background="@drawable/btn_account_background"
-        android:fontFamily="@font/roboto_bold"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
         android:text="UPDATE PHONE"
@@ -96,7 +91,6 @@
         android:layout_alignBottom="@+id/account_email"
         android:layout_alignStart="@+id/btn_update_status"
         android:background="@drawable/btn_account_background"
-        android:fontFamily="@font/roboto_bold"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
         android:text="UPDATE EMAIL"
@@ -111,7 +105,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="171dp"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/roboto_light"
         android:text="Your Mobile Number"
         android:textStyle="italic" />
 
@@ -123,7 +116,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="96dp"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/roboto_medium"
         android:text="Your primary email address"
         android:textStyle="italic" />
 

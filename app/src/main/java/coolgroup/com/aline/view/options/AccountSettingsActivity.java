@@ -49,16 +49,16 @@ public class AccountSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
 
-        mAccountImage = findViewById(R.id.account_image);
-        mAccountName = findViewById(R.id.account_name);
-        mAccountStatus = findViewById(R.id.account_status);
-        mAccountEmail = findViewById(R.id.account_email);
-        mAccountPhone = findViewById(R.id.account_phone);
+        mAccountImage = (CircleImageView) findViewById(R.id.account_image);
+        mAccountName = (TextView) findViewById(R.id.account_name);
+        mAccountStatus = (TextView) findViewById(R.id.account_status);
+        mAccountEmail = (TextView) findViewById(R.id.account_email);
+        mAccountPhone = (TextView) findViewById(R.id.account_phone);
 
-        mChangeImage = findViewById(R.id.btn_change_image);
-        mUpdateStatus = findViewById(R.id.btn_update_status);
+        mChangeImage = (Button) findViewById(R.id.btn_change_image);
+        mUpdateStatus = (Button) findViewById(R.id.btn_update_status);
 
-        mToolbar = findViewById(R.id.profile_appbar);
+        mToolbar = (Toolbar) findViewById(R.id.profile_appbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Account Settings");
 

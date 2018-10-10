@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,7 +34,7 @@ public class AllUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_users);
 
-        mToolbar = findViewById(R.id.users_appbar);
+        mToolbar = (Toolbar) findViewById(R.id.users_appbar);
         setSupportActionBar(mToolbar);
 
         getSupportActionBar().setTitle("All Users");
@@ -44,7 +43,7 @@ public class AllUsersActivity extends AppCompatActivity {
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
-        mUsersList = findViewById(R.id.users_recycler_view);
+        mUsersList = (RecyclerView) findViewById(R.id.users_recycler_view);
         mUsersList.setHasFixedSize(true);
         mUsersList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -54,20 +53,15 @@ public class AllUsersActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Users> options =
-                new FirebaseRecyclerOptions.Builder<Users>()
-                        .setQuery(mUsersDatabase, Users.class)
-                        .build();
-
-        FirebaseRecyclerAdapter firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(options) {
-            @NonNull
-            @Override
-            public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.layout_single_user, viewGroup, false);
-
-                return new UsersViewHolder(view);
-            }
+//        FirebaseRecyclerAdapter firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(options) {
+//            @NonNull
+//            @Override
+//            public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+//                View view = LayoutInflater.from(viewGroup.getContext())
+//                        .inflate(R.layout.layout_single_user, viewGroup, false);
+//
+//                return new UsersViewHolder(view);
+//            }
 
             /**
              * @param usersViewHolder
@@ -75,30 +69,30 @@ public class AllUsersActivity extends AppCompatActivity {
              * @param users    the model object containing the data that should be used to populate the view.
              * @see #onBindViewHolder(RecyclerView.ViewHolder, int)
              */
-            @Override
-            protected void onBindViewHolder(@NonNull UsersViewHolder usersViewHolder, int position, @NonNull Users users) {
-                // Set the name and status of the UsersViewHolder
-                usersViewHolder.setName(users.getName());
-                usersViewHolder.setStatus(users.getStatus());
-
-                String userID = getRef(position).getKey();
-
-                // Set up OnClickListener to open Profile activity
-                usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
-                        profileIntent.putExtra("userID", userID);
-                        startActivity(profileIntent);
-
-                    }
-                });
-            }
+//            @Override
+//            protected void onBindViewHolder(@NonNull UsersViewHolder usersViewHolder, int position, @NonNull Users users) {
+//                // Set the name and status of the UsersViewHolder
+//                usersViewHolder.setName(users.getName());
+//                usersViewHolder.setStatus(users.getStatus());
+//
+//                String userID = getRef(position).getKey();
+//
+//                // Set up OnClickListener to open Profile activity
+//                usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
+//                        profileIntent.putExtra("userID", userID);
+//                        startActivity(profileIntent);
+//
+//                    }
+//                });
+//            }
 
         };
 
-        mUsersList.setAdapter(firebaseRecyclerAdapter);
-        firebaseRecyclerAdapter.startListening();
-    }
+//        mUsersList.setAdapter(firebaseRecyclerAdapter);
+//        firebaseRecyclerAdapter.startListening();
+//    }
 }
