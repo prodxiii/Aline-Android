@@ -75,7 +75,7 @@ public class AllUsersActivity extends AppCompatActivity {
                     public void onClick(View view) {
 
                         Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
-                        profileIntent.putExtra("user_id", user_id);
+                        profileIntent.putExtra("userID", user_id);
                         startActivity(profileIntent);
 
                     }
