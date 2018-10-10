@@ -51,13 +51,15 @@
         <activity
             android:name=".view.options.AllUsersActivity"
             android:parentActivityName=".view.options.AccountSettingsActivity" />
-        <activity android:name=".view.ProfileActivity"></activity>
+        <activity android:name=".view.ProfileActivity" />
 
         <service android:name=".FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".view.ChatActivity"></activity>
     </application>
 
 </manifest>
