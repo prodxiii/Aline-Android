@@ -53,46 +53,39 @@ public class AllUsersActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-//        FirebaseRecyclerAdapter firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(options) {
-//            @NonNull
-//            @Override
-//            public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-//                View view = LayoutInflater.from(viewGroup.getContext())
-//                        .inflate(R.layout.layout_single_user, viewGroup, false);
-//
-//                return new UsersViewHolder(view);
-//            }
+        FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(
 
-            /**
-             * @param usersViewHolder
-             * @param position
-             * @param users    the model object containing the data that should be used to populate the view.
-             * @see #onBindViewHolder(RecyclerView.ViewHolder, int)
-             */
-//            @Override
-//            protected void onBindViewHolder(@NonNull UsersViewHolder usersViewHolder, int position, @NonNull Users users) {
-//                // Set the name and status of the UsersViewHolder
-//                usersViewHolder.setName(users.getName());
-//                usersViewHolder.setStatus(users.getStatus());
-//
-//                String userID = getRef(position).getKey();
-//
-//                // Set up OnClickListener to open Profile activity
-//                usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
-//                        profileIntent.putExtra("userID", userID);
-//                        startActivity(profileIntent);
-//
-//                    }
-//                });
-//            }
+                Users.class,
+                R.layout.layout_single_user,
+                UsersViewHolder.class,
+                mUsersDatabase
 
+        ) {
+            @Override
+            protected void populateViewHolder(UsersViewHolder usersViewHolder, Users users, int position) {
+
+                usersViewHolder.setName(users.getName());
+                usersViewHolder.setStatus(users.getStatus());
+                usersViewHolder.setImage(users.getThumbnail(), getApplicationContext());
+
+                final String user_id = getRef(position).getKey();
+
+                usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
+                        profileIntent.putExtra("user_id", user_id);
+                        startActivity(profileIntent);
+
+                    }
+                });
+
+            }
         };
 
-//        mUsersList.setAdapter(firebaseRecyclerAdapter);
-//        firebaseRecyclerAdapter.startListening();
-//    }
+
+        mUsersList.setAdapter(firebaseRecyclerAdapter);
+
+    }
 }
