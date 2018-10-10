@@ -1,12 +1,12 @@
 package coolgroup.com.aline.model;
 
-public class Contacts {
+public class Request {
 
     public String date;
 
-    public Contacts(){}
+    public Request(){}
 
-    public Contacts(String date) {
+    public Request(String date) {
         this.date = date;
     }
 

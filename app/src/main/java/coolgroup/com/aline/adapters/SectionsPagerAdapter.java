@@ -1,6 +1,5 @@
 package coolgroup.com.aline.adapters;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,7 +8,11 @@ import coolgroup.com.aline.fragments.chat.Chats;
 import coolgroup.com.aline.fragments.chat.Contacts;
 import coolgroup.com.aline.fragments.chat.Requests;
 
-public class SectionsPagerAdapter extends FragmentPagerAdapter{
+/**
+ * Created by AkshayeJH on 11/06/17.
+ */
+
+class SectionsPagerAdapter extends FragmentPagerAdapter{
 
 
     public SectionsPagerAdapter(FragmentManager fm) {
@@ -19,16 +22,23 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
 
-        switch (position) {
+        switch(position) {
             case 0:
-                return new Requests();
+                Requests requestsFragment = new Requests();
+                return requestsFragment;
+
             case 1:
-                return new Chats();
+                Chats chatsFragment = new Chats();
+                return  chatsFragment;
+
             case 2:
-                return new Contacts();
+                Contacts contactsFragment = new Contacts();
+                return contactsFragment;
+
             default:
-                return null;
+                return  null;
         }
+
     }
 
     @Override
@@ -36,18 +46,22 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
         return 3;
     }
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
+    public CharSequence getPageTitle(int position){
+
         switch (position) {
             case 0:
                 return "REQUESTS";
+
             case 1:
                 return "CHATS";
+
             case 2:
-                return "FRIENDS";
+                return "CONTACTS";
+
             default:
                 return null;
         }
+
     }
+
 }

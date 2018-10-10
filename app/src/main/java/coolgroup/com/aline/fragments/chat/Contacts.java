@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.model.Contacts;
+import coolgroup.com.aline.model.Contact;
 import coolgroup.com.aline.view.ChatActivity;
 import coolgroup.com.aline.view.ProfileActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -34,7 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactsFragment extends Fragment {
+public class Contacts extends Fragment {
 
     private RecyclerView mFriendsList;
 
@@ -48,7 +48,7 @@ public class ContactsFragment extends Fragment {
     private View mMainView;
 
 
-    public ContactsFragment() {
+    public Contacts() {
         // Required empty public constructor
     }
 
@@ -82,9 +82,9 @@ public class ContactsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Contacts, FriendsViewHolder> friendsRecyclerViewAdapter = new FirebaseRecyclerAdapter<Contacts, FriendsViewHolder>(
+        FirebaseRecyclerAdapter<Contact, FriendsViewHolder> friendsRecyclerViewAdapter = new FirebaseRecyclerAdapter<Contact, FriendsViewHolder>(
 
-                Contacts.class,
+                Contact.class,
                 R.layout.layout_single_user,
                 FriendsViewHolder.class,
                 mFriendsDatabase
@@ -92,7 +92,7 @@ public class ContactsFragment extends Fragment {
 
         ) {
             @Override
-            protected void populateViewHolder(final FriendsViewHolder friendsViewHolder, Contacts friends, int i) {
+            protected void populateViewHolder(final FriendsViewHolder friendsViewHolder, Contact friends, int i) {
 
                 friendsViewHolder.setDate(friends.getDate());
 
