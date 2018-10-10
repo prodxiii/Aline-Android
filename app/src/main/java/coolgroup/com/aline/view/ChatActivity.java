@@ -39,8 +39,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import coolgroup.com.aline.GetTimeAgo;
+import coolgroup.com.aline.Messages;
+import coolgroup.com.aline.adapters.MessageAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
-import in.coolgroup.com.aline.R;
+import coolgroup.com.aline.R;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -103,7 +106,7 @@ public class ChatActivity extends AppCompatActivity {
         String userName = getIntent().getStringExtra("user_name");
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View action_bar_view = inflater.inflate(R.layout.chat_custom_bar, null);
+        View action_bar_view = inflater.inflate(R.layout.layout_chat_appbar, null);
 
         actionBar.setCustomView(action_bar_view);
 
