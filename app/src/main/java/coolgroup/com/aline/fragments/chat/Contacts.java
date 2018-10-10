@@ -103,7 +103,7 @@ public class Contacts extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         final String userName = dataSnapshot.child("name").getValue().toString();
-                        String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
+                        String userThumb = dataSnapshot.child("thumbnail").getValue().toString();
 
                         if(dataSnapshot.hasChild("online")) {
 

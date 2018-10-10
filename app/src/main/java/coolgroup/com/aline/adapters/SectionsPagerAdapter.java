@@ -12,7 +12,7 @@ import coolgroup.com.aline.fragments.chat.Requests;
  * Created by AkshayeJH on 11/06/17.
  */
 
-class SectionsPagerAdapter extends FragmentPagerAdapter{
+public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
 
     public SectionsPagerAdapter(FragmentManager fm) {

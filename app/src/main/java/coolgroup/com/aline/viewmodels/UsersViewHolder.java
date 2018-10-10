@@ -23,7 +23,7 @@ public class UsersViewHolder extends RecyclerView.ViewHolder{
 
     public void setName(String name) {
 
-        TextView nameView = (TextView) mView.findViewById(R.id.single_user_name);
+        TextView nameView = (TextView) mView.findViewById(R.id.user_single_name);
         nameView.setText(name);
     }
 

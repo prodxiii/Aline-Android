@@ -94,7 +94,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 String name = dataSnapshot.child("name").getValue().toString();
                 final String image = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
-                String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
+                String thumbnail = dataSnapshot.child("thumbnail").getValue().toString();
 
                 mName.setText(name);
                 mStatus.setText(status);
