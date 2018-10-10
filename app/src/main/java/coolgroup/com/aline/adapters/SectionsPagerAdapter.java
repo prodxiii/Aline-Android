@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import coolgroup.com.aline.fragments.chat.Chats;
-import coolgroup.com.aline.fragments.chat.Friends;
+import coolgroup.com.aline.fragments.chat.Contacts;
 import coolgroup.com.aline.fragments.chat.Requests;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter{
@@ -25,7 +25,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
             case 1:
                 return new Chats();
             case 2:
-                return new Friends();
+                return new Contacts();
             default:
                 return null;
         }

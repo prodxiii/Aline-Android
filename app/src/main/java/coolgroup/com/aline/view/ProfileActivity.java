@@ -70,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
         mRootReference = FirebaseDatabase.getInstance().getReference();
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(profileUid);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend Requests");
-        mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Contacts");
         mNotificationDatabase = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         //********************************************//
@@ -143,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.hasChild(profileUid)) {
 
-                                            mFriendState = "friends"; // Friends
+                                            mFriendState = "friends"; // Contacts
                                             mSendReq.setText("Unfriend");
 
                                             mDeclineReq.setVisibility(View.INVISIBLE);
@@ -280,8 +280,8 @@ public class ProfileActivity extends AppCompatActivity {
                 final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
 
                 Map friendsMap = new HashMap();
-                friendsMap.put("Friends/" + mCurrentUser.getUid() + "/" + user_id + "/date", currentDate);
-                friendsMap.put("Friends/" + user_id + "/"  + mCurrentUser.getUid() + "/date", currentDate);
+                friendsMap.put("Contacts/" + mCurrentUser.getUid() + "/" + user_id + "/date", currentDate);
+                friendsMap.put("Contacts/" + user_id + "/"  + mCurrentUser.getUid() + "/date", currentDate);
 
 
                 friendsMap.put("Friend_req/" + mCurrentUser.getUid() + "/" + user_id, null);
@@ -320,8 +320,8 @@ public class ProfileActivity extends AppCompatActivity {
             if (mFriendState.equals("friends")) {
 
                 Map unfriendMap = new HashMap();
-                unfriendMap.put("Friends/" + mCurrentUser.getUid() + "/" + user_id, null);
-                unfriendMap.put("Friends/" + user_id + "/" + mCurrentUser.getUid(), null);
+                unfriendMap.put("Contacts/" + mCurrentUser.getUid() + "/" + user_id, null);
+                unfriendMap.put("Contacts/" + user_id + "/" + mCurrentUser.getUid(), null);
 
                 mRootReference.updateChildren(unfriendMap, new DatabaseReference.CompletionListener() {
                     @Override
