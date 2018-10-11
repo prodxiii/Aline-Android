@@ -13,7 +13,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.List;
+
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 public class FirebaseCommunicatorTest {
 
@@ -41,6 +44,10 @@ public class FirebaseCommunicatorTest {
         users.child("TEST_3").child("email").setValue("3@test.com");
         users.child("TEST_3").child("phone").setValue("0400000003");
 
+        users.child("TEST_4").child("name").setValue("Test 4");
+        users.child("TEST_4").child("email").setValue("4@test.com");
+        users.child("TEST_4").child("phone").setValue("0400000004");
+
         // add dummy contacts
         contacts.child("TEST_1").push().setValue("TEST_2");
         contacts.child("TEST_1").push().setValue("TEST_3");
@@ -60,26 +67,50 @@ public class FirebaseCommunicatorTest {
     @Test
     public void getBasicUserInfo() {
         communicator.getBasicUserInfo("TEST_1", user -> {
-            assertEquals(user.id, "TEST_1");
-            assertEquals(user.email, "1@test.com");
-            assertEquals(user.name, "Test 1");
-            assertEquals(user.phone, "0400000001");
+            assertEquals("TEST_1", user.id);
+            assertEquals("1@test.com", user.email);
+            assertEquals("Test 1", user.name);
+            assertEquals("0400000001", user.phone);
         });
     }
 
     @Test
     public void getContactsList() {
+        communicator.getContactsList("TEST_1", contacts -> {
+            assertEquals(2, contacts.size());
+            assertTrue(contacts.contains("TEST_2"));
+            assertTrue(contacts.contains("TEST_3"));
+        });
     }
 
     @Test
     public void getContactsUserList() {
+        communicator.getContactsUserList("TEST_1", users -> assertEquals(2, users.size()));
     }
 
     @Test
     public void addContact() {
+        communicator.addContact("USER_1", "USER_4");
+        communicator.getContactsList("USER_1", contacts -> assertEquals(3, contacts.size()));
     }
 
     @Test
     public void removeContact() {
+        communicator.removeContact("USER_1", "USER_2");
+        communicator.getContactsList("USER_1", contacts -> assertEquals(1, contacts.size()));
     }
+
+    @Test
+    public void logInUserEmail() {
+        communicator.logInUserEmail("AUTH_TEST", "AUTH_PASSWORD", new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                assertEquals("AUTH_NAME", user.name);
+                assertEquals("AUTH_TEST", user.id);
+                assertEquals("auth@test.com", user.email);
+                assertEquals("0400000000", user.phone);
+            }
+        });
+    }
+
 }
