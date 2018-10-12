@@ -36,6 +36,10 @@
             android:parentActivityName=".view.options.AccountSettingsActivity" />
 
         <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+
+        <activity
             android:name=".view.options.AllUsersActivity"
             android:parentActivityName=".view.options.AccountSettingsActivity" />
 
