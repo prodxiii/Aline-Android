@@ -46,8 +46,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
 
 
-    //Android Layout
-
     private CircleImageView mDisplayImage;
     private TextView mName;
     private TextView mStatus;
@@ -60,7 +58,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     // Storage Firebase
     private StorageReference mImageStorage;
-
     private ProgressDialog mProgressDialog;
 
 
@@ -101,7 +98,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                 if(!image.equals("default")) {
 
-                    //Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.default_avatar).into(mDisplayImage);
+//                    Picasso.with(AccountSettingsActivity.this).load(image).placeholder(R.drawable.avatar_male).into(mDisplayImage);
 
                     Picasso.with(AccountSettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE)
                             .placeholder(R.drawable.avatar_male).into(mDisplayImage, new Callback() {
@@ -137,7 +134,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 String status_value = mStatus.getText().toString();
 
                 Intent status_intent = new Intent(AccountSettingsActivity.this, StatusActivity.class);
-                status_intent.putExtra("status_value", status_value);
+                status_intent.putExtra("statusValue", status_value);
                 startActivity(status_intent);
 
             }

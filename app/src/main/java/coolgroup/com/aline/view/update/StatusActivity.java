@@ -43,7 +43,7 @@ public class StatusActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.status_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Update StatusActivity");
+        getSupportActionBar().setTitle("Update Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

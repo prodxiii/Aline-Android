@@ -12,6 +12,9 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.adapters.SectionsPagerAdapter;
@@ -24,6 +27,7 @@ public class ChatsActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private DatabaseReference mUserReference;
 
     private TabLayout mTabLayout;
 
@@ -38,6 +42,10 @@ public class ChatsActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_appbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chats");
+
+        if (mAuth.getCurrentUser() != null) {
+            mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        }
 
         // Create Tabs
         mViewPager = (ViewPager) findViewById(R.id.chat_tab_pager);
@@ -60,6 +68,20 @@ public class ChatsActivity extends AppCompatActivity {
         // User is not signed in
         if (currentUser == null) {
            backToAuth();
+        } else {
+            mUserReference.child("online").setValue("true");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        // Get the current user ID
+        super.onStop();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+
+            mUserReference.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 
