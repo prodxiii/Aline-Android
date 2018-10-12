@@ -119,7 +119,7 @@ public class Contacts extends Fragment {
                             @Override
                             public void onClick(View view) {
 
-                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message"};
+                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message", "Call "+userName+ "!"};
 
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -143,6 +143,12 @@ public class Contacts extends Fragment {
                                             chatIntent.putExtra("user_id", list_user_id);
                                             chatIntent.putExtra("user_name", userName);
                                             startActivity(chatIntent);
+
+                                        }
+
+                                        if(i == 2){
+
+                                            System.out.println("CALL THE PERSON");
 
                                         }
 
