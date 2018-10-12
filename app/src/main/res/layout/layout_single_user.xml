@@ -7,11 +7,11 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/single_user_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="15dp"
+        android:layout_width="89dp"
+        android:layout_height="79dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:src="@drawable/avatar_male" />
 
     <TextView
@@ -19,7 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/single_user_image"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/single_user_image"
         android:text="Display Name"
         android:textColor="@android:color/black"
@@ -29,10 +30,20 @@
         android:id="@+id/single_user_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/user_single_name"
         android:layout_below="@+id/user_single_name"
+        android:layout_alignStart="@+id/user_single_name"
         android:layout_marginTop="10dp"
-        android:text="User default Status" />
+        android:text="Default Status" />
+
+    <TextView
+        android:id="@+id/single_user_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_single_name"
+        android:layout_alignStart="@+id/user_single_name"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="35dp"
+        android:text="No Location Data" />
 
     <ImageView
         android:id="@+id/single_user_online_icon"
