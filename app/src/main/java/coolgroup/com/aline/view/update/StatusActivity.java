@@ -38,7 +38,7 @@ public class StatusActivity extends AppCompatActivity {
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String currentUID = mCurrentUser.getUid();
 
-        mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("AllUsersActivity").child(currentUID);
+        mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUID);
         //**************************************************//
 
         mToolbar = (Toolbar) findViewById(R.id.status_appbar);
