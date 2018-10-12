@@ -239,7 +239,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                                         Map update_hashMap = new HashMap();
                                         update_hashMap.put("image", download_url);
-                                        update_hashMap.put("thumb_image", thumb_downloadUrl);
+                                        update_hashMap.put("thumbnail", thumb_downloadUrl);
 
                                         mUserDatabase.updateChildren(update_hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override

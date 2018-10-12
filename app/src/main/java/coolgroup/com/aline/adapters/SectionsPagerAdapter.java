@@ -8,10 +8,6 @@ import coolgroup.com.aline.fragments.chat.Chats;
 import coolgroup.com.aline.fragments.chat.Contacts;
 import coolgroup.com.aline.fragments.chat.Requests;
 
-/**
- * Created by AkshayeJH on 11/06/17.
- */
-
 public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
 
@@ -24,16 +20,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
         switch(position) {
             case 0:
-                Requests requestsFragment = new Requests();
-                return requestsFragment;
-
-            case 1:
                 Chats chatsFragment = new Chats();
                 return  chatsFragment;
 
-            case 2:
+            case 1:
                 Contacts contactsFragment = new Contacts();
                 return contactsFragment;
+
+            case 2:
+                Requests requestsFragment = new Requests();
+                return requestsFragment;
 
             default:
                 return  null;
@@ -50,13 +46,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
         switch (position) {
             case 0:
-                return "REQUESTS";
-
-            case 1:
                 return "CHATS";
 
-            case 2:
+            case 1:
                 return "CONTACTS";
+
+            case 2:
+                return "REQUESTS";
 
             default:
                 return null;
