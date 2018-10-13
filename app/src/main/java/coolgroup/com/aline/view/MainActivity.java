@@ -1,4 +1,4 @@
-package coolgroup.com.aline.view;
+package coolgroup.com.aline.View;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,24 +13,24 @@ import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import coolgroup.com.aline.Controller;
+import coolgroup.com.aline.Maps.Homepage;
+import coolgroup.com.aline.Model.User;
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
-    /*
-     * MainActivity is the entrance to the app. It is where we come when the app is first opened.
-     * After that, for doing anything, we palm it off to another activity. We want very little
-     * functionality in this activity.
-     */
 
 
     // Declare Button and Intro View
     Button btnSignIn, btnRegister;
     RelativeLayout rootLayout;
+
+    // Declare Firebase
+    FirebaseAuth auth;
+    FirebaseDatabase db;
 
     // Declare a users database
     DatabaseReference users;
@@ -40,20 +40,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TODO: get this activity to follow this pattern.
-        // If (user logged in) {
-            // goto map activity or something.
-        // else {
-            // ask user to choose between login or signup activities.
-    }
-
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        users = Controller.getInstance().serverCommunicator.getmFirebaseDatabase().getReference("Users");
+        // Initialize Firebase
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseDatabase.getInstance();
+        users = db.getReference("Users");
 
         // Initialize Views
         btnRegister = findViewById(R.id.btnRegister);
@@ -66,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         // Override button onClick methods to show Login Dialog
         btnSignIn.setOnClickListener(v -> showLogInDialog());
     }
-    */
 
     // Create Login Dialog which is of type AlertDialog
     private void showLogInDialog() {
@@ -120,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
             waitingDialog.show();
 
             // Try to Login with correctly validated email and password
-            // auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
-            Controller.getInstance().serverCommunicator.logInUserEmail(edtEmail.getText().toString(), edtPassword.getText().toString())
+            auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
                     .addOnSuccessListener(authResult -> {
 
                         // Remove the loading dialog
@@ -213,11 +201,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Create a new user with the input details
-            // auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
-            Controller.getInstance().serverCommunicator.signUpUser(edtEmail.getText().toString(), edtPassword.getText().toString(), "", "")
+            auth.createUserWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
                     .addOnSuccessListener(authResult -> {
                         // Save user to database
-                        // Create a new user object TODO: Move this logic out of here
+                        // Create a new user object
                         User user = new User();
 
                         // Set email, name and password for the user
@@ -228,17 +215,12 @@ public class MainActivity extends AppCompatActivity {
                         // Not saving the password
                         user.setPassword(edtPassword.getText().toString());
 
-//                        System.out.println(user.getName());
-//                        System.out.println(user.getEmail());
-//                        System.out.println(user.getPassword());
-//                        System.out.println(user.getPhone());
-
                         // Use UID as the unique key
                         users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                 .setValue(user)
                                 .addOnSuccessListener(aVoid -> {
                                     //WELCOME TO ALINE
-                                    Snackbar.make(rootLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
+                                    Snackbar.make(rootLayout, "Homepage to ALINE!", Snackbar.LENGTH_SHORT)
                                             .show();
                                 })
                                 .addOnFailureListener(e -> Snackbar.make(rootLayout, "Failed" + e.getMessage(), Snackbar.LENGTH_LONG)
