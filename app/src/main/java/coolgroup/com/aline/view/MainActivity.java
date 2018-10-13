@@ -1,4 +1,4 @@
-package coolgroup.com.aline.View;
+package coolgroup.com.aline.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.Maps.Homepage;
-import coolgroup.com.aline.Model.User;
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
@@ -205,15 +205,7 @@ public class MainActivity extends AppCompatActivity {
                     .addOnSuccessListener(authResult -> {
                         // Save user to database
                         // Create a new user object
-                        User user = new User();
-
-                        // Set email, name and password for the user
-                        user.setEmail(edtEmail.getText().toString());
-                        user.setName(edtName.getText().toString());
-                        user.setPhone(edtPhone.getText().toString());
-
-                        // Not saving the password
-                        user.setPassword(edtPassword.getText().toString());
+                        User user = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), edtEmail.getText().toString(), edtName.getText().toString(), edtPhone.getText().toString());
 
                         // Use UID as the unique key
                         users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
