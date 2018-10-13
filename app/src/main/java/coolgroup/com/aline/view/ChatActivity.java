@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import coolgroup.com.aline.GetTimeAgo;
-import coolgroup.com.aline.Messages;
+import coolgroup.com.aline.model.Messages;
 import coolgroup.com.aline.adapters.MessageAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 import coolgroup.com.aline.R;

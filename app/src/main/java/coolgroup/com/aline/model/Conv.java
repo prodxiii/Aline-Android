@@ -1,4 +1,4 @@
-package coolgroup.com.aline;
+package coolgroup.com.aline.model;
 
 public class Conv {
 

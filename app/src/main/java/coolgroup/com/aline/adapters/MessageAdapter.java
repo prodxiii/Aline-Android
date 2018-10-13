@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import coolgroup.com.aline.Messages;
+import coolgroup.com.aline.model.Messages;
 import coolgroup.com.aline.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 

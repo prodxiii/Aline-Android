@@ -24,7 +24,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import coolgroup.com.aline.Conv;
+import coolgroup.com.aline.model.Conv;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.view.ChatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
