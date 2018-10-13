@@ -1,6 +1,7 @@
 package coolgroup.com.aline.Maps;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -298,7 +299,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         StringBuilder googleDirectionsUrl = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
         googleDirectionsUrl.append("origin="+latitude+","+longitude);
         googleDirectionsUrl.append("&destination="+end_latitude+","+end_longitude);
-        googleDirectionsUrl.append("&key="+"AIzaSyDcDiyorVCpcl2OsEbqphuoVoTkmgSQ4EQ");
+        googleDirectionsUrl.append("&key="+"AIzaSyAxdy52TGsv0WZOTG0veLdvlZSv3JhwJic");
 
         return googleDirectionsUrl.toString();
     }
@@ -361,4 +362,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
+
+
+
 }
