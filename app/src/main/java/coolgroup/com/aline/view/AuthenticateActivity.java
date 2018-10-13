@@ -14,8 +14,13 @@ import android.widget.RelativeLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+
 import coolgroup.com.aline.Controller;
+
+import coolgroup.com.aline.Maps.Homepage;
+
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
 
 public class AuthenticateActivity extends AppCompatActivity {
@@ -200,6 +205,7 @@ public class AuthenticateActivity extends AppCompatActivity {
                                     // Remove the loading dialog
                                     waitingDialog.dismiss();
 
+
                                     //WELCOME TO ALINE
                                     proceedToHomepage();
 
@@ -234,7 +240,7 @@ public class AuthenticateActivity extends AppCompatActivity {
         Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                 .show();
 
-        Intent homeIntent = new Intent(AuthenticateActivity.this, ChatsActivity.class);
+        Intent homeIntent = new Intent(AuthenticateActivity.this, Homepage.class);
 
         // If email and password is authenticated open the welcome layout
         startActivity(homeIntent);

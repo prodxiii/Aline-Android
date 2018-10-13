@@ -1,5 +1,6 @@
 package coolgroup.com.aline.model;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
     /**
      * AuthenticateActivity a user by email address and password.
+
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
@@ -54,11 +56,25 @@ public class FirebaseCommunicator implements iServerCommunicator {
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.
+     * @param listener
      * @return True if the account exists and details are correct, else false.
      */
     @Override
+    public void logInUserPhone(String phone, String password, OnSuccessListener<User> listener) {
+
+    }
+
+    /**
+     * AuthenticateActivity a user by phone number and password.
+
+     *
+     * @param phone    The phone number registered to the account.
+     * @param password The user’s password.
+     * @return True if the account exists and details are correct, else false.
+     */
     public boolean logInUserPhone(String phone, String password) {
         return false;
+
     }
 
     /**
@@ -81,7 +97,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
 //        currentController.getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
         return toReturn;
     }
-
 
 
     /**

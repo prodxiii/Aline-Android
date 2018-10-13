@@ -36,7 +36,7 @@ public class ChatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chats);
 
-        mAuth = FirebaseAuth.getInstance(); // Done
+        mAuth = FirebaseAuth.getInstance();
 
         // Create the toolbar for the chat activity
         Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_appbar);
@@ -129,4 +129,5 @@ public class ChatsActivity extends AppCompatActivity {
         startActivity(authIntent);
         finish();
     }
+
 }
