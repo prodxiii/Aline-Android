@@ -45,7 +45,9 @@ dependencies {
     implementation 'com.firebase:geofire-android:2.1.2'
     implementation 'com.github.glomadrian:MaterialAnimatedSwitch:1.1@aar'
 
-    compile(name:'sinch-android-rtc', version:'+', ext:'aar')
+    // Add sinch aar file
+    compile files('libs/sinch-android-rtc-3.12.7.aar')
+
 }
 
 apply plugin: 'com.google.gms.google-services'
