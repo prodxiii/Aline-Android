@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/TF_location"
+                android:layout_width="322dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter an address"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/B_search"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:text="Search" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/B_hopistals"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/TF_location"
+                android:layout_alignParentStart="true"
+                android:onClick="onClick"
+                android:text="Hospitals" />
+
+            <Button
+                android:id="@+id/B_church"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/TF_location"
+                android:layout_toEndOf="@+id/B_hopistals"
+                android:onClick="onClick"
+                android:text="Churches" />
+
+            <Button
+                android:id="@+id/B_restaurants"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/TF_location"
+                android:layout_toEndOf="@+id/B_church"
+                android:onClick="onClick"
+                android:text="Restaurants" />
+
+            <Button
+                android:id="@+id/B_to"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/B_restaurants"
+                android:layout_toEndOf="@+id/B_restaurants"
+                android:onClick="getDirection"
+                android:text="To" />
+
+
+        </LinearLayout>
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="547dp"
+            android:layout_below="@+id/B_church"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            tools:context=".view.Homepage" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/home_track_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="97dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="startTrack"
+            android:text="Track" />
+
+        <Button
+            android:id="@+id/home_chat_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="startChat"
+            android:text="@string/chat" />
+
+        <Button
+            android:id="@+id/home_sos_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="startSOS"
+            android:text="@string/sos" />
+    </LinearLayout>
+
+</RelativeLayout>
+
+

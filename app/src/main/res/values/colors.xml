@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0a091b</color>
-    <color name="colorPrimaryDark">#070716</color>
+    <!--Primary Color Choice-->
+    <color name="colorPrimary">#0288d1</color>
+    <color name="colorPrimaryLight">#5eb8ff</color>
+    <color name="colorPrimaryDark">#005b9f</color>
+
+    <color name="colorPrimaryText">#000000</color>
+    <color name="colorPrimaryDarkText">#FFFFFF</color>
+
+    <!--Secondary Color Choice-->
+    <color name="colorSecondary">#263238</color>
+    <color name="colorSecondaryDark">#000a12</color>
+    <color name="colorSecondaryLight">#4f5b62</color>
+
     <color name="colorAccent">#FF4081</color>
 
     <color name="bottomText">#348774</color>
 
     <color name="rippleEffectColor">#f816a463</color>
 
-    <color name="btnSignIn">#1fbad6</color>
-    
-    <color name="baseReleaseColor">#212121</color>
-    <color name="basePressColor">#FAFAFA</color>
-    <color name="ballReleaseColor">#9E9E9E</color>
 </resources>
