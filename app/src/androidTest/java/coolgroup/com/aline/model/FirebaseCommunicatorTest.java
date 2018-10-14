@@ -75,6 +75,13 @@ public class FirebaseCommunicatorTest {
     }
 
     @Test
+    public void getBasicUserInfoTest2() {
+        communicator.getBasicUserInfo("INVALID_USER", user -> {
+            assertEquals(null, user);
+        });
+    }
+
+    @Test
     public void getContactsList() {
         communicator.getContactsList("TEST_1", contacts -> {
             assertEquals(2, contacts.size());
@@ -86,6 +93,11 @@ public class FirebaseCommunicatorTest {
     @Test
     public void getContactsUserList() {
         communicator.getContactsUserList("TEST_1", users -> assertEquals(2, users.size()));
+    }
+
+    @Test
+    public void getContactsUserListTest2() {
+        communicator.getContactsUserList("INVALID_USER", users -> assertEquals(0, users.size()));
     }
 
     @Test
@@ -101,15 +113,25 @@ public class FirebaseCommunicatorTest {
     }
 
     @Test
+    public void removeContactTest2() {
+        communicator.removeContact("USER_1", "USER_2");
+        communicator.removeContact("USER_1", "USER_3");
+        communicator.getContactsList("USER_1", contacts -> assertEquals(0, contacts.size()));
+    }
+
+    @Test
+    public void removeContactTest3() {
+        communicator.removeContact("USER_1", "NON_CONTACT");
+        communicator.getContactsList("USER_1", contacts -> assertEquals(2, contacts.size()));
+    }
+
+    @Test
     public void logInUserEmail() {
-        communicator.logInUserEmail("AUTH_TEST", "AUTH_PASSWORD", new OnSuccessListener<User>() {
-            @Override
-            public void onSuccess(User user) {
-                assertEquals("AUTH_NAME", user.name);
-                assertEquals("AUTH_TEST", user.id);
-                assertEquals("auth@test.com", user.email);
-                assertEquals("0400000000", user.phone);
-            }
+        communicator.logInUserEmail("AUTH_TEST", "AUTH_PASSWORD", user -> {
+            assertEquals("AUTH_NAME", user.name);
+            assertEquals("AUTH_TEST", user.id);
+            assertEquals("auth@test.com", user.email);
+            assertEquals("0400000000", user.phone);
         });
     }
 
