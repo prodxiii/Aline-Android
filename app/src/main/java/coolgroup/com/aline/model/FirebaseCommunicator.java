@@ -9,60 +9,72 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import coolgroup.com.aline.Controller;
 
 public class FirebaseCommunicator implements iServerCommunicator {
 
     // Declare Firebase
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference users;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
 
     public FirebaseCommunicator() {
         // Initialize Firebase
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
     }
 
     /**
-     * Getter for FirebaseDatabase
+     * Retrieve a user ID string.
      *
-     * @return db
+     * @return The user ID if the user exists, else null.
      */
-    public FirebaseDatabase getmFirebaseDatabase() {
-        return mFirebaseDatabase;
+    @Override
+    public String getCurrentUID() {
+        return mAuth.getCurrentUser().getUid();
     }
 
     /**
-     * Authenticate a user by email address and password.
+     * AuthenticateActivity a user by email address and password.
+
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
     @Override
-    public void logInUserEmail(String email, String password, OnSuccessListener<User> listener) {
-        Task<AuthResult> task = mFirebaseAuth.signInWithEmailAndPassword(email, password);
-        task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-
-                FirebaseUser mFirebaseUser = authResult.getUser();
-
-                listener.onSuccess(firebaseUsertoUser(mFirebaseUser));
-            }
-        });
+    public Task<AuthResult> logInUserEmail(String email, String password) {
+        Task<AuthResult> toReturn = mAuth.signInWithEmailAndPassword(email, password);
+//        Controller.getInstance().setMainUser(new User(email, password));
+//        Controller.getInstance().getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
+        return toReturn;
     }
 
     /**
-     * Authenticate a user by phone number and password.
+     * AuthenticateActivity a user by phone number and password.
+     *
+     * @param phone    The phone number registered to the account.
+     * @param password The user’s password.
+     * @param listener
+     * @return True if the account exists and details are correct, else false.
+     */
+    @Override
+    public void logInUserPhone(String phone, String password, OnSuccessListener<User> listener) {
+
+    }
+
+    /**
+     * AuthenticateActivity a user by phone number and password.
+
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
-    @Override
-    public void logInUserPhone(String phone, String password, OnSuccessListener<User> listener) {
-        return;
+    public boolean logInUserPhone(String phone, String password) {
+        return false;
+
     }
 
     /**
@@ -76,28 +88,16 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * and the format of all arguments is valid (e.g. password length).
      */
     @Override
-    public void signUpUser(String email, String password, String name, String phone, OnSuccessListener<User> listener) {
+    public Task<AuthResult> signUpUser(String email, String password, String name, String phone) {
 //        Controller currentController = Controller.getInstance();
-//        Task<AuthResult> toReturn = mFirebaseAuth.createUserWithEmailAndPassword(email, password);
-//        //TODO: check that login succeeded before assigning values as if it has.
-//        currentController.setMainUser(
-//                new User(email, name, phone, mFirebaseAuth.getCurrentUser().getUid())
-//                );
-//        return;
+        Task<AuthResult> toReturn = mAuth.createUserWithEmailAndPassword(email, password);
+//        currentController.setMainUser(new User(email, password));
+//        currentController.getMainUser().setName(name);
+//        currentController.getMainUser().setPhone(name);
+//        currentController.getMainUser().setuID(mFirebaseAuth.getCurrentUser().getUid());
+        return toReturn;
     }
 
-    /**
-     * Retrieve a user ID string.
-     *
-     * @param email The email of the user to be queried.
-     * @param name  The name of the user to be queried.
-     * @param phone The phone of the user to be queried.
-     * @return The user ID if the user exists, else null.
-     */
-    @Override
-    public String getUserId(String email, String name, String phone) {
-        return null;
-    }
 
     /**
      * Retrieve the basic details of a user.
@@ -145,12 +145,34 @@ public class FirebaseCommunicator implements iServerCommunicator {
         return false;
     }
 
-    private User firebaseUsertoUser(FirebaseUser mFirebaseUser) {
-        return new User(mFirebaseUser.getUid(),
-                        mFirebaseUser.getEmail(),
-                        mFirebaseUser.getDisplayName(),
-                        mFirebaseUser.getPhoneNumber());
+    /**
+     * Create user reference in the Firebase Realtime Database
+     *
+     * @param name  The name of user
+     * @param email The login email of user
+     * @param phone The phone number of user
+     *
+     * @return Task<Void>
+     */
+    @Override
+    public Task<Void> createUserChild(String name, String email, String phone) {
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = current_user.getUid();
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+
+        HashMap<String, String> userMap = new HashMap<>();
+        userMap.put("name", name);
+        userMap.put("phone", phone);
+        userMap.put("email", email);
+        userMap.put("status", "Hi there, I'm using Aline.");
+        userMap.put("image", "default");
+        userMap.put("thumbnail", "default");
+
+        return mDatabase.setValue(userMap);
     }
 
-
+    public FirebaseDatabase getmDatabase() {
+        return mDatabase;
+    }
 }

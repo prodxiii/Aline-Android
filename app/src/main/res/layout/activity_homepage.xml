@@ -21,7 +21,6 @@
                     android:id="@+id/TF_location"
                     android:layout_width="322dp"
                     android:layout_height="wrap_content"
-                    android:autofillHints=""
                     android:ems="10"
                     android:hint="Enter an address"
                     android:inputType="textPersonName" />
@@ -96,8 +95,6 @@
                 tools:context=".View.Homepage" />
         </LinearLayout>
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -106,28 +103,30 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/trackButton"
+            android:id="@+id/home_track_btn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="97dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="startTracking"
+            android:onClick="startTrack"
             android:text="Track" />
 
         <Button
-            android:id="@+id/chatButton"
+            android:id="@+id/home_chat_btn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="startChat"
             android:text="@string/chat" />
 
         <Button
-            android:id="@+id/SOSButton"
+            android:id="@+id/home_sos_btn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="startSOS"
             android:text="@string/sos" />
     </LinearLayout>
 

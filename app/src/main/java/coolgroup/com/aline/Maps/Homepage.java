@@ -9,12 +9,14 @@ import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,11 +34,18 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import java.io.IOException;
 import java.util.List;
 
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.view.AuthenticateActivity;
+import coolgroup.com.aline.view.ChatsActivity;
 
 
 public class Homepage extends FragmentActivity implements OnMapReadyCallback,
@@ -58,9 +67,20 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     public static final int REQUEST_LOCATION_CODE = 99;
     int PROXIMITY_RADIUS = 10000;
     double latitude,longitude;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mUserReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null) {
+            mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        }
+
         setContentView(R.layout.activity_homepage);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -72,6 +92,33 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Get the current user ID
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // User is not signed in
+        if (currentUser == null) {
+            backToAuth();
+        } else {
+            mUserReference.child("online").setValue("true");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        // Get the current user ID
+        super.onStop();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+
+            mUserReference.child("online").setValue(ServerValue.TIMESTAMP);
+        }
     }
 
     @Override
@@ -175,7 +222,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         switch(v.getId())
         {
             case R.id.B_search:
-                EditText tf_location =  findViewById(R.id.TF_location);
+                EditText tf_location =  (EditText) findViewById(R.id.TF_location);
                 String location = tf_location.getText().toString();
                 List<Address> addressList;
 
@@ -365,5 +412,30 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     }
 
 
+    public void startChat(View view) {
+        Intent chatIntent = new Intent(Homepage.this, ChatsActivity.class);
 
+        // If email and password is authenticated open the welcome layout
+        startActivity(chatIntent);
+    }
+
+    public void startSOS(View view) {
+        // Go to SOS Activity
+    }
+
+    public void startTrack(View view) {
+        // Start Tracking
+    }
+
+    // Send user to Authentication page
+    private void backToAuth() {
+        Intent authIntent = new Intent(Homepage.this, AuthenticateActivity.class);
+
+        // Validation to stop user from going to the authenticate activity again
+        authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // Take user to authentication
+        startActivity(authIntent);
+        finish();
+    }
 }

@@ -1,9 +1,12 @@
 package coolgroup.com.aline.model;
 
+
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -11,16 +14,16 @@ import coolgroup.com.aline.model.User;
 
 public interface iServerCommunicator {
     /**
-     * Authenticate a user by email address and password.
+     * AuthenticateActivity a user by email address and password.
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
      * @return True if the account exists and details are correct, else false.
      */
-    void logInUserEmail(String email, String password, OnSuccessListener<User> listener);
+    Task<AuthResult> logInUserEmail(String email, String password);
 
     /**
-     * Authenticate a user by phone number and password.
+     * AuthenticateActivity a user by phone number and password.
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.
@@ -38,17 +41,16 @@ public interface iServerCommunicator {
      * @return True if the user doesn’t already exist (e.g. email taken)
      * and the format of all arguments is valid (e.g. password length).
      */
-    void signUpUser(String email, String password, String name, String phone, OnSuccessListener<User> listener);
+
+    Task<AuthResult> signUpUser(String email, String password, String name, String phone);
+
 
     /**
      * Retrieve a user ID string.
      *
-     * @param email The email of the user to be queried.
-     * @param name  The name of the user to be queried.
-     * @param phone The phone of the user to be queried.
      * @return The user ID if the user exists, else null.
      */
-    String getUserId(String email, String name, String phone);
+    String getCurrentUID();
 
     /**
      * Retrieve the basic details of a user.
@@ -84,4 +86,16 @@ public interface iServerCommunicator {
      */
     boolean removeContact(String userId, String contactUserId);
 
+    /**
+     * Create user reference in the Firebase Realtime Database
+     *
+     * @param name  The name of user
+     * @param email The login email of user
+     * @param phone The phone number of user
+     *
+     * @return Task<Void>
+     */
+    Task<Void> createUserChild(String name, String email, String phone);
+
+    FirebaseDatabase getmDatabase();
 }
