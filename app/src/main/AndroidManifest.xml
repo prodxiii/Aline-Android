@@ -27,8 +27,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Maps.Homepage"
-            android:label="@string/title_activity_homepage">
+        <activity android:name=".Maps.Homepage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

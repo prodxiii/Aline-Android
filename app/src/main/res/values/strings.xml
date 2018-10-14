@@ -104,7 +104,6 @@
     <string name="action_settings">Settings</string>
 
 
-    <string name="title_activity_homepage">Map</string>
     <string name="source_address">Enter Source Address</string>
     <string name="destination_address">Enter Destination Address</string>
     <string name="search">Search</string>

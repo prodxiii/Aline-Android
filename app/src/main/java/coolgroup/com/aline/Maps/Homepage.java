@@ -47,6 +47,7 @@ import coolgroup.com.aline.R;
 import coolgroup.com.aline.view.AuthenticateActivity;
 import coolgroup.com.aline.view.ChatsActivity;
 
+
 public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -416,6 +417,14 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
         // If email and password is authenticated open the welcome layout
         startActivity(chatIntent);
+    }
+
+    public void startSOS(View view) {
+        // Go to SOS Activity
+    }
+
+    public void startTrack(View view) {
+        // Start Tracking
     }
 
     // Send user to Authentication page
