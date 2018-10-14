@@ -38,6 +38,7 @@ import java.util.List;
 
 import coolgroup.com.aline.R;
 
+
 public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
