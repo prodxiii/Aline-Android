@@ -1,8 +1,8 @@
 package coolgroup.com.aline.view;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +27,10 @@ import java.util.Map;
 import coolgroup.com.aline.R;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    final String DEFAULT_NAME = "default_name";
+    final String DEFAULT_STATUS = "default_status";
+    final String DEFAULT_IMAGE = "default";
 
     private ImageView mProfileImage;
     private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
@@ -55,18 +59,20 @@ public class ProfileActivity extends AppCompatActivity {
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
 
+        // This user's database reference
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
         mNotificationDatabase = FirebaseDatabase.getInstance().getReference().child("notifications");
         mCurrent_user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mProfileImage = (ImageView) findViewById(R.id.image_profile);
-        mProfileName = (TextView) findViewById(R.id.name_profile);
-        mProfileStatus = (TextView) findViewById(R.id.status_profile);
-        mProfileFriendsCount = (TextView) findViewById(R.id.total_friends_profile);
-        mProfileSendReqBtn = (Button) findViewById(R.id.send_req_btn_profile);
-        mDeclineBtn = (Button) findViewById(R.id.decline_btn_profile);
+        mProfileImage = findViewById(R.id.image_profile);
+        mProfileName = findViewById(R.id.name_profile);
+        mProfileStatus = findViewById(R.id.status_profile);
+        mProfileFriendsCount = findViewById(R.id.total_friends_profile);
+        mProfileSendReqBtn = findViewById(R.id.send_req_btn_profile);
+        mDeclineBtn = findViewById(R.id.decline_btn_profile);
 
 
         mCurrent_state = "not_friends";
@@ -86,10 +92,23 @@ public class ProfileActivity extends AppCompatActivity {
         mUsersDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String display_name = DEFAULT_NAME;
+                String status = DEFAULT_STATUS;
+                String image = DEFAULT_IMAGE;
 
-                String display_name = dataSnapshot.child("name").getValue().toString();
-                String status = dataSnapshot.child("status").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                // Safety checking to prevent null object calls
+                Object temp = dataSnapshot.child("name").getValue();
+                if (!(temp == null)) {
+                    display_name = temp.toString();
+                }
+                temp = dataSnapshot.child("status").getValue();
+                if (!(temp == null)) {
+                    status = temp.toString();
+                }
+                temp = dataSnapshot.child("image").getValue();
+                if (!(temp == null)) {
+                    image = temp.toString();
+                }
 
                 mProfileName.setText(display_name);
                 mProfileStatus.setText(status);
