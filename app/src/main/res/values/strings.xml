@@ -115,7 +115,8 @@
     <!-- New UI strings -->
 
     <!-- Homescreen main navigation bar -->
-    <string name="homebar_map">Map</string>
+    <string name="homebar_map">Map</string> <!-- disused -->
+    <string name="homebar_track">Track</string>
     <string name="homebar_contacts">Contacts</string>
     <string name="homebar_sos">SOS</string>
 
