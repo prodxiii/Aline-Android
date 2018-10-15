@@ -112,4 +112,19 @@
     <string name="chat">Chat</string>
     <string name="sos">SOS</string>
 
+    <!-- New UI strings -->
+
+    <!-- Homescreen main navigation bar -->
+    <string name="homebar_map">Map</string>
+    <string name="homebar_contacts">Contacts</string>
+    <string name="homebar_sos">SOS</string>
+
+    <!-- Homescreen search box -->
+    <string name="map_search_hint">Search for a location</string>
+
+    <!-- Homescreen quick buttons -->
+    <string name="quick_parks">Parks</string>
+    <string name="quick_cafes">Cafes</string>
+    <string name="quick_shopping">Shops</string>
+
 </resources>

@@ -76,6 +76,9 @@ dependencies {
     // Add sinch aar file
     compile files('libs/sinch-android-rtc-3.12.7.aar')
 
+    // Dependency for map floating search box
+    compile 'com.github.arimorty:floatingsearchview:2.1.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homebar_map"
+        android:icon="@drawable/map_icon"
+        android:title="@string/homebar_map" />
+    <item
+        android:id="@+id/homebar_contacts"
+        android:icon="@drawable/contacts_icon"
+        android:title="@string/homebar_contacts" />
+    <item
+        android:id="@+id/homebar_SOS"
+        android:icon="@drawable/sos_icon"
+        android:title="@string/homebar_sos" />
+</menu>
