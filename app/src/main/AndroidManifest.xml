@@ -12,12 +12,14 @@
 
      <!--
          The following permissions/features are for Sinch.
+         Some of them are permissions for other parts of the app too, ie, internet.
      -->
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"
+                     android:required='true'/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -72,6 +74,9 @@
 
         <activity android:name=".view.ChatActivity"
             android:parentActivityName=".view.ChatsActivity">
+        </activity>
+        <activity android:name=".view.CallActivity"
+            android:parentActivityName=".view.CallActivity">
         </activity>
 
         <!--

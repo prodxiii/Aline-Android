@@ -1,6 +1,7 @@
 package coolgroup.com.aline.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.Sinch;
@@ -24,9 +25,9 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
     private Call currentCall = null;
 
     // TODO: fill out these strings in a meaningful way
-    private String mApplicationKey;
-    private String mApplicationSecret;
-    private String mEnvironmentHost;
+    private String mApplicationKey = "3a862a0e-a7f7-40d6-bb1a-0ed817743686";
+    private String mApplicationSecret = "PLPQh5VGBUG4EFfpgdFMSA==";
+    private String mEnvironmentHost = "sandbox.sinch.com";
 
     // List of Observers to notify
     private ArrayList<iVOIPListener> listeners = new ArrayList<>();
@@ -45,10 +46,9 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
 
     public SinchCommunicator(Context context, User currentUser){
 
-        //TODO: use userID instead of user's phone number as a unique identifier.
         mSinchClient = Sinch.getSinchClientBuilder()
                 .context(context)
-                .userId(currentUser.getPhone()) // <-- here
+                .userId(currentUser.getuID())
                 .applicationKey(mApplicationKey)
                 .applicationSecret(mApplicationSecret)
                 .environmentHost(mEnvironmentHost)
@@ -72,10 +72,10 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
 
     @Override
     public void startCall(User user) {
+        Log.d("SinchComm", "User id: " + user.getuID());
         hangUpCall();
 
-        // TODO: use userID instead of phone number as unique identifier.
-        currentCall = mSinchClient.getCallClient().callUser(user.getPhone());
+        currentCall = mSinchClient.getCallClient().callUser(user.getuID());
 
         currentCall.addCallListener( new ObserverCallListener() );
     }

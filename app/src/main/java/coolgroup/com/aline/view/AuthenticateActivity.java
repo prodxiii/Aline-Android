@@ -6,11 +6,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -37,6 +40,8 @@ public class AuthenticateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authenticate);
 
+        // Why even bother with the compartmentalisation if we're just going to cut
+        // through it like this?
         users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("Users");
 
         // Initialize Views
@@ -239,6 +244,18 @@ public class AuthenticateActivity extends AppCompatActivity {
 
         Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                 .show();
+
+        // Create current user
+        //TODO: somehow make the current user.
+        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = current_user.getUid();
+
+        User mainUser = new User(null, null, null, null, uid);
+        Controller.getInstance().setMainUser(mainUser);
+
+        // Create the SinchCommunicator
+        Log.d("AuthActivity", "Creating iVOIPCommunicator");
+        Controller.getInstance().createiVOIPCommunicator(getApplicationContext());
 
         Intent homeIntent = new Intent(AuthenticateActivity.this, Homepage.class);
 

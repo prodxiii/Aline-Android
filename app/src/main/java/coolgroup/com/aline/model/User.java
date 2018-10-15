@@ -1,6 +1,11 @@
 package coolgroup.com.aline.model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String email, password, name, phone, uID;
 
@@ -59,4 +64,5 @@ public class User {
     public void setuID(String uID) {
         this.uID = uID;
     }
+
 }

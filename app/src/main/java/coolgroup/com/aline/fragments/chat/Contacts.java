@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.Contact;
+import coolgroup.com.aline.model.SinchCommunicator;
+import coolgroup.com.aline.model.User;
+import coolgroup.com.aline.model.iVOIPCommunicator;
+import coolgroup.com.aline.view.CallActivity;
 import coolgroup.com.aline.view.ChatActivity;
 import coolgroup.com.aline.view.ProfileActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,7 +52,6 @@ public class Contacts extends Fragment {
     private String mCurrent_user_id;
 
     private View mMainView;
-
 
     public Contacts() {
         // Required empty public constructor
@@ -147,8 +152,17 @@ public class Contacts extends Fragment {
                                         }
 
                                         if(i == 2){
+                                            // This happens if the user tries to start a call.
 
-                                            System.out.println("CALL THE PERSON");
+                                            Intent callIntent = new Intent(getContext(), CallActivity.class);
+
+                                            User otherUser = new User("rebecca@aline.com", "123456789", userName, "0444444444", list_user_id);
+
+                                            Log.d("Aline", "otherUser ID: " + otherUser.getuID().toString());
+                                            // This works because User implements Serializable.
+                                            callIntent.putExtra( CallActivity.otherUserID, otherUser);
+
+                                            startActivity(callIntent);
 
                                         }
 
