@@ -59,7 +59,15 @@
 
         <activity
             android:name=".view.options.AllUsersActivity"
-            android:parentActivityName=".view.options.AccountSettingsActivity" />
+            android:parentActivityName=".view.options.AccountSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
 
         <activity android:name=".view.ProfileActivity">
             <intent-filter>
@@ -72,6 +80,12 @@
 
         <activity android:name=".view.ChatActivity"
             android:parentActivityName=".view.ChatsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
 
         <!--
