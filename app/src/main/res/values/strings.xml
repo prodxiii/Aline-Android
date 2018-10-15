@@ -111,5 +111,7 @@
     <string name="call">Call</string>
     <string name="chat">Chat</string>
     <string name="sos">SOS</string>
+    <string name="search_hint">Search</string>
+    <string name="app_label">Aline</string>
 
 </resources>

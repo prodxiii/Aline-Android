@@ -34,7 +34,17 @@ public class ContactsAdapter<X, Y extends RecyclerView.ViewHolder> extends Fireb
      */
     @Override
     public Filter getFilter() {
-        return null;
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                return null;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            }
+        };
     }
 
     /**
