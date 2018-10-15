@@ -1,11 +1,13 @@
 package coolgroup.com.aline.Maps;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,12 +38,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.view.AuthenticateActivity;
@@ -50,16 +56,22 @@ import coolgroup.com.aline.view.ChatsActivity;
 
 public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        GoogleApiClient.OnConnectionFailedListener{
 
     List<Address> addressList;
     Address destinationAddress;
     double end_latitude;
     double end_longitude;
-    LatLng myLocation;
+    public LatLng myLocation;
+    boolean flag = true;
+
+    public Homepage(){
+
+    }
 
     private GoogleMap mMap;
+    LocationManager locationManager;
+    android.location.LocationListener locationListener;
     private GoogleApiClient client;
     private LocationRequest locationRequest;
     private Location lastlocation;
@@ -81,6 +93,22 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
             mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         }
 
+        mUserReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         setContentView(R.layout.activity_homepage);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -92,6 +120,41 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        if(flag){
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new android.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+                myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                lastlocation = location;
+                mUserReference.child("latitude").setValue(String.valueOf(latitude));
+                mUserReference.child("longitude").setValue(String.valueOf(longitude));
+
+                mMap.clear();
+                //mMap.addMarker(new MarkerOptions().position(myLocation).title("Marker in My Location"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        }
     }
 
     @Override
@@ -123,24 +186,20 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode)
-        {
-            case REQUEST_LOCATION_CODE:
-                if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED)
-                    {
-                        if(client == null)
-                        {
-                            bulidGoogleApiClient();
-                        }
-                        mMap.setMyLocationEnabled(true);
-                    }
-                }
-                else
-                {
-                    Toast.makeText(this,"Permission Denied" , Toast.LENGTH_LONG).show();
-                }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
     }
 
@@ -160,6 +219,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
@@ -186,36 +246,13 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
 
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        lastlocation = location;
-        myLocation = new LatLng(longitude, latitude);
-        if(currentLocationmMarker != null)
-        {
-            currentLocationmMarker.remove();
 
-        }
-        Log.d("lat = ",""+latitude);
-        LatLng latLng = new LatLng(location.getLatitude() , location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        currentLocationmMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
 
-        if(client != null)
-        {
-            LocationServices.FusedLocationApi.removeLocationUpdates(client,this);
-        }
-    }
 
     public void onClick(View v)
     {
+        flag = false;
         Object dataTransfer[] = new Object[2];
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
 
@@ -375,10 +412,10 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED)
-        {
-            LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
-        }
+//        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED)
+//        {
+//            LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, (LocationListener) this);
+//        }
     }
 
 
@@ -390,6 +427,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION))
             {
                 ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION },REQUEST_LOCATION_CODE);
+
             }
             else
             {
