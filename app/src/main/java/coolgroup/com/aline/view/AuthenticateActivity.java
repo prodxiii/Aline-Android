@@ -19,6 +19,7 @@ import coolgroup.com.aline.Controller;
 
 import coolgroup.com.aline.Maps.Homepage;
 
+import coolgroup.com.aline.Maps.NewHomepageActivity;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
@@ -240,7 +241,7 @@ public class AuthenticateActivity extends AppCompatActivity {
         Snackbar.make(authLayout, "Welcome to ALINE!", Snackbar.LENGTH_SHORT)
                 .show();
 
-        Intent homeIntent = new Intent(AuthenticateActivity.this, Homepage.class);
+        Intent homeIntent = new Intent(AuthenticateActivity.this, NewHomepageActivity.class);
 
         // If email and password is authenticated open the welcome layout
         startActivity(homeIntent);
