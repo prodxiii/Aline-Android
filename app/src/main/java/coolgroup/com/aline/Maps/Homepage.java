@@ -10,12 +10,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.Color;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,7 +29,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -49,15 +46,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import coolgroup.com.aline.R;
-import coolgroup.com.aline.model.User;
-import coolgroup.com.aline.model.Users;
 import coolgroup.com.aline.view.AuthenticateActivity;
 import coolgroup.com.aline.view.ChatsActivity;
-
-import static android.graphics.Color.*;
 
 
 public class Homepage extends FragmentActivity implements OnMapReadyCallback,
@@ -102,9 +94,11 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         mUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                sos = dataSnapshot.child("sos").getValue().toString();
+                Object temp = dataSnapshot.child("sos").getValue();
+                if (temp != null) {
+                    sos = temp.toString();
+                }
                 mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
-
 
             }
 
@@ -199,7 +193,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
     }
 
@@ -219,7 +213,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
             mMap.setMyLocationEnabled(true);
-            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
