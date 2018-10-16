@@ -16,6 +16,7 @@ import android.view.View;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.Users;
@@ -28,6 +29,7 @@ public class AllUsersActivity extends AppCompatActivity {
     private RecyclerView mUsersList;
 
     private DatabaseReference mUsersDatabase;
+    private Query mQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,22 @@ public class AllUsersActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("All Users");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Abstract our database
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-
+        // Build a base query
+        mQuery = mUsersDatabase.orderByKey();
 
         mUsersList = (RecyclerView) findViewById(R.id.users_recycler_view);
         mUsersList.setHasFixedSize(true);
         mUsersList.setLayoutManager(new LinearLayoutManager(this));
+
+        // Get the intent, verify if there was a search string and get the query, if not do nothing
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            // Change the query based upon the string
+            mQuery = mUsersDatabase.orderByChild("name").startAt(query).endAt(query + "\uf8ff");
+        }
 
     }
 
@@ -74,7 +86,7 @@ public class AllUsersActivity extends AppCompatActivity {
                 Users.class,
                 R.layout.layout_single_user,
                 UsersViewHolder.class,
-                mUsersDatabase
+                mQuery
 
         ) {
             @Override

@@ -1,14 +1,16 @@
 package coolgroup.com.aline.view;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,6 +58,14 @@ public class ChatsActivity extends AppCompatActivity {
         // Include tab layout
         mTabLayout = (TabLayout) findViewById(R.id.chat_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        // Get the intent, verify the action and get the query
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Integer curr_tab = mTabLayout.getSelectedTabPosition();
+            // Do the search here
+        }
     }
 
     @Override
@@ -91,6 +101,12 @@ public class ChatsActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         return true;
     }
 
