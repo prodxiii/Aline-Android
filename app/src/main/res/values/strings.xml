@@ -126,6 +126,6 @@
     <!-- Homescreen quick buttons -->
     <string name="quick_parks">Parks</string>
     <string name="quick_cafes">Cafes</string>
-    <string name="quick_shopping">Shops</string>
+    <string name="quick_atms">ATMs</string>
 
 </resources>

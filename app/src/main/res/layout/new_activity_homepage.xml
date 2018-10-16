@@ -94,13 +94,13 @@
             android:text="@string/quick_cafes" />
 
         <Button
-            android:id="@+id/btnShops"
+            android:id="@+id/btnAtms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/background"
             android:onClick="onClick"
-            android:text="@string/quick_shopping" />
+            android:text="@string/quick_atms" />
     </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView

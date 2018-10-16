@@ -11,11 +11,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.internal.BottomNavigationMenu;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -88,6 +91,25 @@ public class NewHomepageActivity extends FragmentActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        BottomNavigationView mNavBar = (BottomNavigationView) findViewById(R.id.navMainbar);
+        mNavBar.setOnNavigationItemSelectedListener(
+            item -> {
+                switch (item.getItemId()) {
+                case R.id.homebar_track:
+                    startTrack(getCurrentFocus());
+                    return true;
+
+                case R.id.homebar_contacts:
+                    startChat(getCurrentFocus());
+                    return true;
+
+                case R.id.homebar_SOS:
+                    startSOS(getCurrentFocus());
+                    return true;
+                }
+                return false;
+            });
     }
 
     @Override
@@ -248,23 +270,23 @@ public class NewHomepageActivity extends FragmentActivity
 
         case R.id.btnCafes:
             mMap.clear();
-            url = getUrl(latitude, longitude, "park");
+            url = getUrl(latitude, longitude, "cafe");
             dataTransfer[0] = mMap;
             dataTransfer[1] = url;
 
             getNearbyPlacesData.execute(dataTransfer);
-            Toast.makeText(NewHomepageActivity.this, "Showing nearby parks",
+            Toast.makeText(NewHomepageActivity.this, "Showing nearby cafes",
                     Toast.LENGTH_SHORT).show();
             break;
 
-        case R.id.btnShops:
+        case R.id.btnAtms:
             mMap.clear();
-            url = getUrl(latitude, longitude, "shops");
+            url = getUrl(latitude, longitude, "atm");
             dataTransfer[0] = mMap;
             dataTransfer[1] = url;
 
             getNearbyPlacesData.execute(dataTransfer);
-            Toast.makeText(NewHomepageActivity.this, "Showing Nearby Restaurants",
+            Toast.makeText(NewHomepageActivity.this, "Showing nearby ATMs",
                     Toast.LENGTH_SHORT).show();
             break;
         }
