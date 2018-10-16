@@ -2,6 +2,7 @@ package coolgroup.com.aline.model;
 
 public class User {
 
+    public String sos;
     private String email, password, name, phone, uID;
 
     public User() {

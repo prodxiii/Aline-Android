@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -50,8 +52,12 @@ import java.util.List;
 import java.util.Locale;
 
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.model.User;
+import coolgroup.com.aline.model.Users;
 import coolgroup.com.aline.view.AuthenticateActivity;
 import coolgroup.com.aline.view.ChatsActivity;
+
+import static android.graphics.Color.*;
 
 
 public class Homepage extends FragmentActivity implements OnMapReadyCallback,
@@ -79,7 +85,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     public static final int REQUEST_LOCATION_CODE = 99;
     int PROXIMITY_RADIUS = 10000;
     double latitude,longitude;
-
+    String sos;
     private FirebaseAuth mAuth;
     private DatabaseReference mUserReference;
 
@@ -96,10 +102,9 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         mUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+                sos = dataSnapshot.child("sos").getValue().toString();
+                mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
 
-                }
 
             }
 
@@ -132,11 +137,12 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
                 lastlocation = location;
                 mUserReference.child("latitude").setValue(String.valueOf(latitude));
                 mUserReference.child("longitude").setValue(String.valueOf(longitude));
-
-                mMap.clear();
-                //mMap.addMarker(new MarkerOptions().position(myLocation).title("Marker in My Location"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                if(flag) {
+                    mMap.clear();
+                    //mMap.addMarker(new MarkerOptions().position(myLocation).title("Marker in My Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                }
             }
 
             @Override
@@ -164,12 +170,6 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         // Get the current user ID
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // User is not signed in
-        if (currentUser == null) {
-            backToAuth();
-        } else {
-            mUserReference.child("online").setValue("true");
-        }
     }
 
     @Override
@@ -458,7 +458,30 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     }
 
     public void startSOS(View view) {
-        // Go to SOS Activity
+        Button sosButton = (Button) findViewById(R.id.home_sos_btn);
+        mUserReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    sos = dataSnapshot.child("sos").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if(sos.equals("OFF")){
+            mUserReference.child("sos").setValue("ON");
+            sosButton.setBackgroundColor(Color.GREEN);
+            Toast.makeText(Homepage.this, "Starting SOS feature", Toast.LENGTH_LONG).show();
+        }
+        if(sos.equals("ON")){
+            mUserReference.child("sos").setValue("OFF");
+            sosButton.setBackgroundColor(Color.RED);
+            Toast.makeText(Homepage.this, "Stopping SOS feature", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     public void startTrack(View view) {
