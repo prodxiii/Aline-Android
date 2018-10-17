@@ -114,4 +114,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/new_menu_homebar" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabDirections"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:onClick="getDirection"
+        app:layout_constraintBottom_toTopOf="@+id/navMainbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/directions_icon" />
+
 </android.support.constraint.ConstraintLayout>

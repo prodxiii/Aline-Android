@@ -65,7 +65,7 @@ public class ChatsActivity extends AppCompatActivity {
         mNavBar.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
-                        case R.id.homebar_track:
+                        case R.id.homebar_map:
                             finish();
                             return false;
 

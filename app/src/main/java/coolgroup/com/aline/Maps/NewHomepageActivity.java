@@ -95,11 +95,11 @@ public class NewHomepageActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
 
         BottomNavigationView mNavBar = (BottomNavigationView) findViewById(R.id.navMainbar);
-        mNavBar.setSelectedItemId(R.id.homebar_track);
+        mNavBar.setSelectedItemId(R.id.homebar_map);
         mNavBar.setOnNavigationItemSelectedListener(
             item -> {
                 switch (item.getItemId()) {
-                case R.id.homebar_track:
+                case R.id.homebar_map:
                     startTrack(getCurrentFocus());
                     return true;
 
@@ -210,6 +210,9 @@ public class NewHomepageActivity extends FragmentActivity
         );
         mMap.setPadding(0, (int) px, 0, 0);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 4.0f));
+
+        // disable native Google Maps directions button
+        mMap.getUiSettings().setMapToolbarEnabled(false);
     }
 
     @Override
