@@ -485,6 +485,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
                  mMap.addMarker(markerOptions);
                  mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                  mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                 flag = false;
              }
 
              @Override
