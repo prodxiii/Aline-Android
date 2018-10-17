@@ -673,7 +673,7 @@ public class NewHomepageActivity extends FragmentActivity
                         if(locationService != null && locationService.equals("ON")){
                             location.setOnCheckedChangeListener(null);
                             location.setChecked(true);
-                            
+
                         }
                         if(locationService.equals("OFF")){
                             location.setOnCheckedChangeListener(null);
