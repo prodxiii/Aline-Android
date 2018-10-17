@@ -195,7 +195,11 @@ public class Chats extends Fragment {
         public void setMessage(String message, boolean isSeen) {
 
             TextView userStatusView = (TextView) mView.findViewById(R.id.single_user_status);
-            userStatusView.setText(message);
+            if (message.length() > 30) {
+                userStatusView.setText(message.substring(0, 30) + "...");
+            } else {
+                userStatusView.setText(message);
+            }
 
             if (!isSeen) {
                 userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.BOLD);

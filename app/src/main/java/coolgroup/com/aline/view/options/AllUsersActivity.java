@@ -93,7 +93,13 @@ public class AllUsersActivity extends AppCompatActivity {
             protected void populateViewHolder(UsersViewHolder usersViewHolder, Users users, int position) {
 
                 usersViewHolder.setName(users.getName());
-                usersViewHolder.setStatus(users.getStatus());
+                String status = users.getStatus();
+                if (status.length() > 30) {
+                    usersViewHolder.setStatus(status.substring(0, 30) + "...");
+                } else {
+                    usersViewHolder.setStatus(status);
+                }
+
                 usersViewHolder.setImage(users.getThumbnail(), getApplicationContext());
 
                 final String user_id = getRef(position).getKey();
