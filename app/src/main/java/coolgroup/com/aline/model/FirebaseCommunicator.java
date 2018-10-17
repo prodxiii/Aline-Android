@@ -180,7 +180,7 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userMap.put("latitude", String.valueOf(latitude));
         userMap.put("longitude",String.valueOf(longitude));
         userMap.put("sos","off");
-        userMap.put("track","off");
+        userMap.put("track","OFF");
         return mDatabase.setValue(userMap);
     }
 

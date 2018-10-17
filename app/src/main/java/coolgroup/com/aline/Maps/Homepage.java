@@ -89,24 +89,25 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
         if (mAuth.getCurrentUser() != null) {
             mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+            mUserReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Object temp = dataSnapshot.child("sos").getValue();
+                    if (temp != null) {
+                        sos = temp.toString();
+                        Log.d("starrt",sos);
+                    }
+                    mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
-        mUserReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Object temp = dataSnapshot.child("sos").getValue();
-                if (temp != null) {
-                    sos = temp.toString();
-                }
-                mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         setContentView(R.layout.activity_homepage);
 
@@ -163,6 +164,13 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
         // Get the current user ID
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        // User is not signed in
+        if (currentUser == null) {
+            backToAuth();
+        } else {
+            mUserReference.child("online").setValue("true");
+        }
+        
 
     }
 
@@ -464,6 +472,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
             }
         });
+        Log.d("sos",sos);
 
         if(sos.equals("OFF")){
             mUserReference.child("sos").setValue("ON");
