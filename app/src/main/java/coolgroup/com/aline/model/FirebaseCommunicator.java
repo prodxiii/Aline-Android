@@ -1,5 +1,10 @@
 package coolgroup.com.aline.model;
 
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+import android.util.Log;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -18,12 +23,14 @@ public class FirebaseCommunicator implements iServerCommunicator {
     // Declare Firebase
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-
+    double latitude;
+    double longitude;
     public FirebaseCommunicator() {
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
     }
+
 
     /**
      * Retrieve a user ID string.
@@ -161,8 +168,8 @@ public class FirebaseCommunicator implements iServerCommunicator {
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = current_user.getUid();
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
         HashMap<String, String> userMap = new HashMap<>();
         userMap.put("name", name);
         userMap.put("phone", phone);
@@ -170,7 +177,10 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userMap.put("status", "Hi there, I'm using Aline.");
         userMap.put("image", "default");
         userMap.put("thumbnail", "default");
-
+        userMap.put("latitude", String.valueOf(latitude));
+        userMap.put("longitude",String.valueOf(longitude));
+        userMap.put("sos","off");
+        userMap.put("track","off");
         return mDatabase.setValue(userMap);
     }
 

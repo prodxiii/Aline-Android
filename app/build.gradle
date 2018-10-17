@@ -74,7 +74,7 @@ dependencies {
     implementation 'com.firebase:geofire-android:2.1.2'
 
     // Add sinch aar file
-    compile files('libs/sinch-android-rtc-3.12.7.aar')
+    implementation files('libs/sinch-android-rtc-3.12.7.aar')
 
 }
 
