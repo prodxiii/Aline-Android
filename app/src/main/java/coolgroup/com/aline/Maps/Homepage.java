@@ -103,7 +103,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        if (flag) {
+
             locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             locationListener = new android.location.LocationListener() {
                 @Override
@@ -138,7 +138,6 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
                 }
             };
-        }
     }
 
     @Override
@@ -438,6 +437,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         });
 
         if (sos.equals("OFF")) {
+            flag = false;
             mUserReference.child("sos").setValue("ON");
             sosButton.setBackgroundColor(Color.GREEN);
             Toast.makeText(Homepage.this, "Starting SOS feature", Toast.LENGTH_LONG).show();
@@ -458,6 +458,8 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
         }
         if (sos.equals("ON")) {
+            mMap.clear();
+            flag = true;
             mUserReference.child("sos").setValue("OFF");
             sosButton.setBackgroundColor(Color.RED);
             Toast.makeText(Homepage.this, "Stopping SOS feature", Toast.LENGTH_LONG).show();
