@@ -1,10 +1,14 @@
 package coolgroup.com.aline.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +38,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private static final int GALLERY_PICK = 1;
     private final List<Messages> messagesList = new ArrayList<>();
@@ -150,7 +159,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     long lastTime = Long.parseLong(online);
 
-                    String lastSeenTime = getTimeAgo.getTimeAgo(lastTime, getApplicationContext());
+                    String lastSeenTime = GetTimeAgo.getTimeAgo(lastTime, getApplicationContext());
 
                     mLastSeenView.setText(lastSeenTime);
 
@@ -185,7 +194,7 @@ public class ChatActivity extends AppCompatActivity {
 
                             if (databaseError != null) {
 
-                                Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                                Log.d("CHAT_LOG", databaseError.getMessage());
 
                             }
 
@@ -217,11 +226,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent galleryIntent = new Intent();
-                galleryIntent.setType("image/*");
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
+                showPictureSelectorDialog();
 
             }
         });
@@ -249,9 +254,17 @@ public class ChatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
-
-            Uri imageUri = data.getData();
+        if ((requestCode == GALLERY_PICK && resultCode == RESULT_OK) ||
+                (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)) {
+            Uri imageUri = null;
+            if (requestCode == GALLERY_PICK && data != null) {
+                imageUri = data.getData();
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE && data != null) {
+                imageUri = (Uri) data.getExtras().get("data");
+            }
+            if (imageUri == null) {
+                return;
+            }
 
             final String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
             final String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
@@ -292,7 +305,7 @@ public class ChatActivity extends AppCompatActivity {
 
                                 if (databaseError != null) {
 
-                                    Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                                    Log.d("CHAT_LOG", databaseError.getMessage());
 
                                 }
 
@@ -470,7 +483,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     if (databaseError != null) {
 
-                        Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                        Log.d("CHAT_LOG", databaseError.getMessage());
 
                     }
 
@@ -479,5 +492,89 @@ public class ChatActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    // Create PictureSelectorDialog which is of type AlertDialog
+    private void showPictureSelectorDialog() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+        // Set the Title and Message for the dialog
+        dialog.setTitle("Send an Image");
+        dialog.setMessage("Please either take a photo or select an image from your gallery.");
+
+        // Instantiates a Login layout XML file into the corresponding AuthenticateActivity view object
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View picture_layout = inflater.inflate(R.layout.layout_picture, null);
+
+        // Add onClick for two buttons
+        ImageButton camera_button = (ImageButton) picture_layout.findViewById(R.id.camera_button);
+        ImageButton gallery_button = (ImageButton) picture_layout.findViewById(R.id.gallery_button);
+
+        camera_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dispatchTakePictureIntent();
+
+            }
+        });
+
+        gallery_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent();
+                galleryIntent.setType("image/*");
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
+
+            }
+        });
+
+        dialog.setView(picture_layout);
+
+        // Set the Cancel button
+        dialog.setNegativeButton("DONE", (dialog1, which) -> dialog1.dismiss());
+
+        // Show the dialog when this method is called
+        dialog.show();
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+
+            try {
+                photoFile = createImageFile();
+
+            } catch (IOException e) {
+            }
+
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "coolgroup.com.aline.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            } else {
+                Log.d("ChatAct", "Photo Intent not launched!");
+            }
+        }
+    }
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        return image;
     }
 }
