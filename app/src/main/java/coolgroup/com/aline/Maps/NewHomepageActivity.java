@@ -56,6 +56,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.view.AuthenticateActivity;
@@ -642,7 +643,7 @@ public class NewHomepageActivity extends FragmentActivity
                     LatLng userLocation = new LatLng(latitudeUser, longitudeUser);
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(userLocation);
-                    markerOptions.title(userName);
+                    markerOptions.title(getUserLocation(userLocation));
                     if(sos.equals("ON"))
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     else
@@ -690,6 +691,26 @@ public class NewHomepageActivity extends FragmentActivity
                 }
             });
         }
+    }
+
+    public String getUserLocation(LatLng location) {
+        Geocoder geocoder;
+        List<Address> addresses = null;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String address = "";
+        address += addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        address += addresses.get(0).getLocality();
+        address += addresses.get(0).getAdminArea();
+        address += addresses.get(0).getCountryName();
+        address += addresses.get(0).getPostalCode();
+        address += addresses.get(0).getFeatureName(); // Only if available else return NULL
+        return address;
     }
 
 }
