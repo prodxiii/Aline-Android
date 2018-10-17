@@ -104,40 +104,39 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new android.location.LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-
-                    myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    lastlocation = location;
-                    mUserReference.child("latitude").setValue(String.valueOf(latitude));
-                    mUserReference.child("longitude").setValue(String.valueOf(longitude));
-                    if (flag) {
-                        mMap.clear();
-                        //mMap.addMarker(new MarkerOptions().position(myLocation).title("Marker in My Location"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    }
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new android.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                lastlocation = location;
+                mUserReference.child("latitude").setValue(String.valueOf(latitude));
+                mUserReference.child("longitude").setValue(String.valueOf(longitude));
+                if (flag) {
+                    mMap.clear();
+                    //mMap.addMarker(new MarkerOptions().position(myLocation).title("Marker in My Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                 }
+            }
 
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
 
-                }
+            }
 
-                @Override
-                public void onProviderEnabled(String s) {
+            @Override
+            public void onProviderEnabled(String s) {
 
-                }
+            }
 
-                @Override
-                public void onProviderDisabled(String s) {
+            @Override
+            public void onProviderDisabled(String s) {
 
-                }
-            };
+            }
+        };
     }
 
     @Override
@@ -180,7 +179,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
     }
 
@@ -200,7 +199,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
             mMap.setMyLocationEnabled(true);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
