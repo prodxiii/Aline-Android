@@ -32,9 +32,10 @@
         android:id="@+id/settings_status_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginBottom="28dp"
         android:backgroundTint="@color/colorAccent"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -42,16 +43,35 @@
         android:textColor="@android:color/white" />
 
     <Button
-        android:id="@+id/settings_image_btn"
+        android:id="@+id/settings_share_loc_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/settings_status_btn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="208dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="NOT SHARING GPS"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/settings_image_btn"
+        android:layout_width="166dp"
+        android:layout_height="37dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="118dp"
+        android:layout_marginTop="159dp"
+        android:layout_marginEnd="127dp"
         android:backgroundTint="@android:color/white"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:text="UPDATE IMAGE"
+        android:text="UPDATE"
         android:textColor="@color/colorPrimary" />
 
     <TextView
