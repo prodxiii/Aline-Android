@@ -54,7 +54,7 @@ public interface iServerCommunicator {
      * @param userId The user ID of the user to be queried.
      * @return A User object corresponding to the user, if it exists (else null).
      */
-    User getBasicUserInfo(String userId);
+    void getBasicUserInfo(String userId, OnSuccessListener<Users> listener);
 
     /**
      * Retrieve all contacts of a user.
