@@ -35,16 +35,6 @@
         android:layout_marginTop="10dp"
         android:text="Default Status" />
 
-    <TextView
-        android:id="@+id/single_user_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/user_single_name"
-        android:layout_alignStart="@+id/user_single_name"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="35dp"
-        android:text="No Location Data" />
-
     <ImageView
         android:id="@+id/single_user_online_icon"
         android:layout_width="8dp"

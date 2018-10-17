@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -53,6 +54,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private Button mStatusBtn;
     private Button mImageBtn;
 
+    private FirebaseAuth mAuth;
+    Button location;
+    String location_service;
+
 
     private static final int GALLERY_PICK = 1;
 
@@ -79,7 +84,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         String current_uid = mCurrentUser.getUid();
 
-
+        mAuth = FirebaseAuth.getInstance();
+        location = (Button) findViewById(R.id.settings_share_loc_btn);
+        setLocationService();
 
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
         mUserDatabase.keepSynced(true);
@@ -304,5 +311,59 @@ public class AccountSettingsActivity extends AppCompatActivity {
         return randomStringBuilder.toString();
     }
 
+    public void setLocation(View view) {
+
+        mUserDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                location_service = dataSnapshot.child("track").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if (location_service.equals("OFF")) {
+            mUserDatabase.child("track").setValue("ON");
+            location.setText("Sharing GPS");
+            Toast.makeText(AccountSettingsActivity.this, "location service is on", Toast.LENGTH_LONG).show();
+        }
+        if (location_service.equals("ON")) {
+            mUserDatabase.child("track").setValue("OFF");
+            location.setText("Not sharing GPS");
+            Toast.makeText(AccountSettingsActivity.this, "location service is off", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void setLocationService() {
+        if (mAuth.getCurrentUser() != null) {
+            mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+            mUserDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Object temp = dataSnapshot.child("track").getValue();
+                    if (temp != null) {
+                        location_service = temp.toString();
+                        if(location_service.equals("ON")){
+                            location.setText("Sharing GPS");
+                        }
+                        if(location_service.equals("OFF")){
+                            location.setText("Not sharing GPS");
+                        }
+                    }
+                    mUserDatabase.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
 
 }

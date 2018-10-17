@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +88,8 @@ public class NewHomepageActivity extends FragmentActivity
     private String mCurrentUid;
     private DatabaseReference mFriendsDatabase;
 
+    Switch location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +130,10 @@ public class NewHomepageActivity extends FragmentActivity
                 return false;
             });
         setSosButton();
+
+        location = (Switch) findViewById(R.id.switchTracking);
+        setLocationButton();
+        //startTrack(location);
     }
 
     @Override
@@ -349,12 +356,12 @@ public class NewHomepageActivity extends FragmentActivity
         LatLng location = new LatLng(end_latitude, end_longitude);
         dataTransfer[2] = location;
 
-        Marker m1 = mMap.addMarker(new MarkerOptions()
-                .position(myLocation)
-                .anchor(0.5f, 0.5f)
-                .title("My Current Location")
-                .snippet("Snippet1")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+//        Marker m1 = mMap.addMarker(new MarkerOptions()
+//                .position(myLocation)
+//                .anchor(0.5f, 0.5f)
+//                .title("My Current Location")
+//                .snippet("Snippet1")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
 
         Marker m2 = mMap.addMarker(new MarkerOptions()
@@ -542,10 +549,6 @@ public class NewHomepageActivity extends FragmentActivity
         mMap.setPadding(0, (int) px, 0, 0);
     }
 
-    public void startTrack(View view) {
-        // Start Tracking
-    }
-
     // Send user to Authentication page
     private void backToAuth() {
         Intent authIntent = new Intent(NewHomepageActivity.this, AuthenticateActivity.class);
@@ -572,6 +575,121 @@ public class NewHomepageActivity extends FragmentActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    String locationService;
+    public void startTrack(View view) {
+        mCurrentUid = mAuth.getCurrentUser().getUid();
+        mUserReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                locationService = dataSnapshot.child("track").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if (locationService.equals("OFF")) {
+            flag = false;
+            mCurrentUid = mAuth.getCurrentUser().getUid();
+            mUserReference.child("track").setValue("ON");
+            location.setOnCheckedChangeListener(null);
+            location.setChecked(true);
+//            location.setOnCheckedChangeListener(this);
+            Toast.makeText(NewHomepageActivity.this, "Starting Tracking feature", Toast.LENGTH_LONG).show();
+            mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrentUid);
+            mFriendsDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        getUserTracking(dataSnapshot1.getKey().toString());
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+        if (locationService.equals("ON")) {
+            mMap.clear();
+            flag = true;
+            mUserReference.child("track").setValue("OFF");
+            location.setOnCheckedChangeListener(null);
+            location.setChecked(false);
+            Toast.makeText(NewHomepageActivity.this, "Stopping Tracking feature", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void getUserTracking(String s) {
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(s);
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String location = dataSnapshot.child("track").getValue().toString();
+                if(location.equals("ON")) {
+                    String lat = dataSnapshot.child("latitude").getValue().toString();
+                    String lon = dataSnapshot.child("longitude").getValue().toString();
+                    String userName = dataSnapshot.child("name").getValue().toString();
+                    String sos = dataSnapshot.child("sos").getValue().toString();
+                    double latitudeUser = Double.parseDouble(lat);
+                    double longitudeUser = Double.parseDouble(lon);
+                    LatLng userLocation = new LatLng(latitudeUser, longitudeUser);
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(userLocation);
+                    markerOptions.title(userName);
+                    if(sos.equals("ON"))
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    else
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    mMap.clear();
+                    mMap.addMarker(markerOptions);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                    flag = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void setLocationButton(){
+        if (mAuth.getCurrentUser() != null) {
+            mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+            mUserReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Object temp = dataSnapshot.child("track").getValue();
+                    if (temp != null) {
+                        locationService = temp.toString();
+                        if(locationService != null && locationService.equals("ON")){
+                            location.setOnCheckedChangeListener(null);
+                            location.setChecked(true);
+                            
+                        }
+                        if(locationService.equals("OFF")){
+                            location.setOnCheckedChangeListener(null);
+                            location.setChecked(false);
+                        }
+                    }
+                    mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
 }
