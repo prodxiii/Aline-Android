@@ -42,7 +42,7 @@ public class AuthenticateActivity extends AppCompatActivity {
 
         // Why even bother with the compartmentalisation if we're just going to cut
         // through it like this?
-        users = Controller.getInstance().serverCommunicator.getmDatabase().getReference("Users");
+        users = Controller.getInstance().getServerCommunicator().getmDatabase().getReference("Users");
 
         // Initialize Views
         btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -101,7 +101,7 @@ public class AuthenticateActivity extends AppCompatActivity {
 
             // Try to Login with correctly validated email and password
             // auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
-            Controller.getInstance().serverCommunicator.logInUserEmail(edtEmail.getText().toString(), edtPassword.getText().toString())
+            Controller.getInstance().getServerCommunicator().logInUserEmail(edtEmail.getText().toString(), edtPassword.getText().toString())
                     .addOnSuccessListener(authResult -> {
 
                         // Remove the loading dialog
@@ -199,11 +199,11 @@ public class AuthenticateActivity extends AppCompatActivity {
             waitingDialog.show();
 
             // Create an authentication in the Firebase Authentication
-            Controller.getInstance().serverCommunicator.signUpUser(edtEmail.getText().toString(), edtPassword.getText().toString(), "", "")
+            Controller.getInstance().getServerCommunicator().signUpUser(edtEmail.getText().toString(), edtPassword.getText().toString(), "", "")
                     .addOnSuccessListener(authResult -> {
 
                         // Create an user in the Firebase Realtime Database
-                        Controller.getInstance().serverCommunicator.
+                        Controller.getInstance().getServerCommunicator().
                                 createUserChild(edtName.getText().toString(), edtEmail.getText().toString(), edtPhone.getText().toString())
                                 .addOnSuccessListener(aVoid -> {
 
@@ -247,8 +247,7 @@ public class AuthenticateActivity extends AppCompatActivity {
 
         // Create current user
         //TODO: somehow make the current user.
-        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = current_user.getUid();
+        String uid = Controller.getInstance().getServerCommunicator().getCurrentUID();
 
         User mainUser = new User(null, null, null, null, uid);
         Controller.getInstance().setMainUser(mainUser);

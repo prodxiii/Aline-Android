@@ -14,6 +14,8 @@ import com.sinch.android.rtc.calling.CallListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import coolgroup.com.aline.Controller;
+
 /**
  * This class allows the app to make voice and video calls over Internet Protocol, to an instance of
  * a User Class. Thi User needs some unique identifier (currently a phone number), and then this
@@ -24,7 +26,6 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
     private SinchClient mSinchClient;
     private Call currentCall = null;
 
-    // TODO: fill out these strings in a meaningful way
     private String mApplicationKey = "3a862a0e-a7f7-40d6-bb1a-0ed817743686";
     private String mApplicationSecret = "PLPQh5VGBUG4EFfpgdFMSA==";
     private String mEnvironmentHost = "sandbox.sinch.com";
@@ -37,7 +38,6 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
             listeners.add(listener);
         }
     }
-
     public void removeListener(iVOIPListener listener) {
         if (listeners.contains(listener)){
             listeners.remove(listener);
@@ -64,7 +64,21 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
             public void onIncomingCall(CallClient callClient, Call incomingCall) {
                 currentCall = incomingCall;
                 currentCall.answer();
+                User callingUser = new User(null, null, null, null, incomingCall.getRemoteUserId());
 
+                // TODO: is there a way to make this work with our current system?
+                // User callingUser = Controller.getServerCommunicator().getBasicUserInfo(incomingCall.getRemoteUserId());
+
+                if (false) {
+                    currentCall.hangup();
+                }
+            }
+        });
+
+        // Handles the implementation of the observer pattern.
+        mSinchClient.getCallClient().addCallClientListener(new CallClientListener() {
+            @Override
+            public void onIncomingCall(CallClient callClient, Call call) {
                 currentCall.addCallListener( new ObserverCallListener() );
             }
         });
@@ -86,6 +100,15 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
             currentCall.hangup();
             currentCall = null;
         }
+    }
+
+    public User getUserInCallWith(){
+        if (currentCall == null){
+            return null;
+        }
+        // Alas.
+        // return Controller.getServerCommunicator().getBasicUserInfo(incomingCall.getRemoteUserId());
+        return new User(null, null, null, null, currentCall.getRemoteUserId());
     }
 
     private class ObserverCallListener implements CallListener {

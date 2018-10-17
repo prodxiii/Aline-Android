@@ -124,7 +124,25 @@ public class Contacts extends Fragment {
                             @Override
                             public void onClick(View view) {
 
-                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message", "Call "+userName+ "!"};
+                                String callstring;
+                                iVOIPCommunicator voipCommunicator = Controller.getInstance().getiVOIPCommunicator();
+
+                                User userInCallWith = voipCommunicator.getUserInCallWith();
+
+                                if (userInCallWith == null) {
+                                    callstring = "Call "+userName+ "!";
+                                }
+                                // If this user is the one we're currently in a call with,
+                                // then this button will hang us up.
+                                else if(list_user_id.equals(userInCallWith.getuID())){
+                                    callstring = "Hang up call with " + userName;
+                                }
+                                // Otherwise, it'll start a call.
+                                else {
+                                    callstring = "Call "+userName+ "!";
+                                }
+
+                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message", callstring};
 
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -154,16 +172,21 @@ public class Contacts extends Fragment {
                                         if(i == 2){
                                             // This happens if the user tries to start a call.
 
-                                            Intent callIntent = new Intent(getContext(), CallActivity.class);
+                                            // Create user (this should have happened earlier but
+                                            // here we are.)
+                                            User otherUser = new User(null, null, userName, null, list_user_id);
 
-                                            User otherUser = new User("rebecca@aline.com", "123456789", userName, "0444444444", list_user_id);
-
-                                            Log.d("Aline", "otherUser ID: " + otherUser.getuID().toString());
-                                            // This works because User implements Serializable.
-                                            callIntent.putExtra( CallActivity.otherUserID, otherUser);
-
-                                            startActivity(callIntent);
-
+                                            if (userInCallWith == null) {
+                                                voipCommunicator.startCall(otherUser);
+                                            }
+                                            // If we're in a call with this person, hang it up.
+                                            else if (otherUser.getuID().equals(userInCallWith.getuID())){
+                                                voipCommunicator.hangUpCall();
+                                            }
+                                            // Otherwise, we want to start the call! Hooray!
+                                            else {
+                                                voipCommunicator.startCall(otherUser);
+                                            }
                                         }
 
                                     }
