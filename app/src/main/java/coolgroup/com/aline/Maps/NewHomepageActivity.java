@@ -18,8 +18,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,7 +68,7 @@ public class NewHomepageActivity extends FragmentActivity
     private Location lastLocation;
     private Marker currentLocationMarker;
     public static final int REQUEST_LOCATION_CODE = 99;
-    int PROXIMITY_RADIUS = 10000;
+    int PROXIMITY_RADIUS = 2000;
     double latitude,longitude;
 
     private FirebaseAuth mAuth;
@@ -122,6 +124,20 @@ public class NewHomepageActivity extends FragmentActivity
             backToAuth();
         else
             mUserReference.child("online").setValue("true");
+
+        EditText searchBox = (EditText) findViewById(R.id.edtMapSearch);
+        searchBox.setOnEditorActionListener((textView, i, keyEvent) -> {
+            boolean handled = false;
+            switch (i) {
+            case EditorInfo.IME_ACTION_DONE:
+            case EditorInfo.IME_ACTION_GO:
+            case EditorInfo.IME_ACTION_NEXT:
+            case EditorInfo.IME_ACTION_SEARCH:
+                onClick(findViewById(R.id.btnMapSearch));
+                handled = true;
+            }
+            return handled;
+        });
     }
 
     @Override
