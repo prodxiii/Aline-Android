@@ -55,7 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 2;
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private static final int GALLERY_PICK = 1;
     private final List<Messages> messagesList = new ArrayList<>();
@@ -77,6 +77,8 @@ public class ChatActivity extends AppCompatActivity {
     private int mCurrentPage = 1;
     // Storage Firebase
     private StorageReference mImageStorage;
+
+    private Uri pictureUri;
 
 
     //New Solution
@@ -259,12 +261,16 @@ public class ChatActivity extends AppCompatActivity {
             Uri imageUri = null;
             if (requestCode == GALLERY_PICK && data != null) {
                 imageUri = data.getData();
-            } else if (requestCode == REQUEST_IMAGE_CAPTURE && data != null) {
-                imageUri = (Uri) data.getExtras().get("data");
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Log.d("ChatAct", pictureUri.toString());
+                imageUri = pictureUri;
             }
             if (imageUri == null) {
+                Log.d("ChatAct", "imageUri is null! ");
                 return;
             }
+
+            Log.d("ChatAct", imageUri.toString());
 
             final String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
             final String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
@@ -556,6 +562,7 @@ public class ChatActivity extends AppCompatActivity {
                         "coolgroup.com.aline.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                pictureUri = photoURI;
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             } else {
                 Log.d("ChatAct", "Photo Intent not launched!");
