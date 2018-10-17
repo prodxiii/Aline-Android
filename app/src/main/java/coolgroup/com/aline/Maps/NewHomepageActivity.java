@@ -11,18 +11,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,9 +46,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.List;
@@ -61,6 +70,7 @@ public class NewHomepageActivity extends FragmentActivity
     Address destinationAddress;
     double end_latitude;
     double end_longitude;
+    boolean flag = true;
     LatLng myLocation;
 
     private GoogleMap mMap;
@@ -70,9 +80,12 @@ public class NewHomepageActivity extends FragmentActivity
     public static final int REQUEST_LOCATION_CODE = 99;
     int PROXIMITY_RADIUS = 2000;
     double latitude,longitude;
+    String sos;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mUserReference;
+    private String mCurrentUid;
+    private DatabaseReference mFriendsDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +126,7 @@ public class NewHomepageActivity extends FragmentActivity
                 }
                 return false;
             });
+        setSosButton();
     }
 
     @Override
@@ -201,14 +215,6 @@ public class NewHomepageActivity extends FragmentActivity
             }
         });
 
-        float dp = 112f;
-        Resources r = getResources();
-        float px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                r.getDisplayMetrics()
-        );
-        mMap.setPadding(0, (int) px, 0, 0);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 4.0f));
 
         // disable native Google Maps directions button
@@ -412,7 +418,128 @@ public class NewHomepageActivity extends FragmentActivity
     }
 
     public void startSOS(View view) {
-        // Go to SOS Activity
+        mCurrentUid = mAuth.getCurrentUser().getUid();
+//        Button sosButton = (Button) findViewById(R.id.home_sos_btn);
+        mUserReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                sos = dataSnapshot.child("sos").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if (sos.equals("OFF")) {
+            flag = false;
+            mUserReference.child("sos").setValue("ON");
+//            sosButton.setBackgroundColor(Color.GREEN);
+//            Toast.makeText(NewHomepageActivity.this, "SOS enabled", Toast.LENGTH_LONG).show();
+            mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrentUid);
+            mFriendsDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        getUserLocation(dataSnapshot1.getKey().toString());
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+        if (sos.equals("ON")) {
+            mMap.clear();
+            flag = true;
+            mUserReference.child("sos").setValue("OFF");
+//            sosButton.setBackgroundColor(Color.RED);
+//            Toast.makeText(NewHomepageActivity.this, "SOS disabled", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void setSosButton(){
+        if (mAuth.getCurrentUser() != null) {
+            mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+            mUserReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Object temp = dataSnapshot.child("sos").getValue();
+                    if (temp != null) {
+                        sos = temp.toString();
+                        if (sos.equals("ON")){
+                            setSosBanner(true);
+                        }
+                        if (sos.equals("OFF")){
+                            setSosBanner(false);
+                        }
+                    }
+                    mUserReference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void getUserLocation(String s) {
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(s);
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String lat = dataSnapshot.child("latitude").getValue().toString();
+                String lon = dataSnapshot.child("longitude").getValue().toString();
+                String userName = dataSnapshot.child("name").getValue().toString();
+                double latitudeUser = Double.parseDouble(lat);
+                double longitudeUser = Double.parseDouble(lon);
+                LatLng userLocation = new LatLng(latitudeUser,longitudeUser);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(userLocation);
+                markerOptions.title(userName);
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                mMap.clear();
+                mMap.addMarker(markerOptions);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                flag = false;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setSosBanner(boolean enabled) {
+        CardView banner = (CardView) findViewById(R.id.sosEnabledContainer);
+        ViewGroup.LayoutParams params = banner.getLayoutParams();
+        params.height = enabled ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
+        banner.setLayoutParams(params);
+
+        if (enabled)
+            setMapPadding(132);
+        else
+            setMapPadding(108);
+    }
+
+    private void setMapPadding(float dp) {
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                r.getDisplayMetrics()
+        );
+        mMap.setPadding(0, (int) px, 0, 0);
     }
 
     public void startTrack(View view) {
