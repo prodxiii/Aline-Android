@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,7 @@ import java.util.Map;
 import java.util.Random;
 
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.view.update.PhoneActivity;
 import coolgroup.com.aline.view.update.StatusActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
@@ -54,8 +56,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private CircleImageView mDisplayImage;
     private TextView mName;
     private TextView mStatus;
-    private Button mStatusBtn;
-    private Button mImageBtn;
+    private Button mStatusBtn, mImageBtn, mPhoneBtn, mEmailBtn;
     // Storage Firebase
     private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
@@ -83,6 +84,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         mStatusBtn = (Button) findViewById(R.id.settings_status_btn);
         mImageBtn = (Button) findViewById(R.id.settings_image_btn);
+        mPhoneBtn = (Button) findViewById(R.id.settings_phone_btn);
+        mEmailBtn = (Button) findViewById(R.id.settings_email_btn);
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
@@ -101,10 +104,16 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 String name = dataSnapshot.child("name").getValue().toString();
                 final String image = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
+                String phone = dataSnapshot.child("phone").getValue().toString();
+                String email = dataSnapshot.child("email").getValue().toString();
                 String thumbnail = dataSnapshot.child("thumbnail").getValue().toString();
+
+                String formattedPhone = PhoneNumberUtils.formatNumber(phone);
 
                 mName.setText(name);
                 mStatus.setText(status);
+                mPhoneBtn.setText(formattedPhone);
+                mEmailBtn.setText(email);
 
                 if (!image.equals("default")) {
 
@@ -150,6 +159,19 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
         });
 
+        mPhoneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String phone_value = mPhoneBtn.getText().toString();
+
+                Intent phone_intent = new Intent(AccountSettingsActivity.this, PhoneActivity.class);
+                phone_intent.putExtra("phoneValue", phone_value);
+                startActivity(phone_intent);
+
+            }
+        });
+
 
         mImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,10 +179,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                 showPictureSelectorDialog();
 
-
             }
         });
-
 
     }
 

@@ -23,6 +23,7 @@
         android:layout_below="@+id/settings_image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:fontFamily="monospace"
         android:text="Display Name"
         android:textColor="@android:color/white"
         android:textSize="24sp" />
@@ -37,7 +38,7 @@
         android:backgroundTint="@color/colorAccent"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="CHANGE STATUS"
+        android:text="UPDATE STATUS"
         android:textColor="@android:color/white" />
 
     <Button
@@ -50,7 +51,7 @@
         android:backgroundTint="@android:color/white"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:text="CHANGE IMAGE"
+        android:text="UPDATE IMAGE"
         android:textColor="@color/colorPrimary" />
 
     <TextView
@@ -60,7 +61,57 @@
         android:layout_below="@+id/settings_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
+        android:fontFamily="monospace"
         android:text="Hi, I'm using Aline!"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/settings_email_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="162dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="profile@aline.com"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/settings_phone_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="294dp"
+        android:fontFamily="monospace"
+        android:text="Phone"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/settings_phone_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="242dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="+61 (0) 400 000 000"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/settings_email_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="213dp"
+        android:fontFamily="monospace"
+        android:text="Email"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

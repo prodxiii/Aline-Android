@@ -112,9 +112,6 @@ public class Contacts extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         final String userName = dataSnapshot.child("name").getValue().toString();
-                        final String userLatitude = dataSnapshot.child("latitude").getValue().toString();
-                        final String userLongitude = dataSnapshot.child("longitude").getValue().toString();
-
 
                         String userThumb = dataSnapshot.child("thumbnail").getValue().toString();
 
@@ -127,7 +124,6 @@ public class Contacts extends Fragment {
 
                         friendsViewHolder.setName(userName);
                         friendsViewHolder.setUserImage(userThumb, getContext());
-                        friendsViewHolder.setLocation(userLatitude+ " , " +userLongitude);
 
                         friendsViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -239,13 +235,6 @@ public class Contacts extends Fragment {
 
             TextView userStatusView = (TextView) mView.findViewById(R.id.single_user_status);
             userStatusView.setText(date);
-
-        }
-
-        public void setLocation(String location) {
-
-            TextView userLocationView = (TextView) mView.findViewById(R.id.single_user_location);
-            userLocationView.setText(location);
 
         }
 

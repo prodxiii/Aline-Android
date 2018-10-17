@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -146,6 +147,8 @@ public class AuthenticateActivity extends AppCompatActivity {
         edtEmail = (MaterialEditText) register_layout.findViewById(R.id.edtEmail);
         edtPhone = (MaterialEditText) register_layout.findViewById(R.id.edtPhone);
         edtPassword = (MaterialEditText) register_layout.findViewById(R.id.edtPassword);
+
+        edtPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         dialog.setView(register_layout);
 
