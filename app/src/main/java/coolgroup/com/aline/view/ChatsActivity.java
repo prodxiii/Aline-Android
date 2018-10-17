@@ -1,6 +1,7 @@
 package coolgroup.com.aline.view;
 
 import android.content.Intent;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -28,13 +29,14 @@ public class ChatsActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private DatabaseReference mUserReference;
+    private BottomNavigationView mNavBar;
 
     private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chats);
+        setContentView(R.layout.new_activity_chats);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -56,6 +58,26 @@ public class ChatsActivity extends AppCompatActivity {
         // Include tab layout
         mTabLayout = (TabLayout) findViewById(R.id.chat_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        // set the bottom navigation bar
+        mNavBar = (BottomNavigationView) findViewById(R.id.navMainbar);
+        mNavBar.setSelectedItemId(R.id.homebar_contacts);
+        mNavBar.setOnNavigationItemSelectedListener(
+                item -> {
+                    switch (item.getItemId()) {
+                        case R.id.homebar_track:
+                            finish();
+                            return false;
+
+                        case R.id.homebar_contacts:
+                            return true;
+
+                        case R.id.homebar_SOS:
+                            // TODO: start SOS
+                            return false;
+                    }
+                    return false;
+                });
     }
 
     @Override

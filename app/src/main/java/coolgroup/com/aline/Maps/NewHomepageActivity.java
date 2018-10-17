@@ -93,6 +93,7 @@ public class NewHomepageActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
 
         BottomNavigationView mNavBar = (BottomNavigationView) findViewById(R.id.navMainbar);
+        mNavBar.setSelectedItemId(R.id.homebar_track);
         mNavBar.setOnNavigationItemSelectedListener(
             item -> {
                 switch (item.getItemId()) {
@@ -102,11 +103,11 @@ public class NewHomepageActivity extends FragmentActivity
 
                 case R.id.homebar_contacts:
                     startChat(getCurrentFocus());
-                    return true;
+                    return false;
 
                 case R.id.homebar_SOS:
                     startSOS(getCurrentFocus());
-                    return true;
+                    return false;
                 }
                 return false;
             });
