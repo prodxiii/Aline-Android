@@ -3,7 +3,7 @@ package coolgroup.com.aline;
 import android.app.Application;
 import android.content.Context;
 
-public class GetTimeAgo extends Application{
+public class GetTimeAgo extends Application {
 
     /*
      * Copyright 2012 Google Inc.

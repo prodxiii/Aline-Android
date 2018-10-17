@@ -1,8 +1,5 @@
 package coolgroup.com.aline.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 public class User implements Serializable {

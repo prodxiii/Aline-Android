@@ -77,7 +77,7 @@ public class ChatsActivity extends AppCompatActivity {
 
         // User is not signed in
         if (currentUser == null) {
-           backToAuth();
+            backToAuth();
         } else {
             mUserReference.child("online").setValue("true");
         }

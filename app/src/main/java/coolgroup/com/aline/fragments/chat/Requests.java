@@ -102,7 +102,7 @@ public class Requests extends Fragment {
                         final String userName = dataSnapshot.child("name").getValue().toString();
                         String userThumb = dataSnapshot.child("thumbnail").getValue().toString();
 
-                        if(dataSnapshot.hasChild("online")) {
+                        if (dataSnapshot.hasChild("online")) {
 
                             String userOnline = dataSnapshot.child("online").getValue().toString();
                             friendsViewHolder.setUserOnline(userOnline);
@@ -184,21 +184,21 @@ public class Requests extends Fragment {
 
         }
 
-        public void setDate(String date){
+        public void setDate(String date) {
 
             TextView userStatusView = (TextView) mView.findViewById(R.id.single_user_status);
             userStatusView.setText(date);
 
         }
 
-        public void setName(String name){
+        public void setName(String name) {
 
             TextView userNameView = (TextView) mView.findViewById(R.id.user_single_name);
             userNameView.setText(name);
 
         }
 
-        public void setUserImage(String thumb_image, Context ctx){
+        public void setUserImage(String thumb_image, Context ctx) {
 
             CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.single_user_image);
             Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.avatar_male).into(userImageView);
@@ -209,7 +209,7 @@ public class Requests extends Fragment {
 
             ImageView userOnlineView = (ImageView) mView.findViewById(R.id.single_user_online_icon);
 
-            if(online_status.equals("true")){
+            if (online_status.equals("true")) {
 
                 userOnlineView.setVisibility(View.VISIBLE);
 

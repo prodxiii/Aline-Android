@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso;
 import coolgroup.com.aline.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UsersViewHolder extends RecyclerView.ViewHolder{
+public class UsersViewHolder extends RecyclerView.ViewHolder {
 
     public View mView;
 
@@ -34,7 +34,7 @@ public class UsersViewHolder extends RecyclerView.ViewHolder{
 
     }
 
-    public void setImage(String thumbnail, Context ctx){
+    public void setImage(String thumbnail, Context ctx) {
 
         CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.single_user_image);
         Picasso.with(ctx).load(thumbnail).placeholder(R.drawable.avatar_male).into(userImageView);

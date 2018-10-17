@@ -1,10 +1,5 @@
 package coolgroup.com.aline.model;
 
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
-import android.util.Log;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -16,15 +11,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import coolgroup.com.aline.Controller;
-
 public class FirebaseCommunicator implements iServerCommunicator {
 
+    double latitude;
+    double longitude;
     // Declare Firebase
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-    double latitude;
-    double longitude;
+
     public FirebaseCommunicator() {
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -44,7 +38,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
     /**
      * AuthenticateActivity a user by email address and password.
-
      *
      * @param email    The email registered to the account.
      * @param password The user’s password.
@@ -73,7 +66,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
 
     /**
      * AuthenticateActivity a user by phone number and password.
-
      *
      * @param phone    The phone number registered to the account.
      * @param password The user’s password.
@@ -160,7 +152,6 @@ public class FirebaseCommunicator implements iServerCommunicator {
      * @param name  The name of user
      * @param email The login email of user
      * @param phone The phone number of user
-     *
      * @return Task<Void>
      */
     @Override
@@ -178,9 +169,9 @@ public class FirebaseCommunicator implements iServerCommunicator {
         userMap.put("image", "default");
         userMap.put("thumbnail", "default");
         userMap.put("latitude", String.valueOf(latitude));
-        userMap.put("longitude",String.valueOf(longitude));
-        userMap.put("sos","off");
-        userMap.put("track","OFF");
+        userMap.put("longitude", String.valueOf(longitude));
+        userMap.put("sos", "OFF");
+        userMap.put("track", "OFF");
         return mDatabase.setValue(userMap);
     }
 

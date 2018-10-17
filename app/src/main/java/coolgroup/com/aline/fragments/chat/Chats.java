@@ -24,8 +24,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import coolgroup.com.aline.model.Conv;
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.model.Conv;
 import coolgroup.com.aline.view.ChatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -142,7 +142,7 @@ public class Chats extends Fragment {
                         final String userName = dataSnapshot.child("name").getValue().toString();
                         String userThumb = dataSnapshot.child("thumbnail").getValue().toString();
 
-                        if(dataSnapshot.hasChild("online")) {
+                        if (dataSnapshot.hasChild("online")) {
 
                             String userOnline = dataSnapshot.child("online").getValue().toString();
                             convViewHolder.setUserOnline(userOnline);
@@ -192,12 +192,12 @@ public class Chats extends Fragment {
 
         }
 
-        public void setMessage(String message, boolean isSeen){
+        public void setMessage(String message, boolean isSeen) {
 
             TextView userStatusView = (TextView) mView.findViewById(R.id.single_user_status);
             userStatusView.setText(message);
 
-            if(!isSeen){
+            if (!isSeen) {
                 userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.BOLD);
             } else {
                 userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.NORMAL);
@@ -205,14 +205,14 @@ public class Chats extends Fragment {
 
         }
 
-        public void setName(String name){
+        public void setName(String name) {
 
             TextView userNameView = (TextView) mView.findViewById(R.id.user_single_name);
             userNameView.setText(name);
 
         }
 
-        public void setUserImage(String thumb_image, Context ctx){
+        public void setUserImage(String thumb_image, Context ctx) {
 
             CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.single_user_image);
             Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.avatar_male).into(userImageView);
@@ -223,7 +223,7 @@ public class Chats extends Fragment {
 
             ImageView userOnlineView = (ImageView) mView.findViewById(R.id.single_user_online_icon);
 
-            if(online_status.equals("true")){
+            if (online_status.equals("true")) {
 
                 userOnlineView.setVisibility(View.VISIBLE);
 
@@ -237,7 +237,6 @@ public class Chats extends Fragment {
 
 
     }
-
 
 
 }

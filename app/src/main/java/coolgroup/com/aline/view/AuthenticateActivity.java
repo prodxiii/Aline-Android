@@ -12,16 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-
 import coolgroup.com.aline.Controller;
-
 import coolgroup.com.aline.Maps.Homepage;
-
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;

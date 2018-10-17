@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,8 @@ import com.squareup.picasso.Picasso;
 import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.Contact;
-import coolgroup.com.aline.model.SinchCommunicator;
 import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.model.iVOIPCommunicator;
-import coolgroup.com.aline.view.CallActivity;
 import coolgroup.com.aline.view.ChatActivity;
 import coolgroup.com.aline.view.ProfileActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -110,7 +107,7 @@ public class Contacts extends Fragment {
                         final String userName = dataSnapshot.child("name").getValue().toString();
                         String userThumb = dataSnapshot.child("thumbnail").getValue().toString();
 
-                        if(dataSnapshot.hasChild("online")) {
+                        if (dataSnapshot.hasChild("online")) {
 
                             String userOnline = dataSnapshot.child("online").getValue().toString();
                             friendsViewHolder.setUserOnline(userOnline);
@@ -130,16 +127,16 @@ public class Contacts extends Fragment {
                                 User userInCallWith = voipCommunicator.getUserInCallWith();
 
                                 if (userInCallWith == null) {
-                                    callstring = "Call "+userName+ "!";
+                                    callstring = "Call " + userName + "!";
                                 }
                                 // If this user is the one we're currently in a call with,
                                 // then this button will hang us up.
-                                else if(list_user_id.equals(userInCallWith.getuID())){
+                                else if (list_user_id.equals(userInCallWith.getuID())) {
                                     callstring = "Hang up call with " + userName;
                                 }
                                 // Otherwise, it'll start a call.
                                 else {
-                                    callstring = "Call "+userName+ "!";
+                                    callstring = "Call " + userName + "!";
                                 }
 
                                 CharSequence options[] = new CharSequence[]{"Open Profile", "Send message", callstring};
@@ -152,7 +149,7 @@ public class Contacts extends Fragment {
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
                                         //Click Event for each item.
-                                        if(i == 0){
+                                        if (i == 0) {
 
                                             Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
                                             profileIntent.putExtra("user_id", list_user_id);
@@ -160,7 +157,7 @@ public class Contacts extends Fragment {
 
                                         }
 
-                                        if(i == 1){
+                                        if (i == 1) {
 
                                             Intent chatIntent = new Intent(getContext(), ChatActivity.class);
                                             chatIntent.putExtra("user_id", list_user_id);
@@ -169,7 +166,7 @@ public class Contacts extends Fragment {
 
                                         }
 
-                                        if(i == 2){
+                                        if (i == 2) {
                                             // This happens if the user tries to start a call.
 
                                             // Create user (this should have happened earlier but
@@ -180,7 +177,7 @@ public class Contacts extends Fragment {
                                                 voipCommunicator.startCall(otherUser);
                                             }
                                             // If we're in a call with this person, hang it up.
-                                            else if (otherUser.getuID().equals(userInCallWith.getuID())){
+                                            else if (otherUser.getuID().equals(userInCallWith.getuID())) {
                                                 voipCommunicator.hangUpCall();
                                             }
                                             // Otherwise, we want to start the call! Hooray!
@@ -226,21 +223,21 @@ public class Contacts extends Fragment {
 
         }
 
-        public void setDate(String date){
+        public void setDate(String date) {
 
             TextView userStatusView = (TextView) mView.findViewById(R.id.single_user_status);
             userStatusView.setText(date);
 
         }
 
-        public void setName(String name){
+        public void setName(String name) {
 
             TextView userNameView = (TextView) mView.findViewById(R.id.user_single_name);
             userNameView.setText(name);
 
         }
 
-        public void setUserImage(String thumb_image, Context ctx){
+        public void setUserImage(String thumb_image, Context ctx) {
 
             CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.single_user_image);
             Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.avatar_male).into(userImageView);
@@ -251,7 +248,7 @@ public class Contacts extends Fragment {
 
             ImageView userOnlineView = (ImageView) mView.findViewById(R.id.single_user_online_icon);
 
-            if(online_status.equals("true")){
+            if (online_status.equals("true")) {
 
                 userOnlineView.setVisibility(View.VISIBLE);
 

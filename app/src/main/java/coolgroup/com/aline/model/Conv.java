@@ -5,8 +5,13 @@ public class Conv {
     public boolean seen;
     public long timestamp;
 
-    public Conv(){
+    public Conv() {
 
+    }
+
+    public Conv(boolean seen, long timestamp) {
+        this.seen = seen;
+        this.timestamp = timestamp;
     }
 
     public boolean isSeen() {
@@ -22,11 +27,6 @@ public class Conv {
     }
 
     public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Conv(boolean seen, long timestamp) {
-        this.seen = seen;
         this.timestamp = timestamp;
     }
 }

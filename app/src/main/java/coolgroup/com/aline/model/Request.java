@@ -4,7 +4,8 @@ public class Request {
 
     public String date;
 
-    public Request(){}
+    public Request() {
+    }
 
     public Request(String date) {
         this.date = date;

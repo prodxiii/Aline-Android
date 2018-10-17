@@ -33,13 +33,14 @@ public class Controller {
         return instance;
     }
 
-    public iVOIPCommunicator createiVOIPCommunicator(Context c){
-        if( voipCommunicator == null ){
+    public iVOIPCommunicator createiVOIPCommunicator(Context c) {
+        if (voipCommunicator == null) {
             voipCommunicator = new SinchCommunicator(c, mainUser);
         }
         return voipCommunicator;
     }
-    public iVOIPCommunicator getiVOIPCommunicator(){
+
+    public iVOIPCommunicator getiVOIPCommunicator() {
         return voipCommunicator;
     }
 

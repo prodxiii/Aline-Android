@@ -9,21 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import coolgroup.com.aline.Controller;
-import coolgroup.com.aline.model.SinchCommunicator;
 import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.model.iVOIPCommunicator;
 
 public class CallActivity extends AppCompatActivity {
 
-    private static final int REQUEST_PERMISSION_RECORD_AUDIO = 55;
-
     public static final String otherUserID = "otherUser";
-
-    private User otherUser;
+    private static final int REQUEST_PERMISSION_RECORD_AUDIO = 55;
     iVOIPCommunicator voipCommunicator;
+    private User otherUser;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         voipCommunicator = Controller.getInstance().getiVOIPCommunicator();
@@ -34,8 +31,8 @@ public class CallActivity extends AppCompatActivity {
         }
 
         otherUser = (User) getIntent().getSerializableExtra(otherUserID);
-        Log.d("CallActivity", "user ID: " + otherUser.getuID() );
-        if (otherUser == null){
+        Log.d("CallActivity", "user ID: " + otherUser.getuID());
+        if (otherUser == null) {
             Log.e("CallActivity", "otherUser is null! oh no!");
         } else {
             Log.d("CallActivity", "otherUser is not null.");

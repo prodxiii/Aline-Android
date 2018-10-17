@@ -3,13 +3,14 @@ package coolgroup.com.aline.model;
 public class Users {
 
     public String sos;
-    private String name, email, image, status, thumbnail, phone, latitude, longitude,track;
+    private String name, email, image, status, thumbnail, phone, latitude, longitude, track;
 
 
     // Empty Constructor
-    public Users() {}
+    public Users() {
+    }
 
-    public Users(String name, String email, String image, String status, String thumbnail, String phone, String latitude,String longitude,
+    public Users(String name, String email, String image, String status, String thumbnail, String phone, String latitude, String longitude,
                  String sos, String track) {
         this.name = name;
         this.email = email;
@@ -21,10 +22,6 @@ public class Users {
         this.longitude = longitude;
         this.sos = sos;
         this.track = track;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getImage() {
@@ -53,6 +50,10 @@ public class Users {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {

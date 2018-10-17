@@ -8,7 +8,7 @@ import coolgroup.com.aline.fragments.chat.Chats;
 import coolgroup.com.aline.fragments.chat.Contacts;
 import coolgroup.com.aline.fragments.chat.Requests;
 
-public class SectionsPagerAdapter extends FragmentPagerAdapter{
+public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
     public SectionsPagerAdapter(FragmentManager fm) {
@@ -18,10 +18,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
 
-        switch(position) {
+        switch (position) {
             case 0:
                 Chats chatsFragment = new Chats();
-                return  chatsFragment;
+                return chatsFragment;
 
             case 1:
                 Contacts contactsFragment = new Contacts();
@@ -32,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
                 return requestsFragment;
 
             default:
-                return  null;
+                return null;
         }
 
     }
@@ -42,7 +42,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
         return 3;
     }
 
-    public CharSequence getPageTitle(int position){
+    public CharSequence getPageTitle(int position) {
 
         switch (position) {
             case 0:

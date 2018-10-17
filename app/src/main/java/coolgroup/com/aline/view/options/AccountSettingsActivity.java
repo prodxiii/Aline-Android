@@ -44,24 +44,29 @@ import id.zelory.compressor.Compressor;
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
+    private static final int GALLERY_PICK = 1;
     private DatabaseReference mUserDatabase;
     private FirebaseUser mCurrentUser;
-
-
     private CircleImageView mDisplayImage;
     private TextView mName;
     private TextView mStatus;
-
     private Button mStatusBtn;
     private Button mImageBtn;
-
-
-    private static final int GALLERY_PICK = 1;
-
     // Storage Firebase
     private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
 
+    public static String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(20);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++) {
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +87,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         String current_uid = mCurrentUser.getUid();
 
 
-
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
         mUserDatabase.keepSynced(true);
 
@@ -98,7 +102,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 mName.setText(name);
                 mStatus.setText(status);
 
-                if(!image.equals("default")) {
+                if (!image.equals("default")) {
 
 //                    Picasso.with(AccountSettingsActivity.this).load(image).placeholder(R.drawable.avatar_male).into(mDisplayImage);
 
@@ -160,7 +164,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
 
             Uri imageUri = data.getData();
 
@@ -210,12 +214,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 final StorageReference thumb_filepath = mImageStorage.child("profile_images").child("thumbs").child(current_user_id + ".jpg");
 
 
-
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
 
                             final String download_url = task.getResult().getDownloadUrl().toString();
 
@@ -226,7 +229,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                                     String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
 
-                                    if(thumb_task.isSuccessful()){
+                                    if (thumb_task.isSuccessful()) {
 
                                         Map update_hashMap = new HashMap();
                                         update_hashMap.put("image", download_url);
@@ -236,7 +239,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
 
-                                                if(task.isSuccessful()){
+                                                if (task.isSuccessful()) {
 
                                                     mProgressDialog.dismiss();
                                                     Toast.makeText(AccountSettingsActivity.this, "Success Uploading.", Toast.LENGTH_LONG).show();
@@ -259,7 +262,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             });
 
 
-
                         } else {
 
                             Toast.makeText(AccountSettingsActivity.this, "Error in uploading.", Toast.LENGTH_LONG).show();
@@ -271,7 +273,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 });
 
 
-
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
 
                 Exception error = result.getError();
@@ -280,19 +281,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         }
 
 
-    }
-
-
-    public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(20);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
     }
 
     // Create PictureSelectorDialog which is of type AlertDialog

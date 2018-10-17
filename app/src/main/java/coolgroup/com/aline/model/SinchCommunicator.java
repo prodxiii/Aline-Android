@@ -14,8 +14,6 @@ import com.sinch.android.rtc.calling.CallListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import coolgroup.com.aline.Controller;
-
 /**
  * This class allows the app to make voice and video calls over Internet Protocol, to an instance of
  * a User Class. Thi User needs some unique identifier (currently a phone number), and then this
@@ -33,18 +31,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
     // List of Observers to notify
     private ArrayList<iVOIPListener> listeners = new ArrayList<>();
 
-    public void addListener(iVOIPListener listener){
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
-    public void removeListener(iVOIPListener listener) {
-        if (listeners.contains(listener)){
-            listeners.remove(listener);
-        }
-    }
-
-    public SinchCommunicator(Context context, User currentUser){
+    public SinchCommunicator(Context context, User currentUser) {
 
         mSinchClient = Sinch.getSinchClientBuilder()
                 .context(context)
@@ -79,9 +66,21 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
         mSinchClient.getCallClient().addCallClientListener(new CallClientListener() {
             @Override
             public void onIncomingCall(CallClient callClient, Call call) {
-                currentCall.addCallListener( new ObserverCallListener() );
+                currentCall.addCallListener(new ObserverCallListener());
             }
         });
+    }
+
+    public void addListener(iVOIPListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeListener(iVOIPListener listener) {
+        if (listeners.contains(listener)) {
+            listeners.remove(listener);
+        }
     }
 
     @Override
@@ -91,19 +90,19 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
 
         currentCall = mSinchClient.getCallClient().callUser(user.getuID());
 
-        currentCall.addCallListener( new ObserverCallListener() );
+        currentCall.addCallListener(new ObserverCallListener());
     }
 
     @Override
-    public void hangUpCall(){
+    public void hangUpCall() {
         if (currentCall != null) {
             currentCall.hangup();
             currentCall = null;
         }
     }
 
-    public User getUserInCallWith(){
-        if (currentCall == null){
+    public User getUserInCallWith() {
+        if (currentCall == null) {
             return null;
         }
         // Alas.
@@ -114,7 +113,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
     private class ObserverCallListener implements CallListener {
         @Override
         public void onCallEnded(Call endedCall) {
-            for(iVOIPListener l : listeners) {
+            for (iVOIPListener l : listeners) {
                 l.onCallEnded();
             }
             currentCall = null;
@@ -122,7 +121,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
 
         @Override
         public void onCallEstablished(Call establishedCall) {
-            for(iVOIPListener l : listeners) {
+            for (iVOIPListener l : listeners) {
                 l.onCallEstablished();
             }
         }
@@ -130,7 +129,7 @@ public class SinchCommunicator implements iVOIPCommunicator, iVOIPNotifier {
         @Override
         public void onCallProgressing(Call progressingCall) {
             //call is ringing
-            for(iVOIPListener l : listeners) {
+            for (iVOIPListener l : listeners) {
                 l.onCallRinging();
             }
         }

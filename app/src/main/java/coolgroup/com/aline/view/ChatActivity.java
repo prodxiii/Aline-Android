@@ -3,11 +3,11 @@ package coolgroup.com.aline.view;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -40,40 +40,32 @@ import java.util.List;
 import java.util.Map;
 
 import coolgroup.com.aline.GetTimeAgo;
-import coolgroup.com.aline.model.Messages;
-import coolgroup.com.aline.adapters.MessageAdapter;
-import de.hdodenhof.circleimageview.CircleImageView;
 import coolgroup.com.aline.R;
+import coolgroup.com.aline.adapters.MessageAdapter;
+import coolgroup.com.aline.model.Messages;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
+    private static final int TOTAL_ITEMS_TO_LOAD = 10;
+    private static final int GALLERY_PICK = 1;
+    private final List<Messages> messagesList = new ArrayList<>();
     private String mChatUser;
     private Toolbar mChatToolbar;
-
     private DatabaseReference mRootRef;
-
     private TextView mTitleView;
     private TextView mLastSeenView;
     private CircleImageView mProfileImage;
     private FirebaseAuth mAuth;
     private String mCurrentUserId;
-
     private ImageButton mChatAddBtn;
     private ImageButton mChatSendBtn;
     private EditText mChatMessageView;
-
     private RecyclerView mMessagesList;
     private SwipeRefreshLayout mRefreshLayout;
-
-    private final List<Messages> messagesList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
-
-    private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
-
-    private static final int GALLERY_PICK = 1;
-
     // Storage Firebase
     private StorageReference mImageStorage;
 
@@ -148,7 +140,7 @@ public class ChatActivity extends AppCompatActivity {
                 String online = dataSnapshot.child("online").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
 
-                if(online.equals("true")) {
+                if (online.equals("true")) {
 
                     mLastSeenView.setText("Online");
 
@@ -177,7 +169,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(!dataSnapshot.hasChild(mChatUser)){
+                if (!dataSnapshot.hasChild(mChatUser)) {
 
                     Map chatAddMap = new HashMap();
                     chatAddMap.put("seen", false);
@@ -191,7 +183,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                            if(databaseError != null){
+                            if (databaseError != null) {
 
                                 Log.d("CHAT_LOG", databaseError.getMessage().toString());
 
@@ -211,7 +203,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-
         mChatSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,7 +211,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
 
 
         mChatAddBtn.setOnClickListener(new View.OnClickListener() {
@@ -235,7 +225,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
 
 
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -260,7 +249,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
 
             Uri imageUri = data.getData();
 
@@ -273,13 +262,13 @@ public class ChatActivity extends AppCompatActivity {
             final String push_id = user_message_push.getKey();
 
 
-            StorageReference filepath = mImageStorage.child("message_images").child( push_id + ".jpg");
+            StorageReference filepath = mImageStorage.child("message_images").child(push_id + ".jpg");
 
             filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
 
                         String download_url = task.getResult().getDownloadUrl().toString();
 
@@ -301,7 +290,7 @@ public class ChatActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                                if(databaseError != null){
+                                if (databaseError != null) {
 
                                     Log.d("CHAT_LOG", databaseError.getMessage().toString());
 
@@ -334,7 +323,7 @@ public class ChatActivity extends AppCompatActivity {
                 Messages message = dataSnapshot.getValue(Messages.class);
                 String messageKey = dataSnapshot.getKey();
 
-                if(!mPrevKey.equals(messageKey)){
+                if (!mPrevKey.equals(messageKey)) {
 
                     messagesList.add(itemPos++, message);
 
@@ -345,7 +334,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
 
 
-                if(itemPos == 1) {
+                if (itemPos == 1) {
 
                     mLastKey = messageKey;
 
@@ -400,7 +389,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 itemPos++;
 
-                if(itemPos == 1){
+                if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey();
 
@@ -446,7 +435,7 @@ public class ChatActivity extends AppCompatActivity {
 
         String message = mChatMessageView.getText().toString();
 
-        if(!TextUtils.isEmpty(message)){
+        if (!TextUtils.isEmpty(message)) {
 
             String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
             String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
@@ -479,7 +468,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                    if(databaseError != null){
+                    if (databaseError != null) {
 
                         Log.d("CHAT_LOG", databaseError.getMessage().toString());
 

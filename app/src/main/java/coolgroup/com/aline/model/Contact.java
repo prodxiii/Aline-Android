@@ -4,7 +4,8 @@ public class Contact {
 
     public String date;
 
-    public Contact(){}
+    public Contact() {
+    }
 
     public Contact(String date) {
         this.date = date;
