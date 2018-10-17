@@ -26,6 +26,11 @@
     <!-- Permission for floating chat head -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <!-- end Sinch permissions -->
+    <!-- Camera permissions -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <!-- End camera permissions -->
 
     <application
         android:name=".Aline"

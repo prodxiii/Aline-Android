@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,6 +47,7 @@ import id.zelory.compressor.Compressor;
 
 public class AccountSettingsActivity extends AppCompatActivity {
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int GALLERY_PICK = 1;
     private DatabaseReference mUserDatabase;
     private FirebaseUser mCurrentUser;
@@ -295,27 +299,46 @@ public class AccountSettingsActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View picture_layout = inflater.inflate(R.layout.layout_picture, null);
 
-        dialog.setView(picture_layout);
-
         // Add onClick for two buttons
-        /*Intent galleryIntent = new Intent();
+        ImageButton camera_button = (ImageButton) picture_layout.findViewById(R.id.camera_button);
+        ImageButton gallery_button = (ImageButton) picture_layout.findViewById(R.id.gallery_button);
+
+        camera_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dispatchTakePictureIntent();
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(AccountSettingsActivity.this);
+            }
+        });
+
+        gallery_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent();
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
 
+            }
+        });
 
-                /*
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(SettingsActivity.this);
-                        */
+        dialog.setView(picture_layout);
 
         // Set the Cancel button
-        dialog.setNegativeButton("CANCEL", (dialog1, which) -> dialog1.dismiss());
+        dialog.setNegativeButton("DONE", (dialog1, which) -> dialog1.dismiss());
 
         // Show the dialog when this method is called
         dialog.show();
     }
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
 }
