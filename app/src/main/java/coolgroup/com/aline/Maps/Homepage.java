@@ -45,6 +45,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import coolgroup.com.aline.R;
@@ -75,7 +76,10 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     private Marker currentLocationmMarker;
     private FirebaseAuth mAuth;
     private DatabaseReference mUserReference;
+    private String mCurrent_user_id;
     Button sosButton;
+    private DatabaseReference mFriendsDatabase;
+    ArrayList<String> uid = new ArrayList<>();
     public Homepage() {
 
     }
@@ -140,7 +144,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     @Override
     protected void onStart() {
         super.onStart();
-
+        mCurrent_user_id = mAuth.getCurrentUser().getUid();
         // Get the current user ID
         FirebaseUser currentUser = mAuth.getCurrentUser();
         // User is not signed in
@@ -432,12 +436,26 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
 
             }
         });
-        Log.d("sos", sos);
 
         if (sos.equals("OFF")) {
             mUserReference.child("sos").setValue("ON");
             sosButton.setBackgroundColor(Color.GREEN);
             Toast.makeText(Homepage.this, "Starting SOS feature", Toast.LENGTH_LONG).show();
+            mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
+            mFriendsDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        getUserLocation(dataSnapshot1.getKey().toString());
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
         }
         if (sos.equals("ON")) {
             mUserReference.child("sos").setValue("OFF");
@@ -445,6 +463,34 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
             Toast.makeText(Homepage.this, "Stopping SOS feature", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void getUserLocation(String s) {
+         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(s);
+         userReference.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot dataSnapshot) {
+                 String lat = dataSnapshot.child("latitude").getValue().toString();
+                 String lon = dataSnapshot.child("longitude").getValue().toString();
+                 String userName = dataSnapshot.child("name").getValue().toString();
+                 double latitudeUser = Double.parseDouble(lat);
+                 double longitudeUser = Double.parseDouble(lon);
+                 LatLng userLocation = new LatLng(latitudeUser,longitudeUser);
+                 MarkerOptions markerOptions = new MarkerOptions();
+                 markerOptions.position(userLocation);
+                 markerOptions.title(userName);
+                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                 mMap.clear();
+                 mMap.addMarker(markerOptions);
+                 mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+             }
+
+             @Override
+             public void onCancelled(DatabaseError databaseError) {
+
+             }
+         });
     }
 
     public void startTrack(View view) {

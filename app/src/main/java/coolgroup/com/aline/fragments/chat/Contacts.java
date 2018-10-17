@@ -43,8 +43,11 @@ public class Contacts extends Fragment {
 
     private RecyclerView mFriendsList;
 
+
+
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mUsersDatabase;
+
 
     private FirebaseAuth mAuth;
 
@@ -111,6 +114,7 @@ public class Contacts extends Fragment {
                         final String userName = dataSnapshot.child("name").getValue().toString();
                         final String userLatitude = dataSnapshot.child("latitude").getValue().toString();
                         final String userLongitude = dataSnapshot.child("longitude").getValue().toString();
+
 
                         String userThumb = dataSnapshot.child("thumbnail").getValue().toString();
 
