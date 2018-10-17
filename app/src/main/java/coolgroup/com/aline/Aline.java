@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
+import coolgroup.com.aline.model.User;
 import coolgroup.com.aline.Maps.Homepage;
 
 public class Aline extends Application{
@@ -45,6 +47,17 @@ public class Aline extends Application{
         mAuth = FirebaseAuth.getInstance();
 
         if(mAuth.getCurrentUser() != null) {
+
+            //Create user reference in the Controller
+            FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+            String uid = current_user.getUid();
+
+            User mainUser = new User(null, null, null, null, uid);
+            Controller.getInstance().setMainUser(mainUser);
+
+            // Create the iVOIPCommunicator
+            Log.d("AlineMain", "Creating iVOIPListener");
+            Controller.getInstance().createiVOIPCommunicator(getApplicationContext());
 
             mUserDatabase = FirebaseDatabase.getInstance()
                     .getReference().child("Users").child(mAuth.getCurrentUser().getUid());

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.Contact;
+import coolgroup.com.aline.model.SinchCommunicator;
+import coolgroup.com.aline.model.User;
+import coolgroup.com.aline.model.iVOIPCommunicator;
+import coolgroup.com.aline.view.CallActivity;
 import coolgroup.com.aline.view.ChatActivity;
 import coolgroup.com.aline.view.ProfileActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,7 +52,6 @@ public class Contacts extends Fragment {
     private String mCurrent_user_id;
 
     private View mMainView;
-
 
     public Contacts() {
         // Required empty public constructor
@@ -119,7 +124,25 @@ public class Contacts extends Fragment {
                             @Override
                             public void onClick(View view) {
 
-                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message", "Call "+userName+ "!"};
+                                String callstring;
+                                iVOIPCommunicator voipCommunicator = Controller.getInstance().getiVOIPCommunicator();
+
+                                User userInCallWith = voipCommunicator.getUserInCallWith();
+
+                                if (userInCallWith == null) {
+                                    callstring = "Call "+userName+ "!";
+                                }
+                                // If this user is the one we're currently in a call with,
+                                // then this button will hang us up.
+                                else if(list_user_id.equals(userInCallWith.getuID())){
+                                    callstring = "Hang up call with " + userName;
+                                }
+                                // Otherwise, it'll start a call.
+                                else {
+                                    callstring = "Call "+userName+ "!";
+                                }
+
+                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message", callstring};
 
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -147,9 +170,23 @@ public class Contacts extends Fragment {
                                         }
 
                                         if(i == 2){
+                                            // This happens if the user tries to start a call.
 
-                                            System.out.println("CALL THE PERSON");
+                                            // Create user (this should have happened earlier but
+                                            // here we are.)
+                                            User otherUser = new User(null, null, userName, null, list_user_id);
 
+                                            if (userInCallWith == null) {
+                                                voipCommunicator.startCall(otherUser);
+                                            }
+                                            // If we're in a call with this person, hang it up.
+                                            else if (otherUser.getuID().equals(userInCallWith.getuID())){
+                                                voipCommunicator.hangUpCall();
+                                            }
+                                            // Otherwise, we want to start the call! Hooray!
+                                            else {
+                                                voipCommunicator.startCall(otherUser);
+                                            }
                                         }
 
                                     }

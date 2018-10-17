@@ -10,4 +10,6 @@ public interface iVOIPCommunicator {
 
     void hangUpCall();
 
+    User getUserInCallWith();
+
 }

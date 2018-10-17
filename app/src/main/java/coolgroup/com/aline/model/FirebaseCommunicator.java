@@ -114,6 +114,8 @@ public class FirebaseCommunicator implements iServerCommunicator {
      */
     @Override
     public User getBasicUserInfo(String userId) {
+        DatabaseReference mUsersDatabase;
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
         return null;
     }
 
