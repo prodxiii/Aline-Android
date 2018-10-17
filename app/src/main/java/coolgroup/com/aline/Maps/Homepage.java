@@ -144,7 +144,6 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     @Override
     protected void onStart() {
         super.onStart();
-        mCurrent_user_id = mAuth.getCurrentUser().getUid();
         // Get the current user ID
         FirebaseUser currentUser = mAuth.getCurrentUser();
         // User is not signed in
@@ -424,6 +423,7 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
     }
 
     public void startSOS(View view) {
+        mCurrent_user_id = mAuth.getCurrentUser().getUid();
         Button sosButton = (Button) findViewById(R.id.home_sos_btn);
         mUserReference.addValueEventListener(new ValueEventListener() {
             @Override
