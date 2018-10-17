@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     tools:context=".view.options.AccountSettingsActivity">
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/settings_image"
         android:layout_width="170dp"
@@ -15,7 +14,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:src="@drawable/avatar_male" />
-
     <TextView
         android:id="@+id/settings_name"
         android:layout_width="wrap_content"
@@ -27,7 +25,6 @@
         android:text="Display Name"
         android:textColor="@android:color/white"
         android:textSize="24sp" />
-
     <Button
         android:id="@+id/settings_status_btn"
         android:layout_width="wrap_content"
@@ -53,11 +50,11 @@
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="28dp"
         android:backgroundTint="@color/colorPrimaryLight"
+        android:onClick="setLocation"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="NOT SHARING GPS"
         android:textColor="@android:color/white" />
-
     <Button
         android:id="@+id/settings_image_btn"
         android:layout_width="166dp"
@@ -73,7 +70,6 @@
         android:paddingRight="25dp"
         android:text="UPDATE"
         android:textColor="@color/colorPrimary" />
-
     <TextView
         android:id="@+id/settings_status"
         android:layout_width="wrap_content"
@@ -84,7 +80,6 @@
         android:fontFamily="monospace"
         android:text="Hi, I'm using Aline!"
         android:textColor="@android:color/white" />
-
     <Button
         android:id="@+id/settings_email_btn"
         android:layout_width="match_parent"
@@ -97,7 +92,6 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@android:color/white" />
-
     <TextView
         android:id="@+id/settings_phone_title"
         android:layout_width="wrap_content"
@@ -109,7 +103,6 @@
         android:fontFamily="monospace"
         android:text="Phone"
         android:textColor="@android:color/white" />
-
     <Button
         android:id="@+id/settings_phone_btn"
         android:layout_width="match_parent"
@@ -121,7 +114,6 @@
         android:text="+61 (0) 400 000 000"
         android:textAlignment="center"
         android:textColor="@android:color/white" />
-
     <TextView
         android:id="@+id/settings_email_title"
         android:layout_width="wrap_content"
@@ -133,5 +125,4 @@
         android:fontFamily="monospace"
         android:text="Email"
         android:textColor="@android:color/white" />
-
 </RelativeLayout>
