@@ -112,8 +112,10 @@ public class Homepage extends FragmentActivity implements OnMapReadyCallback,
                 longitude = location.getLongitude();
                 myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                 lastlocation = location;
-                mUserReference.child("latitude").setValue(String.valueOf(latitude));
-                mUserReference.child("longitude").setValue(String.valueOf(longitude));
+                if (mAuth.getCurrentUser() != null) {
+                    mUserReference.child("latitude").setValue(String.valueOf(latitude));
+                    mUserReference.child("longitude").setValue(String.valueOf(longitude));
+                }
                 if (flag) {
                     mMap.clear();
                     //mMap.addMarker(new MarkerOptions().position(myLocation).title("Marker in My Location"));
