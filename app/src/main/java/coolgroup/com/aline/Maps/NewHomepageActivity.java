@@ -11,8 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -20,15 +18,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,7 +110,7 @@ public class NewHomepageActivity extends FragmentActivity
             item -> {
                 switch (item.getItemId()) {
                 case R.id.homebar_map:
-                    startTrack(getCurrentFocus());
+//                    startTrack(getCurrentFocus());
                     return true;
 
                 case R.id.homebar_contacts:
@@ -450,7 +443,7 @@ public class NewHomepageActivity extends FragmentActivity
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                        getUserLocation(dataSnapshot1.getKey().toString());
+                        getUserLocation(dataSnapshot1.getKey());
                     }
                 }
                 @Override
@@ -606,7 +599,7 @@ public class NewHomepageActivity extends FragmentActivity
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                        getUserTracking(dataSnapshot1.getKey().toString());
+                        getUserTracking(dataSnapshot1.getKey());
                     }
                 }
                 @Override
