@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
         android:text="Display Name"
-        android:textColor="@color/colorPrimaryDarkText"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="24sp" />
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:text="Current User Status"
-        android:textColor="@color/colorPrimaryDarkText"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="16sp" />
 
     <TextView
@@ -59,7 +59,7 @@
         android:layout_marginBottom="87dp"
         android:background="@drawable/btn_sign_in_background"
         android:text="SEND FRIEND REQUEST"
-        android:textColor="@color/colorPrimaryDarkText" />
+        android:textColor="@color/colorPrimaryText" />
 
 
     <Button
