@@ -35,6 +35,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import coolgroup.com.aline.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,7 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import coolgroup.com.aline.R;
+
 import coolgroup.com.aline.view.update.PhoneActivity;
 import coolgroup.com.aline.view.update.StatusActivity;
 import de.hdodenhof.circleimageview.CircleImageView;

@@ -57,14 +57,13 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Maps.NewHomepageActivity">
+        <activity android:name=".Maps.Homepage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".Maps.Homepage" />
 
         <activity android:name=".view.AuthenticateActivity" />
         <activity android:name=".view.options.AccountSettingsActivity" />

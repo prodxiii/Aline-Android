@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import coolgroup.com.aline.Controller;
-import coolgroup.com.aline.Maps.NewHomepageActivity;
+import coolgroup.com.aline.Maps.Homepage;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.User;
 import dmax.dialog.SpotsDialog;
@@ -254,7 +254,7 @@ public class AuthenticateActivity extends AppCompatActivity {
         Log.d("AuthActivity", "Creating iVOIPCommunicator");
         Controller.getInstance().createiVOIPCommunicator(getApplicationContext());
 
-        Intent homeIntent = new Intent(AuthenticateActivity.this, NewHomepageActivity.class);
+        Intent homeIntent = new Intent(AuthenticateActivity.this, Homepage.class);
 
         // If email and password is authenticated open the welcome layout
         startActivity(homeIntent);
