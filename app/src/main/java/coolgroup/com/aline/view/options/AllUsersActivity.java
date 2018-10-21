@@ -94,10 +94,12 @@ public class AllUsersActivity extends AppCompatActivity {
 
                 usersViewHolder.setName(users.getName());
                 String status = users.getStatus();
-                if (status.length() > 30) {
-                    usersViewHolder.setStatus(status.substring(0, 30) + "...");
-                } else {
-                    usersViewHolder.setStatus(status);
+                if (status != null && !status.isEmpty()) {
+                    if (status.length() > 30) {
+                        usersViewHolder.setStatus(status.substring(0, 30) + "...");
+                    } else {
+                        usersViewHolder.setStatus(status);
+                    }
                 }
 
                 usersViewHolder.setImage(users.getThumbnail(), getApplicationContext());
