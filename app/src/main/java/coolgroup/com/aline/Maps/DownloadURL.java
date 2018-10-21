@@ -10,7 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
+/**
+ * downloads url for the map service
+ */
 public class DownloadURL {
 
     public String readUrl(String myUrl) throws IOException {

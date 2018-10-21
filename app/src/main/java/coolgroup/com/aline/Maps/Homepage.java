@@ -50,17 +50,24 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.view.AuthenticateActivity;
 import coolgroup.com.aline.view.ChatsActivity;
 
+/**
+ * basically the main homepage of our app. It contains all the map functionality
+ * including sos and tracking feature. It gets user location and updates on the map
+ * in real time. It also updates user location on firebase.
+ */
 public class Homepage extends FragmentActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
+    //variables required to hold necessary information regarding current user's location
     List<Address> addressList;
     Address destinationAddress;
     double end_latitude;
@@ -68,6 +75,8 @@ public class Homepage extends FragmentActivity
     boolean flag = true;
     LatLng myLocation;
 
+
+    //variables to set up the map and have continuos updates from user
     private GoogleMap mMap;
     private GoogleApiClient client;
     private Location lastLocation;
@@ -75,15 +84,26 @@ public class Homepage extends FragmentActivity
     public static final int REQUEST_LOCATION_CODE = 99;
     int PROXIMITY_RADIUS = 2000;
     double latitude,longitude;
-    String sos;
 
+
+
+    //used for firebase authentication and updating all the necessary details about the user
     private FirebaseAuth mAuth;
     private DatabaseReference mUserReference;
     private String mCurrentUid;
     private DatabaseReference mFriendsDatabase;
 
+    //used for getting layout items and values
     Switch location;
+    String sos;
 
+
+    /**
+     * OnCreate method create the main homepage and gets called once everytime app is open
+     * and creates references for the various view items from homepage. It also sets up
+     * sos and tracking as per firebase values
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,13 +124,13 @@ public class Homepage extends FragmentActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //gets the necessary buttons from the map
         BottomNavigationView mNavBar = (BottomNavigationView) findViewById(R.id.navMainbar);
         mNavBar.setSelectedItemId(R.id.homebar_map);
         mNavBar.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
                         case R.id.homebar_map:
-//                    startTrack(getCurrentFocus());
                             return true;
 
                         case R.id.homebar_contacts:
@@ -127,9 +147,11 @@ public class Homepage extends FragmentActivity
 
         location = (Switch) findViewById(R.id.switchTracking);
         setLocationButton();
-        //startTrack(location);
     }
 
+    /**
+     * this method gets called when the app starts and initialises various variables
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -163,6 +185,12 @@ public class Homepage extends FragmentActivity
             mUserReference.child("online").setValue(ServerValue.TIMESTAMP);
     }
 
+    /**
+     * takes permission from user about location service
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -222,6 +250,11 @@ public class Homepage extends FragmentActivity
         mMap.getUiSettings().setMapToolbarEnabled(false);
     }
 
+
+    /**
+     * checks for location changes and updates it spontaneously onto the map
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
@@ -248,6 +281,10 @@ public class Homepage extends FragmentActivity
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
     }
 
+    /**
+     *this method is triggered once the buttons on the homepage are pressed and does the
+     * necessary task as per the request
+     */
     public void onClick(View v) {
         Object dataTransfer[] = new Object[2];
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
@@ -319,6 +356,10 @@ public class Homepage extends FragmentActivity
         }
     }
 
+    /**
+     * this method gets the direction requested by the user and draws on the map
+     * @param view
+     */
     public void getDirection(View view) {
         EditText destination = (EditText)findViewById(R.id.edtMapSearch);
         String destinationAddressString = destination.getText().toString();
@@ -350,14 +391,6 @@ public class Homepage extends FragmentActivity
         LatLng location = new LatLng(end_latitude, end_longitude);
         dataTransfer[2] = location;
 
-//        Marker m1 = mMap.addMarker(new MarkerOptions()
-//                .position(myLocation)
-//                .anchor(0.5f, 0.5f)
-//                .title("My Current Location")
-//                .snippet("Snippet1")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-
         Marker m2 = mMap.addMarker(new MarkerOptions()
                 .position(location)
                 .anchor(0.5f, 0.5f)
@@ -370,12 +403,25 @@ public class Homepage extends FragmentActivity
         getDirectionsData.execute(dataTransfer);
     }
 
+
+    /**
+     * this method just returns the standard url for the google maps api
+     * @return
+     */
     private String getDirectionsUrl() {
         return "https://maps.googleapis.com/maps/api/directions/json?" + "origin=" +
                 latitude + "," + longitude + "&destination=" + end_latitude + "," + end_longitude +
                 "&key=" + "AIzaSyAxdy52TGsv0WZOTG0veLdvlZSv3JhwJic";
     }
 
+
+    /**
+     * this methods returns standard url combined with requested places for the nearby search
+     * @param latitude
+     * @param longitude
+     * @param nearbyPlace
+     * @return
+     */
     private String getUrl(double latitude , double longitude , String nearbyPlace) {
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append("location=").append(latitude).append(",").append(longitude);
@@ -389,6 +435,11 @@ public class Homepage extends FragmentActivity
         return googlePlaceUrl.toString();
     }
 
+
+    /**
+     * ths method ask for location permission once the app is launched
+     * @param bundle
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();
@@ -401,16 +452,21 @@ public class Homepage extends FragmentActivity
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
     }
 
-    public boolean checkLocationPermission() {
+    /**
+     * checks for location permission and if its not there then ask for it
+     * @return
+     */
+    public void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_CODE);
-            return false;
-        } else {
-            return true;
         }
     }
 
+    /**
+     * this method starts the chat activity on click of the chat button
+     * @param view
+     */
     public void startChat(View view) {
         Intent chatIntent = new Intent(Homepage.this, ChatsActivity.class);
 
@@ -418,9 +474,15 @@ public class Homepage extends FragmentActivity
         startActivity(chatIntent);
     }
 
+
+    /**
+     * this method starts sos service on click of the sos button and shows location of all
+     * the friends that have active location service
+     * @param view
+     */
     public void startSOS(View view) {
-        mCurrentUid = mAuth.getCurrentUser().getUid();
-//        Button sosButton = (Button) findViewById(R.id.home_sos_btn);
+        mMap.clear();
+        mCurrentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         mUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -433,11 +495,10 @@ public class Homepage extends FragmentActivity
             }
         });
 
+        //updates sos as per the click on the button
         if (sos.equals("OFF")) {
             flag = false;
             mUserReference.child("sos").setValue("ON");
-//            sosButton.setBackgroundColor(Color.GREEN);
-//            Toast.makeText(NewHomepageActivity.this, "SOS enabled", Toast.LENGTH_LONG).show();
             mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrentUid);
             mFriendsDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -458,12 +519,13 @@ public class Homepage extends FragmentActivity
             mMap.clear();
             flag = true;
             mUserReference.child("sos").setValue("OFF");
-//            sosButton.setBackgroundColor(Color.RED);
-//            Toast.makeText(NewHomepageActivity.this, "SOS disabled", Toast.LENGTH_LONG).show();
         }
 
     }
 
+    /**
+     * this method sets the sos button as per the value stored on firebase on last time usage
+     */
     public void setSosButton(){
         if (mAuth.getCurrentUser() != null) {
             mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
@@ -492,6 +554,10 @@ public class Homepage extends FragmentActivity
         }
     }
 
+    /**
+     * this method is used to get user location and place the marker on the map from firebase
+     * @param s
+     */
     private void getUserLocation(String s) {
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(s);
         userReference.addValueEventListener(new ValueEventListener() {
@@ -521,6 +587,10 @@ public class Homepage extends FragmentActivity
         });
     }
 
+    /**
+     * this method sets up the sos banner on clicking it
+     * @param enabled
+     */
     private void setSosBanner(boolean enabled) {
         CardView banner = (CardView) findViewById(R.id.sosEnabledContainer);
         ViewGroup.LayoutParams params = banner.getLayoutParams();
@@ -533,6 +603,10 @@ public class Homepage extends FragmentActivity
             setMapPadding(108);
     }
 
+    /**
+     * this method sets up the maps padding required for the frontend
+     * @param dp
+     */
     private void setMapPadding(float dp) {
         Resources r = getResources();
         float px = TypedValue.applyDimension(
@@ -571,9 +645,13 @@ public class Homepage extends FragmentActivity
 
     }
 
+    /**
+     * this method unables the user to track all his friends if they have active locaiton service
+     */
     String locationService;
     public void startTrack(View view) {
-        mCurrentUid = mAuth.getCurrentUser().getUid();
+        mMap.clear();
+        mCurrentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         mUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -592,7 +670,6 @@ public class Homepage extends FragmentActivity
             mUserReference.child("track").setValue("ON");
             location.setOnCheckedChangeListener(null);
             location.setChecked(true);
-//            location.setOnCheckedChangeListener(this);
             Toast.makeText(Homepage.this, "Starting Tracking feature", Toast.LENGTH_LONG).show();
             mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrentUid);
             mFriendsDatabase.addValueEventListener(new ValueEventListener() {
@@ -620,6 +697,10 @@ public class Homepage extends FragmentActivity
         }
     }
 
+    /**
+     * this method places a marker on the map of a friend if location service is on
+     * @param s
+     */
     private void getUserTracking(String s) {
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(s);
         userReference.addValueEventListener(new ValueEventListener() {
@@ -629,7 +710,6 @@ public class Homepage extends FragmentActivity
                 if(location.equals("ON")) {
                     String lat = dataSnapshot.child("latitude").getValue().toString();
                     String lon = dataSnapshot.child("longitude").getValue().toString();
-                    String userName = dataSnapshot.child("name").getValue().toString();
                     String sos = dataSnapshot.child("sos").getValue().toString();
                     double latitudeUser = Double.parseDouble(lat);
                     double longitudeUser = Double.parseDouble(lon);
@@ -655,6 +735,10 @@ public class Homepage extends FragmentActivity
             }
         });
     }
+
+    /**
+     * this method sets up the tracking button as per the last usage history of the user
+     */
     public void setLocationButton(){
         if (mAuth.getCurrentUser() != null) {
             mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
@@ -669,7 +753,7 @@ public class Homepage extends FragmentActivity
                             location.setChecked(true);
 
                         }
-                        if(locationService.equals("OFF")){
+                        if (locationService != null && locationService.equals("OFF")) {
                             location.setOnCheckedChangeListener(null);
                             location.setChecked(false);
                         }
@@ -686,6 +770,11 @@ public class Homepage extends FragmentActivity
         }
     }
 
+    /**
+     *this method returns string format of user location to set it up on the marker
+     * @param location
+     * @return
+     */
     public String getUserLocation(LatLng location) {
         Geocoder geocoder;
         List<Address> addresses = null;
@@ -697,6 +786,7 @@ public class Homepage extends FragmentActivity
             e.printStackTrace();
         }
         String address = "";
+        assert addresses != null;
         address += addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
         address += addresses.get(0).getLocality();
         address += addresses.get(0).getAdminArea();

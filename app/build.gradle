@@ -76,7 +76,7 @@ dependencies {
     implementation files('libs/sinch-android-rtc-3.12.7.aar')
 
     // Dependency for map floating search box
-    compile 'com.github.arimorty:floatingsearchview:2.1.1'
+    implementation 'com.github.arimorty:floatingsearchview:2.1.1'
 
 }
 

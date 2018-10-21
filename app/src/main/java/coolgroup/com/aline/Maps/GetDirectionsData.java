@@ -10,7 +10,9 @@ import com.google.maps.android.PolyUtil;
 
 import java.io.IOException;
 
-
+/**
+ * gets all the nearby locations for the map according to request and displays it onto the map
+ */
 public class GetDirectionsData extends AsyncTask<Object, String, String> {
 
     GoogleMap mMap;

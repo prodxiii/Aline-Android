@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * helper class to get the location service working properly like parsing the string input
+ * and returning polyline for the map
+ */
 class DataParser {
 
     public String location;
