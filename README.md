@@ -5,10 +5,17 @@ Client for the *Aline* assisted wayfinding mobile application on the Android ope
 Users can be guided to their desired destinations with real-time assistance from their chosen contacts.
 
 ## Features
-*Features to be added as they are implemented.*
-
-## Screenshots
-*Screenshots to be added as app is developed.*
+* Locate yourself on a map and find directions to a destination
+* Search for a destination by name (e.g. "Melbourne Central")
+* Get quick at-a-glance access to nearby parks, cafes and ATMs with a single tap
+* See friends sharing their locations on the map using the tracking feature
+* Mark yourself as needing assistance with the SOS feature - your marker on friends' maps will change to red
+* Choose when to share your location for added privacy
+* Ask a friend for help using the chat feature
+* See which friends are currently online to receive help quickly
+* Show your friend exactly where you are by sending a photo
+* Voice chat is available to help in extra confusing situations
+* Set a profile picture and status to share with your friends
 
 ## Installation
 ### Prerequisites
