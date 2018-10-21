@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 
+import coolgroup.com.aline.Controller;
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.adapters.SectionsPagerAdapter;
 import coolgroup.com.aline.view.options.AccountSettingsActivity;
@@ -26,13 +27,10 @@ import coolgroup.com.aline.view.options.AllUsersActivity;
 
 public class ChatsActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth; // Done
-
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private DatabaseReference mUserReference;
     private BottomNavigationView mNavBar;
-
     private TabLayout mTabLayout;
 
     @Override
@@ -40,21 +38,14 @@ public class ChatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_activity_chats);
 
-        mAuth = FirebaseAuth.getInstance();
-
         // Create the toolbar for the chat activity
         Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_appbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chats");
 
-        if (mAuth.getCurrentUser() != null) {
-            mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-        }
-
         // Create Tabs
         mViewPager = (ViewPager) findViewById(R.id.chat_tab_pager);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Include tab layout
@@ -86,15 +77,10 @@ public class ChatsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Get the current user ID
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        // User is not signed in
-        if (currentUser == null) {
+        if (Controller.getInstance().getServerCommunicator().isSignedIn())
+            Controller.getInstance().getServerCommunicator().setMainUserOnlineNow();
+        else
             backToAuth();
-        } else {
-            mUserReference.child("online").setValue("true");
-        }
     }
 
     @Override
@@ -102,11 +88,8 @@ public class ChatsActivity extends AppCompatActivity {
         // Get the current user ID
         super.onStop();
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-
-            mUserReference.child("online").setValue(ServerValue.TIMESTAMP);
-        }
+        if (Controller.getInstance().getServerCommunicator().isSignedIn())
+            Controller.getInstance().getServerCommunicator().setMainUserLastOnlineNow();
     }
 
     @Override
@@ -130,7 +113,7 @@ public class ChatsActivity extends AppCompatActivity {
 
         // Sign out of aline
         if (item.getItemId() == R.id.menu_sign_out) {
-            FirebaseAuth.getInstance().signOut();
+            Controller.getInstance().getServerCommunicator().signOut();
             backToAuth();
         }
 

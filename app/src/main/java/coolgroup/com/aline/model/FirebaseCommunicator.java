@@ -9,10 +9,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import coolgroup.com.aline.Controller;
 
 public class FirebaseCommunicator implements iServerCommunicator {
 
@@ -194,4 +197,38 @@ public class FirebaseCommunicator implements iServerCommunicator {
     public FirebaseDatabase getmDatabase() {
         return mDatabase;
     }
+
+    @Override
+    public boolean isSignedIn() {
+        return mAuth.getCurrentUser() != null;
+    }
+
+    @Override
+    public void signOut() {
+        FirebaseAuth.getInstance().signOut();
+        Controller.getInstance().setMainUser(null);
+    }
+
+    @Override
+    public void setMainUserOnlineNow() {
+        getMainUserDatabaseReference().child("online").setValue("true");
+    }
+
+    @Override
+    public void setMainUserLastOnlineNow() {
+        getMainUserDatabaseReference().child("online").setValue(ServerValue.TIMESTAMP);
+    }
+
+    /**
+     * Get the database reference of the main user's node in the "Users" table.
+     * @return The database reference if the user is signed in, otherwise null
+     */
+    private DatabaseReference getMainUserDatabaseReference() {
+        if (!isSignedIn())
+            return null;
+
+        String mMainUid = mAuth.getCurrentUser().getUid();
+        return FirebaseDatabase.getInstance().getReference().child("Users").child(mMainUid);
+    }
+
 }

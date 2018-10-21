@@ -93,4 +93,26 @@ public interface iServerCommunicator {
     Task<Void> createUserChild(String name, String email, String phone);
 
     FirebaseDatabase getmDatabase();
+
+    /**
+     * Determine whether the user is signed in.
+     * @return True iff the user is signed in
+     */
+    boolean isSignedIn();
+
+    /**
+     * Sign out the main user.
+     */
+    void signOut();
+
+    /**
+     * Record the main user as currently being online.
+     */
+    void setMainUserOnlineNow();
+
+    /**
+     * Record the main user as last being online at the current time.
+     */
+    void setMainUserLastOnlineNow();
+
 }
