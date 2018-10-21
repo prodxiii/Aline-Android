@@ -59,7 +59,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:background="@android:color/holo_red_dark"
-        android:text="DECLINE FRIEND REQUEST"
+        android:text="DECLINE CONTACT REQUEST"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

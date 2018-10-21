@@ -24,6 +24,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.Conv;
 import coolgroup.com.aline.view.ChatActivity;
@@ -41,12 +43,6 @@ public class Chats extends Fragment {
     private DatabaseReference mMessageDatabase;
     private DatabaseReference mUsersDatabase;
 
-    private FirebaseAuth mAuth;
-
-    private String mCurrent_user_id;
-
-    private View mMainView;
-
 
     public Chats() {
         // Required empty public constructor
@@ -57,12 +53,12 @@ public class Chats extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mMainView = inflater.inflate(R.layout.fragment_chats, container, false);
+        View mMainView = inflater.inflate(R.layout.fragment_chats, container, false);
 
         mConvList = (RecyclerView) mMainView.findViewById(R.id.conv_list);
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        mCurrent_user_id = mAuth.getCurrentUser().getUid();
+        String mCurrent_user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
         mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrent_user_id);
 
@@ -152,17 +148,14 @@ public class Chats extends Fragment {
                         convViewHolder.setName(userName);
                         convViewHolder.setUserImage(userThumb, getContext());
 
-                        convViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                        convViewHolder.mView.setOnClickListener(view -> {
 
 
-                                Intent chatIntent = new Intent(getContext(), ChatActivity.class);
-                                chatIntent.putExtra("user_id", list_user_id);
-                                chatIntent.putExtra("user_name", userName);
-                                startActivity(chatIntent);
+                            Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+                            chatIntent.putExtra("user_id", list_user_id);
+                            chatIntent.putExtra("user_name", userName);
+                            startActivity(chatIntent);
 
-                            }
                         });
 
 

@@ -13,19 +13,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.Objects;
+
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.view.options.AccountSettingsActivity;
 
 public class StatusActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
-
     private MaterialEditText mStatus;
-    private Button mSave;
 
     //****************Firebase***************//
     private DatabaseReference mStatusDatabase;
-    private FirebaseUser mCurrentUser;
     //**************************************//
 
     @Override
@@ -34,31 +32,31 @@ public class StatusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_status);
 
         //**********************Firebase********************//
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert mCurrentUser != null;
         String currentUID = mCurrentUser.getUid();
 
         mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUID);
         //**************************************************//
 
-        mToolbar = (Toolbar) findViewById(R.id.status_appbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.status_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Update Status");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Update Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         String statusValue = getIntent().getStringExtra("statusValue");
         mStatus = (MaterialEditText) findViewById(R.id.input_status);
-        mSave = (Button) findViewById(R.id.btn_save_status);
+        Button mSave = (Button) findViewById(R.id.btn_save_status);
 
         mStatus.setText(statusValue);
 
+        // Save the status button
         mSave.setOnClickListener(v -> {
 
             String status = mStatus.getText().toString();
             mStatusDatabase.child("status").setValue(status)
-                    .addOnSuccessListener(aVoid -> {
-                        backToParentActivity();
-                    })
+                    .addOnSuccessListener(aVoid -> backToParentActivity())
                     .addOnFailureListener(e -> Toast.makeText(StatusActivity.this, e.getMessage(), Toast.LENGTH_LONG).show());
         });
 

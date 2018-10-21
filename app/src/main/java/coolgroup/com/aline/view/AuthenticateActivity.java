@@ -1,5 +1,6 @@
 package coolgroup.com.aline.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -62,7 +63,7 @@ public class AuthenticateActivity extends AppCompatActivity {
 
         // Instantiates a Login layout XML file into the corresponding AuthenticateActivity view object
         LayoutInflater inflater = LayoutInflater.from(this);
-        View login_layout = inflater.inflate(R.layout.layout_login, null);
+        @SuppressLint("InflateParams") View login_layout = inflater.inflate(R.layout.layout_login, null);
 
         // Create custom TextView for email and password input
         final MaterialEditText edtEmail = (MaterialEditText) login_layout.findViewById(R.id.edtEmail);
@@ -96,7 +97,6 @@ public class AuthenticateActivity extends AppCompatActivity {
             waitingDialog.show();
 
             // Try to Login with correctly validated email and password
-            // auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()) TODO: Delete me!
             Controller.getInstance().getServerCommunicator().logInUserEmail(edtEmail.getText().toString(), edtPassword.getText().toString())
                     .addOnSuccessListener(authResult -> {
 
@@ -139,7 +139,7 @@ public class AuthenticateActivity extends AppCompatActivity {
 
         // Instantiates a Register layout XML file into the corresponding AuthenticateActivity view object
         LayoutInflater inflater = LayoutInflater.from(this);
-        View register_layout = inflater.inflate(R.layout.layout_register, null);
+        @SuppressLint("InflateParams") View register_layout = inflater.inflate(R.layout.layout_register, null);
 
         // Create custom TextView for email, name, phone and password
         final MaterialEditText edtName, edtEmail, edtPhone, edtPassword;
@@ -244,7 +244,6 @@ public class AuthenticateActivity extends AppCompatActivity {
                 .show();
 
         // Create current user
-        //TODO: somehow make the current user.
         String uid = Controller.getInstance().getServerCommunicator().getCurrentUID();
 
         User mainUser = new User(null, null, null, null, uid);

@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/linearLayout"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/chat_app_bar"></android.support.v7.widget.RecyclerView>
+            android:layout_below="@+id/chat_app_bar" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

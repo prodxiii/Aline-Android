@@ -133,5 +133,14 @@
     <string name="quick_parks">Parks</string>
     <string name="quick_cafes">Cafes</string>
     <string name="quick_atms">ATMs</string>
+    <string name="accept_request">Accept Contact Request</string>
+    <string name="cancel_request">Cancel Contact Request</string>
+    <string name="send_request">Send Contact Request</string>
+    <string name="remove_contact">Remove Contact</string>
+    <string name="time_stamp">yyyyMMdd_HHmmss</string>
+    <string name="online">Online</string>
+    <string name="not_sharing_gps">Not sharing GPS</string>
+    <string name="sharing_gps">Sharing GPS</string>
+
 
 </resources>

@@ -1,5 +1,6 @@
 package coolgroup.com.aline.view.options;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
@@ -17,8 +17,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,8 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-
+import java.util.Objects;
 
 import coolgroup.com.aline.view.update.PhoneActivity;
 import coolgroup.com.aline.view.update.StatusActivity;
@@ -61,8 +58,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private TextView mName;
     private TextView mStatus;
 
-    private Button mStatusBtn;
-    private Button mImageBtn;
     private Button mPhoneBtn;
     private Button mEmailBtn;
 
@@ -75,18 +70,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
 
-    public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(20);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++) {
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +79,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
         mName = (TextView) findViewById(R.id.settings_name);
         mStatus = (TextView) findViewById(R.id.settings_status);
 
-        mStatusBtn = (Button) findViewById(R.id.settings_status_btn);
-        mImageBtn = (Button) findViewById(R.id.settings_image_btn);
+        Button mStatusBtn = (Button) findViewById(R.id.settings_status_btn);
+        Button mImageBtn = (Button) findViewById(R.id.settings_image_btn);
         mPhoneBtn = (Button) findViewById(R.id.settings_phone_btn);
         mEmailBtn = (Button) findViewById(R.id.settings_email_btn);
 
@@ -105,6 +88,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        assert mCurrentUser != null;
         String current_uid = mCurrentUser.getUid();
 
         mAuth = FirebaseAuth.getInstance();
@@ -134,8 +118,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                 if (!image.equals("default")) {
 
-//                    Picasso.with(AccountSettingsActivity.this).load(image).placeholder(R.drawable.avatar_male).into(mDisplayImage);
-
                     Picasso.with(AccountSettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE)
                             .placeholder(R.drawable.avatar_male).into(mDisplayImage, new Callback() {
                         @Override
@@ -163,41 +145,28 @@ public class AccountSettingsActivity extends AppCompatActivity {
         });
 
 
-        mStatusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mStatusBtn.setOnClickListener(view -> {
 
-                String status_value = mStatus.getText().toString();
+            String status_value = mStatus.getText().toString();
 
-                Intent status_intent = new Intent(AccountSettingsActivity.this, StatusActivity.class);
-                status_intent.putExtra("statusValue", status_value);
-                startActivity(status_intent);
+            Intent status_intent = new Intent(AccountSettingsActivity.this, StatusActivity.class);
+            status_intent.putExtra("statusValue", status_value);
+            startActivity(status_intent);
 
-            }
         });
 
-        mPhoneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mPhoneBtn.setOnClickListener(view -> {
 
-                String phone_value = mPhoneBtn.getText().toString();
+            String phone_value = mPhoneBtn.getText().toString();
 
-                Intent phone_intent = new Intent(AccountSettingsActivity.this, PhoneActivity.class);
-                phone_intent.putExtra("phoneValue", phone_value);
-                startActivity(phone_intent);
+            Intent phone_intent = new Intent(AccountSettingsActivity.this, PhoneActivity.class);
+            phone_intent.putExtra("phoneValue", phone_value);
+            startActivity(phone_intent);
 
-            }
         });
 
 
-        mImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                showPictureSelectorDialog();
-
-            }
-        });
+        mImageBtn.setOnClickListener(view -> showPictureSelectorDialog());
 
     }
 
@@ -214,7 +183,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     .setMinCropWindowSize(500, 500)
                     .start(this);
 
-            //Toast.makeText(SettingsActivity.this, imageUri, Toast.LENGTH_LONG).show();
 
         }
 
@@ -226,6 +194,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
 
+                /*
+                Visible Progress Dialog while uploading photo
+                 */
                 mProgressDialog = new ProgressDialog(AccountSettingsActivity.this);
                 mProgressDialog.setTitle("Uploading Image...");
                 mProgressDialog.setMessage("Please wait while we upload and process the image.");
@@ -235,7 +206,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
                 Uri resultUri = result.getUri();
 
-                File thumb_filePath = new File(resultUri.getPath());
+                File thumb_filePath = new File(Objects.requireNonNull(resultUri.getPath()));
 
                 String current_user_id = mCurrentUser.getUid();
 
@@ -255,62 +226,53 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 final StorageReference thumb_filepath = mImageStorage.child("profile_images").child("thumbs").child(current_user_id + ".jpg");
 
 
-                filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                filepath.putFile(resultUri).addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
+                    if (task.isSuccessful()) {
 
-                            final String download_url = task.getResult().getDownloadUrl().toString();
+                        @SuppressLint("VisibleForTests") final String download_url = Objects.requireNonNull(task.getResult().getDownloadUrl()).toString();
 
-                            UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
-                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
+                        UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
+                        uploadTask.addOnCompleteListener(thumb_task -> {
 
-                                    String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
+                            @SuppressLint("VisibleForTests") String thumb_downloadUrl = Objects.requireNonNull(thumb_task.getResult().getDownloadUrl()).toString();
 
-                                    if (thumb_task.isSuccessful()) {
+                            if (thumb_task.isSuccessful()) {
 
-                                        Map update_hashMap = new HashMap();
-                                        update_hashMap.put("image", download_url);
-                                        update_hashMap.put("thumbnail", thumb_downloadUrl);
+                                Map<String, Object> update_hashMap = new HashMap<>();
+                                update_hashMap.put("image", download_url);
+                                update_hashMap.put("thumbnail", thumb_downloadUrl);
 
-                                        mUserDatabase.updateChildren(update_hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
+                                mUserDatabase.updateChildren(update_hashMap).addOnCompleteListener(task1 -> {
 
-                                                if (task.isSuccessful()) {
+                                    if (task1.isSuccessful()) {
 
-                                                    mProgressDialog.dismiss();
-                                                    Toast.makeText(AccountSettingsActivity.this, "Success Uploading.", Toast.LENGTH_LONG).show();
-
-                                                }
-
-                                            }
-                                        });
-
-
-                                    } else {
-
-                                        Toast.makeText(AccountSettingsActivity.this, "Error in uploading thumbnail.", Toast.LENGTH_LONG).show();
                                         mProgressDialog.dismiss();
+                                        Toast.makeText(AccountSettingsActivity.this, "Success Uploading.", Toast.LENGTH_LONG).show();
 
                                     }
 
-
-                                }
-                            });
+                                });
 
 
-                        } else {
+                            } else {
 
-                            Toast.makeText(AccountSettingsActivity.this, "Error in uploading.", Toast.LENGTH_LONG).show();
-                            mProgressDialog.dismiss();
+                                Toast.makeText(AccountSettingsActivity.this, "Error in uploading thumbnail.", Toast.LENGTH_LONG).show();
+                                mProgressDialog.dismiss();
 
-                        }
+                            }
+
+
+                        });
+
+
+                    } else {
+
+                        Toast.makeText(AccountSettingsActivity.this, "Error in uploading.", Toast.LENGTH_LONG).show();
+                        mProgressDialog.dismiss();
 
                     }
+
                 });
 
 
@@ -334,33 +296,27 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         // Instantiates a Login layout XML file into the corresponding AuthenticateActivity view object
         LayoutInflater inflater = LayoutInflater.from(this);
-        View picture_layout = inflater.inflate(R.layout.layout_picture, null);
+        @SuppressLint("InflateParams") View picture_layout = inflater.inflate(R.layout.layout_picture, null);
 
         // Add onClick for two buttons
         ImageButton camera_button = (ImageButton) picture_layout.findViewById(R.id.camera_button);
         ImageButton gallery_button = (ImageButton) picture_layout.findViewById(R.id.gallery_button);
 
-        camera_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        camera_button.setOnClickListener(view -> {
 
-                dispatchTakePictureIntent();
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(AccountSettingsActivity.this);
-            }
+            dispatchTakePictureIntent();
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .start(AccountSettingsActivity.this);
         });
 
-        gallery_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent galleryIntent = new Intent();
-                galleryIntent.setType("image/*");
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        gallery_button.setOnClickListener(view -> {
+            Intent galleryIntent = new Intent();
+            galleryIntent.setType("image/*");
+            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
-                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
+            startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
 
-            }
         });
 
         dialog.setView(picture_layout);
@@ -371,6 +327,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
         // Show the dialog when this method is called
         dialog.show();
     }
+
+    /**
+     * This method turns on the option to share your location
+     * @param view sets view for the button
+     */
     public void setLocation(View view) {
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
@@ -387,17 +348,20 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         if (location_service.equals("OFF")) {
             mUserDatabase.child("track").setValue("ON");
-            location.setText("Sharing GPS");
+            location.setText(R.string.sharing_gps);
             Toast.makeText(AccountSettingsActivity.this, "location service is on", Toast.LENGTH_LONG).show();
         }
         if (location_service.equals("ON")) {
             mUserDatabase.child("track").setValue("OFF");
-            location.setText("Not sharing GPS");
+            location.setText(R.string.not_sharing_gps);
             Toast.makeText(AccountSettingsActivity.this, "location service is off", Toast.LENGTH_LONG).show();
         }
 
     }
 
+    /**
+     * setLocationService sets value for whether the assistor has turned on tracking or not
+     */
     public void setLocationService() {
         if (mAuth.getCurrentUser() != null) {
             mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
@@ -408,10 +372,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     if (temp != null) {
                         location_service = temp.toString();
                         if(location_service.equals("ON")){
-                            location.setText("Sharing GPS");
+                            location.setText(R.string.sharing_gps);
                         }
                         if(location_service.equals("OFF")){
-                            location.setText("Not sharing GPS");
+                            location.setText(R.string.not_sharing_gps);
                         }
                     }
                     mUserDatabase.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
@@ -426,6 +390,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {

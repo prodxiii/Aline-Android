@@ -2,6 +2,7 @@ package coolgroup.com.aline.view;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,8 +34,8 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private static int NOT_A_CONTACT = 0;
     private static int IS_A_CONTACT = 1;
-    private static int SENT_ADD_REQUEST = 2;
-    private static int RECEIVED_ADD_REQUEST = 3;
+    private static int SENT_CONTACT_REQUEST = 2;
+    private static int RECEIVED_CONTACT_REQUEST = 3;
 
     final String DEFAULT_NAME = "Default Name";
     final String DEFAULT_STATUS = "Default Status";
@@ -49,7 +49,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
 
-    private DatabaseReference mUsersDatabase;
     private DatabaseReference mFriendReqDatabase;
     private DatabaseReference mFriendDatabase;
 
@@ -69,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         mRootRef = FirebaseDatabase.getInstance().getReference();
 
         // This user's database reference
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+        DatabaseReference mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
         // This is a reference to the contact request database
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
@@ -80,12 +79,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         mCurrent_user = FirebaseAuth.getInstance().getCurrentUser();
 
+        // Get all the activity_profile resources
         mProfileImage = (ImageView) findViewById(R.id.image_profile);
         mProfileName = (TextView) findViewById(R.id.name_profile);
         mProfileStatus = (TextView) findViewById(R.id.status_profile);
         mProfileSendReqBtn = (Button) findViewById(R.id.send_req_btn_profile);
         mDeclineBtn = (Button) findViewById(R.id.decline_btn_profile);
-
 
         // Initial Contact Request
         mContactState = NOT_A_CONTACT;
@@ -94,8 +93,8 @@ public class ProfileActivity extends AppCompatActivity {
         mDeclineBtn.setVisibility(View.INVISIBLE);
         mDeclineBtn.setEnabled(false);
 
-        /**
-         * Progress Dialog
+        /*
+          Progress Dialog
          */
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle("Loading User Data");
@@ -142,8 +141,8 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
 
-                /**
-                 * Initially opening another user's profile
+                /*
+                  Initially opening another user's profile
                  */
                 mFriendReqDatabase.child(mCurrent_user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -155,8 +154,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                             if (req_type.equals("received")) {
 
-                                mContactState = RECEIVED_ADD_REQUEST;
-                                mProfileSendReqBtn.setText("Accept Contact Request");
+                                mContactState = RECEIVED_CONTACT_REQUEST;
+                                mProfileSendReqBtn.setText(R.string.accept_request);
 
                                 mDeclineBtn.setVisibility(View.VISIBLE);
                                 mDeclineBtn.setEnabled(true);
@@ -164,8 +163,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                             } else if (req_type.equals("sent")) {
 
-                                mContactState = SENT_ADD_REQUEST;
-                                mProfileSendReqBtn.setText("Cancel Request");
+                                mContactState = SENT_CONTACT_REQUEST;
+                                mProfileSendReqBtn.setText(R.string.cancel_request);
 
                                 mDeclineBtn.setVisibility(View.INVISIBLE);
                                 mDeclineBtn.setEnabled(false);
@@ -184,7 +183,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     if (dataSnapshot.hasChild(user_id)) {
 
                                         mContactState = IS_A_CONTACT;
-                                        mProfileSendReqBtn.setText("Remove Contact");
+                                        mProfileSendReqBtn.setText(R.string.remove_contact);
 
                                         mDeclineBtn.setVisibility(View.INVISIBLE);
                                         mDeclineBtn.setEnabled(false);
@@ -223,12 +222,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
+        /*
+          Functionality for Decline Contact Request Button
+         */
         mDeclineBtn.setOnClickListener(View -> {
             mDeclineBtn.setEnabled(false);
 
-            if (mContactState == RECEIVED_ADD_REQUEST) {
-                Map contactsMap = new HashMap();
+            if (mContactState == RECEIVED_CONTACT_REQUEST) {
+                Map<String, Object> contactsMap = new HashMap<>();
 
                 contactsMap.put("Friend_req/" + mCurrent_user.getUid() + "/" + user_id, null);
                 contactsMap.put("Friend_req/" + user_id + "/" + mCurrent_user.getUid(), null);
@@ -241,9 +242,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                         mProfileSendReqBtn.setEnabled(true);
                         mContactState = NOT_A_CONTACT;
-                        mProfileSendReqBtn.setText("SEND CONTACT REQUEST");
+                        mProfileSendReqBtn.setText(R.string.send_request);
 
-                        mDeclineBtn.setVisibility(View.INVISIBLE);
+                        mDeclineBtn.setVisibility(android.view.View.INVISIBLE);
 
                     } else {
 
@@ -262,15 +263,19 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
+        /*
+          Functionality for Send Contact Request Button
+          This button actually has three other functions
+               1. Send Contact Request
+               2. Accept Contact Request
+               3. Cancel Contact Request
+         */
 
         mProfileSendReqBtn.setOnClickListener(view -> {
 
             mProfileSendReqBtn.setEnabled(false);
 
-            /**
-             * Send an add contact request.
-             */
-
+            // Send an add contact request.
             if (mContactState == NOT_A_CONTACT) {
 
 
@@ -281,7 +286,7 @@ public class ProfileActivity extends AppCompatActivity {
                 notificationData.put("from", mCurrent_user.getUid());
                 notificationData.put("type", "request");
 
-                Map requestMap = new HashMap();
+                Map<String, Object> requestMap = new HashMap<>();
                 requestMap.put("Friend_req/" + mCurrent_user.getUid() + "/" + user_id + "/request_type", "sent");
                 requestMap.put("Friend_req/" + user_id + "/" + mCurrent_user.getUid() + "/request_type", "received");
                 requestMap.put("notifications/" + user_id + "/" + newNotificationId, notificationData);
@@ -294,8 +299,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                     } else {
 
-                        mContactState = SENT_ADD_REQUEST;
-                        mProfileSendReqBtn.setText("Cancel Contact Request");
+                        mContactState = SENT_CONTACT_REQUEST;
+                        mProfileSendReqBtn.setText(R.string.send_request);
 
                     }
 
@@ -307,47 +312,34 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
 
-            /**
-             * User have sent an add contact request.
-             */
 
-            if (mContactState == SENT_ADD_REQUEST) {
+            // User have sent an add contact request.
+            if (mContactState == SENT_CONTACT_REQUEST) {
 
-                mFriendReqDatabase.child(mCurrent_user.getUid()).child(user_id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+                mFriendReqDatabase.child(mCurrent_user.getUid()).child(user_id).removeValue()
+                        .addOnSuccessListener(aVoid -> mFriendReqDatabase.child(user_id)
+                                .child(mCurrent_user.getUid()).removeValue()
+                                .addOnSuccessListener(aVoid1 -> {
 
-                        mFriendReqDatabase.child(user_id).child(mCurrent_user.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+                    mProfileSendReqBtn.setEnabled(true);
+                    mContactState = NOT_A_CONTACT;
+                    mProfileSendReqBtn.setText(R.string.send_request);
 
-
-                                mProfileSendReqBtn.setEnabled(true);
-                                mContactState = NOT_A_CONTACT;
-                                mProfileSendReqBtn.setText("Send Contact Request");
-
-                                mDeclineBtn.setVisibility(View.INVISIBLE);
-                                mDeclineBtn.setEnabled(false);
+                    mDeclineBtn.setVisibility(View.INVISIBLE);
+                    mDeclineBtn.setEnabled(false);
 
 
-                            }
-                        });
-
-                    }
-                });
+                })).addOnFailureListener(e -> Toast.makeText(ProfileActivity.this, "There was some error in cancelling request", Toast.LENGTH_SHORT).show());
 
             }
 
 
-            /**
-             * User have received an add contact request.
-             */
-
-            if (mContactState == RECEIVED_ADD_REQUEST) {
+            // User have received an add contact request.
+            if (mContactState == RECEIVED_CONTACT_REQUEST) {
 
                 final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
 
-                Map contactsMap = new HashMap();
+                Map<String, Object> contactsMap = new HashMap<>();
                 contactsMap.put("Friends/" + mCurrent_user.getUid() + "/" + user_id + "/date", currentDate);
                 contactsMap.put("Friends/" + user_id + "/" + mCurrent_user.getUid() + "/date", currentDate);
 
@@ -363,7 +355,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         mProfileSendReqBtn.setEnabled(true);
                         mContactState = IS_A_CONTACT;
-                        mProfileSendReqBtn.setText("Remove Contact");
+                        mProfileSendReqBtn.setText(R.string.remove_contact);
 
                         mDeclineBtn.setVisibility(View.INVISIBLE);
                         mDeclineBtn.setEnabled(false);
@@ -382,13 +374,10 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
 
-            /**
-             * Remove added contact from contact list.
-             */
-
+            // Remove added contact from contact list.
             if (mContactState == IS_A_CONTACT) {
 
-                Map removeContactMap = new HashMap();
+                Map<String, Object> removeContactMap = new HashMap<>();
                 removeContactMap.put("Friends/" + mCurrent_user.getUid() + "/" + user_id, null);
                 removeContactMap.put("Friends/" + user_id + "/" + mCurrent_user.getUid(), null);
 
@@ -398,7 +387,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (databaseError == null) {
 
                         mContactState = NOT_A_CONTACT;
-                        mProfileSendReqBtn.setText("Send Contact Request");
+                        mProfileSendReqBtn.setText(R.string.send_request);
 
                         mDeclineBtn.setVisibility(View.INVISIBLE);
                         mDeclineBtn.setEnabled(false);

@@ -11,12 +11,13 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+import java.util.Objects;
 
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.model.Users;
@@ -25,10 +26,8 @@ import coolgroup.com.aline.viewmodels.UsersViewHolder;
 
 public class AllUsersActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
     private RecyclerView mUsersList;
 
-    private DatabaseReference mUsersDatabase;
     private Query mQuery;
 
     @Override
@@ -36,14 +35,14 @@ public class AllUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_users);
 
-        mToolbar = (Toolbar) findViewById(R.id.users_appbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.users_appbar);
         setSupportActionBar(mToolbar);
 
-        getSupportActionBar().setTitle("All Users");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("All Users");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Abstract our database
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        DatabaseReference mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         // Build a base query
         mQuery = mUsersDatabase.orderByKey();
 
@@ -71,6 +70,7 @@ public class AllUsersActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         // Assumes current activity is the searchable activity
+        assert searchManager != null;
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
@@ -106,15 +106,12 @@ public class AllUsersActivity extends AppCompatActivity {
 
                 final String user_id = getRef(position).getKey();
 
-                usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                usersViewHolder.mView.setOnClickListener(view -> {
 
-                        Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
-                        profileIntent.putExtra("user_id", user_id);
-                        startActivity(profileIntent);
+                    Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
+                    profileIntent.putExtra("user_id", user_id);
+                    startActivity(profileIntent);
 
-                    }
                 });
 
             }

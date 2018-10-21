@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 
+import java.util.Objects;
+
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.adapters.SectionsPagerAdapter;
 import coolgroup.com.aline.view.options.AccountSettingsActivity;
@@ -26,14 +28,9 @@ import coolgroup.com.aline.view.options.AllUsersActivity;
 
 public class ChatsActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth; // Done
+    private FirebaseAuth mAuth;
 
-    private ViewPager mViewPager;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private DatabaseReference mUserReference;
-    private BottomNavigationView mNavBar;
-
-    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +42,24 @@ public class ChatsActivity extends AppCompatActivity {
         // Create the toolbar for the chat activity
         Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Chats");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Chats");
 
         if (mAuth.getCurrentUser() != null) {
             mUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         }
 
         // Create Tabs
-        mViewPager = (ViewPager) findViewById(R.id.chat_tab_pager);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.chat_tab_pager);
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Include tab layout
-        mTabLayout = (TabLayout) findViewById(R.id.chat_tabs);
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.chat_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
 
         // set the bottom navigation bar
-        mNavBar = (BottomNavigationView) findViewById(R.id.navMainbar);
+        BottomNavigationView mNavBar = (BottomNavigationView) findViewById(R.id.navMainbar);
         mNavBar.setSelectedItemId(R.id.homebar_contacts);
         mNavBar.setOnNavigationItemSelectedListener(
                 item -> {
@@ -75,7 +72,6 @@ public class ChatsActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.homebar_SOS:
-                            // TODO: start SOS
                             return false;
                     }
                     return false;
@@ -118,8 +114,11 @@ public class ChatsActivity extends AppCompatActivity {
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
         // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        if (searchManager != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         return true;
     }

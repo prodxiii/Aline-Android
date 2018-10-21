@@ -3,6 +3,7 @@ package coolgroup.com.aline.view;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +60,7 @@ public class CallActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_PERMISSION_RECORD_AUDIO: {
                 // If request is cancelled, the result arrays are empty.
@@ -67,11 +68,8 @@ public class CallActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted! Make the call. B|
                     voipCommunicator.startCall(otherUser);
-                } else {
-                    // permission denied. I guess we just go back to the map?
-                    //TODO: functionality here
-                }
-                return;
+                }  // permission denied. I guess we just go back to the map?
+
             }
 
             // other 'case' lines to check for other

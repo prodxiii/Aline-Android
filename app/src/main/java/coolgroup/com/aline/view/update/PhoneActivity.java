@@ -14,19 +14,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.Objects;
+
 import coolgroup.com.aline.R;
 import coolgroup.com.aline.view.options.AccountSettingsActivity;
 
 public class PhoneActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
-
     private MaterialEditText mPhone;
-    private Button mSave;
 
     //****************Firebase***************//
     private DatabaseReference mPhoneDatabase;
-    private FirebaseUser mCurrentUser;
     //**************************************//
 
     @Override
@@ -35,21 +33,22 @@ public class PhoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_phone);
 
         //**********************Firebase********************//
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert mCurrentUser != null;
         String currentUID = mCurrentUser.getUid();
 
         mPhoneDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUID);
         //**************************************************//
 
-        mToolbar = (Toolbar) findViewById(R.id.phone_appbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.phone_appbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Update Phone Number");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Update Phone Number");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         String phoneValue = getIntent().getStringExtra("phoneValue");
         mPhone = (MaterialEditText) findViewById(R.id.input_phone);
-        mSave = (Button) findViewById(R.id.btn_save_phone);
+        Button mSave = (Button) findViewById(R.id.btn_save_phone);
 
         mPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
@@ -59,9 +58,7 @@ public class PhoneActivity extends AppCompatActivity {
 
             String phone = mPhone.getText().toString();
             mPhoneDatabase.child("phone").setValue(phone)
-                    .addOnSuccessListener(aVoid -> {
-                        backToParentActivity();
-                    })
+                    .addOnSuccessListener(aVoid -> backToParentActivity())
                     .addOnFailureListener(e -> Toast.makeText(PhoneActivity.this, e.getMessage(), Toast.LENGTH_LONG).show());
         });
 
